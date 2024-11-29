@@ -1,0 +1,40 @@
+{
+  "LOGIN": {
+    "FORM": {
+      "TITLE": {
+        "Welcome to VRChat": "VRChatへようこそ",
+        "New to VRChat?": "初めてですか？",
+        "Using an Oculus, Steam, or Viveport account?": "Oculus/Steam/Viveportのアカウントをお使いですか？"
+      },
+      "LOGIN_FAILED": {
+        "Failed to Log In": "認証に失敗しました",
+        "\"Invalid Username/Email or Password\"": "ユーザ名またはメールアドレスに誤りがあります"
+      },
+      "LOGIN_INPUT": {
+        "Username/Email": "ユーザ名/メールアドレス",
+        "Password": "パスワード"
+      },
+      "LOGIN_FORGOT": {
+        "password": "パスワード",
+        "email address": "メールアドレス",
+        "Forgot your": "",
+        "or": "または",
+        "?": "をお忘れですか？"
+      },
+      "LOGIN_BUTTON": {
+        "Login": "ログイン"
+      },
+      "CREATE_ACCOUNT_BUTTON": {
+        "Create an account": "アカウントを作成する"
+      },
+      "USING_OTHER_ACCOUNTS": {
+        "Don't worry! You can link your VRChat account to your existing Oculus / Steam / Viveport account and keep all your friends.": "VRChatアカウントを既存のOculus/Steam/Viveportのアカウントと紐づけることで、フレンドを移行することができます。",
+        "Learn More": "さらに詳しく"
+      }
+    },
+    "WORLD_INFO": {
+      "World:": "ワールド名",
+      "Author:": "作者:"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+%! "../translations/ja.json"
+% https://vrchat.com/home/login
+
+LOGIN {
+  % フォーム画面
+  FORM //form#login-form {
+    TITLE /h4 *
+    LOGIN_FAILED /.e1cgibpb4 {
+      /.e1cgibpb3/.e1cgibpb2
+      /.e1cgibpb1
+    }
+    LOGIN_INPUT /.e1buxcrw2/input.e1buxcrw1 * [placeholder]
+    LOGIN_FORGOT /div[4] * {
+      /a
+      /text()[1,4,6]
+    }
+    LOGIN_BUTTON /.e7cdgnz2/button.e7cdgnz1
+    CREATE_ACCOUNT_BUTTON /a.e18c1r7j6
+    USING_OTHER_ACCOUNTS /p[1] {
+      /text()[1]
+      /a[1]
+    }
+  }
+  % ワールド情報
+  WORLD_INFO /div[2]/div[3]/p/strong[1] *
+}

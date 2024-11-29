@@ -1,0 +1,6 @@
+{
+  "output": "./output.json",
+  "files": [
+    "./login.xpr"
+  ]
+}

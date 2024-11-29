@@ -1,0 +1,54 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "xpath-rule file",
+	"patterns": [
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#attributes"
+		},
+		{
+			"include": "#multiIndex"
+		},
+		{
+			"include": "#strings"
+		}
+	],
+	"repository": {
+		"comments": {
+			"patterns": [{
+				"name": "comment.line.percentage.xpr",
+				"match": "(?:^|\\s)%.*$"
+			}]
+		},
+		"keywords": {
+			"patterns": [{
+				"name": "entity.name.tag.xpr",
+				"match": "(?<=^\\s*)[A-Z0-9_]+(?=\\b)"
+			}]
+		},
+		"attributes": {
+			"patterns": [{
+				"name": "entity.other.attribute-name.xpr",
+				"match": "(?<=\\s)\\[[a-zA-Z0-9-]+\\](?=\\s|$)"
+			}]
+		},
+		"multiIndex": {
+			"patterns": [{
+				"name": "keyword.operator",
+				"match": "(?<=\\s)\\*(?=\\s|$)"
+			}]
+		},
+		"strings": {
+			"patterns": [{
+				"name": "string.quoted.double.xpr",
+				"match": "/[a-zA-Z0-9#./,:=\\-()\\[\\]]+(?=\\s|$)"
+			}]
+		}
+	},
+	"scopeName": "source.xpr"
+}
