@@ -1,5 +1,13 @@
 import PageTranslator from './PageTranslator.class.js';
 
-console.log('Module loaded!');
+(async () => {
+  console.log('Module loaded!');
 
-const pt = new PageTranslator();
+  const xpathRuleURL = chrome.runtime.getURL('mapping/output.json');
+  console.log(xpathRuleURL);
+  const res = await fetch(xpathRuleURL);
+  const xpathRule = await res.json();
+  console.log(xpathRule);
+
+  // const pt = new PageTranslator();
+})();

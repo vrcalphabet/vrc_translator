@@ -2,6 +2,6 @@
   "output": "./output.json",
   "base": "./base.json",
   "files": [
-    "./ja.json"
+    "./ja-jp.json"
   ]
 }

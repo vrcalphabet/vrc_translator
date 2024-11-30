@@ -13,12 +13,15 @@
     "storage"
   ],
   "host_permissions": [
-    "https://vrchat.com/home*"
+    "https://vrchat.com/home",
+    "https://vrchat.com/home/*",
+    "https://vrchat.com/home?*",
+    "https://vrchat.com/home#*"
   ],
   "web_accessible_resources": [
     {
-      "resources": ["scripts/*"],
-      "matches": ["<all_urls>"]
+      "resources": ["scripts/*", "mapping/output.json", "translations/output.json"],
+      "matches": ["https://vrchat.com/*"]
     }
   ]
 }
