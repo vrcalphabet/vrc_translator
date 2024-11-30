@@ -42,7 +42,7 @@ class XPRParser {
     const xpathStack = [];
     const multiStack = [];
     
-    const tree = {};
+    const tree = { values: [] };
     let itemData = this.#createNewItem();
     
     for(const token of tokens) {
