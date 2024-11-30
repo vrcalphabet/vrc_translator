@@ -4,7 +4,7 @@
   "description": "Syntax highlighting for xpath-rule file(.xpr) and convert file to JSON",
   "version": "0.0.3",
   "engines": {
-    "vscode": "^0.42.0"
+    "vscode": "^0.43.5"
   },
   "categories": [
     "Programming Languages"
