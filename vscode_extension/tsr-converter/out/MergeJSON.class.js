@@ -6,7 +6,7 @@ class MergeJSON {
         temp[lang] = obj[lang][key];
       }
       if(base[key] === null) {
-        base[key] = temp;
+        base[key] = { data: true, ...temp };
         continue;
       }
       this.merge(base[key], temp);
