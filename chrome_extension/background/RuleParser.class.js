@@ -1,5 +1,5 @@
 class RuleParser {
-  parseXPR(content) {
+  static parseXPR(content) {
     const result = [];
   
     function deep(path, obj) {
@@ -20,7 +20,7 @@ class RuleParser {
     return result;
   }
   
-  parseTranslation(content) {
+  static parseTranslation(content) {
     const result = [];
 
     function deep(path, obj) {
