@@ -2,7 +2,7 @@
   "name": "xpr-syntax-highlighter",
   "displayName": "xpr Syntax Highlighter & Converter",
   "description": "Syntax highlighting for xpath-rule file(.xpr) and convert file to JSON",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^0.42.0"
   },
