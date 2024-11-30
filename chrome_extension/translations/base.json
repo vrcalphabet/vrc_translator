@@ -1,0 +1,40 @@
+{
+  "LOGIN": {
+    "FORM": {
+      "TITLE": {
+        "Welcome to VRChat": null,
+        "New to VRChat?": null,
+        "Using an Oculus, Steam, or Viveport account?": null
+      },
+      "LOGIN_FAILED": {
+        "Failed to Log In": null,
+        "\"Invalid Username/Email or Password\"": null
+      },
+      "LOGIN_INPUT": {
+        "Username/Email": null,
+        "Password": null
+      },
+      "LOGIN_FORGOT": {
+        "password": null,
+        "email address": null,
+        "Forgot your": null,
+        "or": null,
+        "?": null
+      },
+      "LOGIN_BUTTON": {
+        "Login": null
+      },
+      "CREATE_ACCOUNT_BUTTON": {
+        "Create an account": null
+      },
+      "USING_OTHER_ACCOUNTS": {
+        "Don't worry! You can link your VRChat account to your existing Oculus / Steam / Viveport account and keep all your friends.": null,
+        "Learn More": null
+      }
+    },
+    "WORLD_INFO": {
+      "World:": null,
+      "Author:": null
+    }
+  }
+}

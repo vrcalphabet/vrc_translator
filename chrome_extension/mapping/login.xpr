@@ -4,18 +4,25 @@
 LOGIN {
   % フォーム画面
   FORM //form#login-form {
+    % タイトル
     TITLE /h4 *
+    % ログイン失敗したとき
     LOGIN_FAILED /.e1cgibpb4 {
       /.e1cgibpb3/.e1cgibpb2
       /.e1cgibpb1
     }
+    % 入力欄
     LOGIN_INPUT /.e1buxcrw2/input.e1buxcrw1 * [placeholder]
+    % パスワードを忘れた
     LOGIN_FORGOT /div[4] * {
       /a
       /text()[1,4,6]
     }
+    % ログインボタン
     LOGIN_BUTTON /.e7cdgnz2/button.e7cdgnz1
+    % アカウント作成ボタン
     CREATE_ACCOUNT_BUTTON /a.e18c1r7j6
+    % 他の種類のアカウントを使用していますか
     USING_OTHER_ACCOUNTS /p[1] {
       /text()[1]
       /a[1]

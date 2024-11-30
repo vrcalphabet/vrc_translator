@@ -1,6 +1,7 @@
-[
-  {
-    "key": "ja",
-    "filepath": "./ja.json"
-  }
-]
+{
+  "output": "./output.json",
+  "base": "./base.json",
+  "files": [
+    "./ja.json"
+  ]
+}
