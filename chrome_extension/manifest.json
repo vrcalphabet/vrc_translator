@@ -10,13 +10,12 @@
   "permissions": [
     "tabs",
     "scripting",
-    "storage"
+    "storage",
+    "unlimitedStorage"
   ],
   "host_permissions": [
     "https://vrchat.com/home",
-    "https://vrchat.com/home/*",
-    "https://vrchat.com/home?*",
-    "https://vrchat.com/home#*"
+    "https://vrchat.com/home/*"
   ],
   "web_accessible_resources": [
     {
