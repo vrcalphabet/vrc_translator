@@ -1,15 +1,28 @@
 import RuleParser from "./RuleParser.class.js";
 
-self.addEventListener('activate', async () => {
+chrome.alarms.create('keepAlive', {
+  periodInMinutes: 0.25
+});
+
+chrome.alarms.onAlarm.addListener(alarm => {
+  if(alarm.name === 'keepAlive') {
+    chrome.runtime.getPlatformInfo();
+  }
+});
+
+chrome.runtime.onStartup.addListener(initialize);
+self.addEventListener('activate', initialize);
+
+async function initialize() {
   await saveData();
   console.log('ルールファイルと翻訳ファイルの変換が完了しました');
   
   chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if(isTabActive(changeInfo, tab)) {
-      injection(tabId, rulesContent, translationContent);
+      injection(tabId);
     }
   });
-});
+}
 
 async function saveData() {
   const rulesContent =
@@ -47,7 +60,9 @@ async function injection(tabId) {
   });
 }
 
-function load() {
+async function load() {
+  const content = await chrome.storage.local.get(['rulesContent', 'translationContent']);
+  console.log(content);
   const pt = new PageTranslator();
   pt.setConfig();
 }

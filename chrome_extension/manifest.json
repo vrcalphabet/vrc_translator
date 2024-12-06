@@ -11,7 +11,8 @@
     "tabs",
     "scripting",
     "storage",
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "alarms"
   ],
   "host_permissions": [
     "https://vrchat.com/home",
@@ -19,7 +20,10 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["scripts/*", "mapping/output.json", "translations/output.json"],
+      "resources": [
+        "scripts/*",
+        "output/*.json"
+      ],
       "matches": ["https://vrchat.com/*"]
     }
   ]
