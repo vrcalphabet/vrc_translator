@@ -1,5 +1,5 @@
 {
-  "output": "../output/translations.json",
+  "output": "../chrome_extension/output/translations.json",
   "base": "./base.json",
   "files": [
     "./ja-jp.json"

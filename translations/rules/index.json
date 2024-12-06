@@ -1,0 +1,6 @@
+{
+  "output": "../../chrome_extension/output/rules.json",
+  "files": [
+    "./login.xpr"
+  ]
+}
