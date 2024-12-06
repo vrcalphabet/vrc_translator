@@ -1,5 +1,5 @@
 class RuleParser {
-  static parseXPR(content) {
+  static parseRules(content) {
     const result = [];
   
     function deep(path, obj) {
