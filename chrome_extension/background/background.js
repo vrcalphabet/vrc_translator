@@ -1,7 +1,5 @@
-import RuleParser from "./RuleParser.class.js";
-
 chrome.alarms.create('keepAlive', {
-  periodInMinutes: 0.25
+  periodInMinutes: 0.5
 });
 
 chrome.alarms.onAlarm.addListener(alarm => {
@@ -25,20 +23,18 @@ async function initialize() {
 }
 
 async function saveData() {
-  const rulesContent =
-    await fetchAndParse('output/rules.json', RuleParser.parseRules);
-  const translationContent =
-    await fetchAndParse('output/translations.json', RuleParser.parseTranslation);
+  const rulesContent = await fetchContent('/output/rules.json');
+  const translationContent = await fetchContent('/output/translations.json');
   chrome.storage.local.set({
     rulesContent,
     translationContent
   });
 }
 
-async function fetchAndParse(url, parser) {
+async function fetchContent(url) {
   const resourceURL = chrome.runtime.getURL(url);
-  const json = await (await fetch(resourceURL)).json();
-  return parser(json);
+  const content = await (await fetch(resourceURL)).text();
+  return content;
 }
 
 function isTabActive(changeInfo, tab) {
@@ -49,20 +45,10 @@ function isTabActive(changeInfo, tab) {
   );
 }
 
-async function injection(tabId) {
-  await chrome.scripting.executeScript({
+function injection(tabId) {
+  console.log('injection');
+  chrome.scripting.executeScript({
     target: { tabId: tabId },
-    files: ['./scripts/PageTranslator.class.js']
-  })
-  await chrome.scripting.executeScript({
-    target: { tabId: tabId },
-    func: load
+    files: ['/scripts/script.js']
   });
-}
-
-async function load() {
-  const content = await chrome.storage.local.get(['rulesContent', 'translationContent']);
-  console.log(content);
-  const pt = new PageTranslator();
-  pt.setConfig();
 }
