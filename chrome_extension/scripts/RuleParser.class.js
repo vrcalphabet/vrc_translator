@@ -2,45 +2,47 @@ class RuleParser {
   static parseRules(content) {
     const result = [];
   
-    function deep(path, obj) {
+    function deep(keyStack, obj) {
       const { values, ...keys } = obj;
       
       for(const value of values) {
         result.push({
-          path, ...value
+          key: keyStack.join('/'),
+          ...value
         });
       }
       
       for(const key in keys) {
-        deep(path.concat(key), keys[key]);
+        deep(keyStack.concat(key), keys[key]);
       }
     }
     
-    deep([], content);
+    deep([], JSON.parse(content));
     return result;
   }
   
   static parseTranslation(content) {
     const result = [];
 
-    function deep(path, obj) {
+    function deep(keyStack, obj) {
       if(obj.data === true) {
         const { data, ...temp } = obj;
-        const name = path.pop();
+        const name = keyStack.pop();
         
         result.push({
-          path, name, ...temp
+          key: keyStack.join('/'),
+          name, ...temp
         });
         
         return;
       }
       
       for(const key in obj) {
-        deep(path.concat(key), obj[key]);
+        deep(keyStack.concat(key), obj[key]);
       }
     }
 
-    deep([], content);
+    deep([], JSON.parse(content));
     return result;
   }
 }
