@@ -6,19 +6,19 @@ LOGIN {
     % タイトル
     TITLE /h4 *
     % ログイン失敗したとき
-    LOGIN_FAILED /.e1cgibpb4 {
-      /.e1cgibpb3/.e1cgibpb2
-      /.e1cgibpb1
+    LOGIN_FAILED /div.e1cgibpb4 {
+      /div.e1cgibpb3/div.e1cgibpb2
+      /div.e1cgibpb1
     }
     % 入力欄
-    LOGIN_INPUT /.e1buxcrw2/input.e1buxcrw1 * [placeholder]
+    LOGIN_INPUT /div.e1buxcrw2/input.e1buxcrw1 * [placeholder]
     % パスワードを忘れた
     LOGIN_FORGOT /div[4] * {
       /a
       /text()[1,4,6]
     }
     % ログインボタン
-    LOGIN_BUTTON /.e7cdgnz2/button.e7cdgnz1
+    LOGIN_BUTTON /div.e7cdgnz2/button.e7cdgnz1
     % アカウント作成ボタン
     CREATE_ACCOUNT_BUTTON /a.e18c1r7j6
     % 他の種類のアカウントを使用していますか

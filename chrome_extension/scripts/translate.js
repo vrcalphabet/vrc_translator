@@ -5,7 +5,7 @@ async function initialize() {
   const { rulesContent, translationContent } = await chrome.storage.local.get(['rulesContent', 'translationContent']);
   const [rules, translations] = [RuleParser.parseRules(rulesContent), RuleParser.parseTranslation(translationContent)];
   
-  const pt = new PageTranslator(rules, translations);
+  const pt = new PageTranslator(rules, translations, 'ja-jp');
   pt.observe();
 }
 
