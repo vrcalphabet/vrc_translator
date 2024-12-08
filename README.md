@@ -8,8 +8,9 @@
 
 ## 進捗表
 - [ ] 翻訳ライブラリの作成
+- [ ] 翻訳がしやすくなる拡張機能を作成
 - [ ] 各ページの対応
-  - [ ] /home/login
+  - [x] /home/login
   - [ ] /home/password
   - [ ] /home/forgot-email
   - [ ] /home/register
