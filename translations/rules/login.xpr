@@ -1,32 +1,38 @@
-% https://vrchat.com/home/login
-
-LOGIN {
-  % フォーム画面
-  FORM //form#login-form {
-    % タイトル
-    TITLE /h4 *
-    % ログイン失敗したとき
-    LOGIN_FAILED /div.e1cgibpb4 {
-      /div.e1cgibpb3/div.e1cgibpb2
-      /div.e1cgibpb1
-    }
-    % 入力欄
-    LOGIN_INPUT /div.e1buxcrw2/input.e1buxcrw1 * [placeholder]
-    % パスワードを忘れた
-    LOGIN_FORGOT /div[4] * {
-      /a
-      /text()[1,4,6]
-    }
-    % ログインボタン
-    LOGIN_BUTTON /div.e7cdgnz2/button.e7cdgnz1
-    % アカウント作成ボタン
-    CREATE_ACCOUNT_BUTTON /a.e18c1r7j6
-    % 他の種類のアカウントを使用していますか
-    USING_OTHER_ACCOUNTS /p[1] {
-      /text()[1]
-      /a[1]
-    }
-  }
-  % ワールド情報
-  WORLD_INFO /div[2]/div[3]/p/strong[1] *
+@rootkey LOGIN
+@includes {
+  /home/login
+  /home/a
 }
+@excludes {
+  /home
+  /home/b
+}
+
+% フォーム画面
+FORM //form#login-form {
+  % タイトル
+  TITLE /h4 *
+  % ログイン失敗したとき
+  LOGIN_FAILED /div.e1cgibpb4 {
+    /div.e1cgibpb3/div.e1cgibpb2
+    /div.e1cgibpb1
+  }
+  % 入力欄
+  LOGIN_INPUT /div.e1buxcrw2/input.e1buxcrw1 * [placeholder]
+  % パスワードを忘れた
+  LOGIN_FORGOT /div[4] * {
+    /a
+    /text()[1,4,6]
+  }
+  % ログインボタン
+  LOGIN_BUTTON /div.e7cdgnz2/button.e7cdgnz1
+  % アカウント作成ボタン
+  CREATE_ACCOUNT_BUTTON /a.e18c1r7j6
+  % 他の種類のアカウントを使用していますか
+  USING_OTHER_ACCOUNTS /p[1] {
+    /text()[1]
+    /a[1]
+  }
+}
+% ワールド情報
+WORLD_INFO /div[2]/div[3]/p/strong[1] *
