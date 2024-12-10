@@ -71,7 +71,9 @@ class RuleParser {
       if(i % 2 === 0) {
         result.push(
           token
+          // #id記法を属性記法に変換
           .replaceAll(/#([\w-]+)/g, '[@id="$1"]')
+          // .class記法を属性記法に変換
           .replaceAll(/\.([\w-]+)/g, '[contains(concat(" ", normalize-space(@class), " "), " $1 ")]')
         );
       }
@@ -79,10 +81,13 @@ class RuleParser {
       else {
         result.push(
           token
+          // インデックス範囲指定を正しい記法に変換
           .replaceAll(/(\d+):(\d+)/g, '(position() >= $1 and position() <= $2)')
+          // インデックス複数指定を正しい記法に変換
           .replaceAll(/(\d+),(\d+)/g, 'position() = $1 or position() = $2')
           .replaceAll(/,(\d+)/g, ' or position() = $1')
           .replaceAll(/(\d+),/g, 'position() = $1 or ')
+          // 特定の要素数をカウントする記法に変換
           .replaceAll(/([\w-]+)\*(\d+)/g, 'count($1) = $2')
         );
       }
