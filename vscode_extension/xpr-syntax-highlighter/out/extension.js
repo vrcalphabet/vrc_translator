@@ -26,7 +26,7 @@ function activate() {
       const outputPath = path.resolve(basePath, output);
       
       const notExistFiles = [];
-      const result = {};
+      const result = [];
       
       for(const entry of files) {
         const filePath = path.resolve(basePath, entry);
@@ -39,7 +39,7 @@ function activate() {
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         const tree = XPRParser.parse(fileContent);
         
-        Object.assign(result, tree);
+        result.push(tree);
       }
       
       fs.writeFileSync(outputPath, JSON.stringify(result), 'utf-8');

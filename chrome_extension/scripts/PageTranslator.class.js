@@ -18,14 +18,36 @@ class PageTranslator {
   }
   
   #domChanged() {
-    const elements = this.#findElements();
+    const xpathRules = this.#filterXpathRules();
+    const elements = this.#findElements(xpathRules);
     console.log(elements);
     this.#replaceTranslation(elements);
   }
   
-  #findElements() {
+  #filterXpathRules() {
+    // 末尾にスラッシュがある場合はスラッシュを消す
+    const fullPath = location.pathname.replace(/\/$/, '');
     const result = [];
+    
     for(const rule of this.#rules) {
+      if(this.#isIncluded(fullPath, rule)) {
+        result.push(...rule.values);
+      }
+    }
+    
+    return result;
+  }
+
+  #isIncluded(fullPath, rule) {
+    const isIncludedPath = rule.includes.some(includePath => includePath.test(fullPath));
+    const isExcludedPath = rule.excludes.some(excludePath => excludePath.test(fullPath));
+    
+    return isIncludedPath && !isExcludedPath;
+  }
+  
+  #findElements(xpathRules) {
+    const result = [];
+    for(const rule of xpathRules) {
       const elements = this.#queryElements(rule);
       result.push(...elements);
     }

@@ -1,12 +1,13 @@
 class RuleParser {
   static parseRules(content) {
+    const contents = JSON.parse(content);
     const result = [];
   
-    function deep(keyStack, obj) {
+    function deep(temp, keyStack, obj) {
       const { values, ...keys } = obj;
       
       for(const { xpath, multi, attribute } of values) {
-        result.push({
+        temp.push({
           key: keyStack.join('/'),
           xpath: RuleParser.#normalizeXpath(xpath),
           multi,
@@ -15,11 +16,21 @@ class RuleParser {
       }
       
       for(const key in keys) {
-        deep(keyStack.concat(key), keys[key]);
+        deep(temp, keyStack.concat(key), keys[key]);
       }
     }
     
-    deep([], JSON.parse(content));
+    for(const content of contents) {
+      const { rootkey, includes, excludes, ...keys } = content;
+      const temp = {
+        includes: includes.map(rule => new RegExp(rule.replaceAll('*', '.*'))),
+        excludes: excludes.map(rule => new RegExp(rule.replaceAll('*', '.*'))),
+        values: []
+      };
+      deep(temp.values, [rootkey], keys);
+      result.push(temp);
+    }
+    
     return result;
   }
   

@@ -1,11 +1,6 @@
 @rootkey LOGIN
 @includes {
   /home/login
-  /home/a
-}
-@excludes {
-  /home
-  /home/b
 }
 
 % フォーム画面
