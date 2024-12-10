@@ -38,14 +38,73 @@ class XPRParser {
   }
   
   static #buildTree(tokens) {
+    let rootKey;
     const keyStack = [];
     const xpathStack = [];
     const multiStack = [];
+    const includes = [];
+    const excludes = [];
+    
+    let isRootKeyToken = false;
+    let isIncludesBlock = false;
+    let isExcludesBlock = false;
+    let tempString;
     
     const tree = { values: [] };
     let itemData = this.#createNewItem();
     
     for(const token of tokens) {
+      // rootkeyブロック
+      if(isRootKeyToken) {
+        if(token === ',') {
+          rootKey = tempString;
+          
+          tree[rootKey] = {};
+          Object.assign(tree[rootKey], {
+            includes, excludes
+          });
+          
+          isRootKeyToken = false;
+        } else {
+          tempString = token;
+        }
+        continue;
+      }
+      // includesブロック内
+      if(isIncludesBlock) {
+        if(token === '}') {
+          isIncludesBlock = false;
+        } else if(token.startsWith('/')) {
+          tempString = token;
+        } else if(token === ',') {
+          includes.push(tempString);
+        }
+        continue;
+      }
+      // excludesブロック内
+      if(isExcludesBlock) {
+        if(token === '}') {
+          isExcludesBlock = false;
+        } else if(token.startsWith('/')) {
+          tempString = token;
+        } else if(token === ',') {
+          excludes.push(tempString);
+        }
+        continue;
+      }
+      
+      // rootkeyトークン
+      if(token === '@rootkey') {
+        isRootKeyToken = true;
+      }
+      // includesトークン
+      if(token === '@includes') {
+        isIncludesBlock = true;
+      }
+      // excludesトークン
+      if(token === '@excludes') {
+        isExcludesBlock = true;
+      }
       // キートークン
       if(token.match(/^[A-Z]/)) {
         itemData.key = token;
@@ -83,7 +142,7 @@ class XPRParser {
           multi: itemData.multi || multiStack[multiStack.length - 1],
           attribute: itemData.attribute
         };
-        this.#pushItem(tree, path, item);
+        this.#pushItem(tree, rootKey, path, item);
         
         itemData = this.#createNewItem();
       }
@@ -96,8 +155,8 @@ class XPRParser {
     return { key: '', xpath: '', multi: inheritMulti, attribute: ''};
   }
   
-  static #pushItem(rootTree, path, item) {
-    let point = rootTree;
+  static #pushItem(rootTree, rootKey, path, item) {
+    let point = rootTree[rootKey];
     for(const p of path) {
       if(!(p in point)) {
         point[p] = { values: [] };

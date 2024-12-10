@@ -3,6 +3,9 @@
 	"name": "xpath-rule file",
 	"patterns": [
 		{
+			"include": "#metadata"
+		},
+		{
 			"include": "#comments"
 		},
 		{
@@ -19,6 +22,12 @@
 		}
 	],
 	"repository": {
+		"metadata": {
+			"patterns": [{
+				"name": "keyword.control",
+				"match": "^@rootkey|^@includes|^@excludes"
+			}]
+		},
 		"comments": {
 			"patterns": [{
 				"name": "comment.line.percentage.xpr",
@@ -28,7 +37,7 @@
 		"keywords": {
 			"patterns": [{
 				"name": "entity.name.tag.xpr",
-				"match": "(?<=^\\s*)[A-Z0-9_]+(?=\\b)"
+				"match": "(?<=^\\s*|^@rootkey\\s)[A-Z0-9_]+(?=\\b)"
 			}]
 		},
 		"attributes": {
