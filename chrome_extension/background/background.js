@@ -1,5 +1,5 @@
 chrome.alarms.create('keepAlive', {
-  periodInMinutes: 0.5
+  periodInMinutes: 0.25
 });
 
 chrome.alarms.onAlarm.addListener(alarm => {
