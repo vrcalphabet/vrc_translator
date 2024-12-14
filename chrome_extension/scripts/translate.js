@@ -3,10 +3,11 @@ import PageTranslator from './PageTranslator.class.js';
 
 async function initialize() {
   const { rulesContent, translationContent } = await chrome.storage.local.get(['rulesContent', 'translationContent']);
-  const [rules, translations] = [RuleParser.parseRules(rulesContent), RuleParser.parseTranslation(translationContent)];
+  const rules        = RuleParser.parseRules(rulesContent);
+  const translations = RuleParser.parseTranslation(translationContent);
   
-  const pt = new PageTranslator(rules, translations, 'ja-jp');
-  pt.observe();
+  const pageTranslator = new PageTranslator(rules, translations, 'ja-jp');
+  pageTranslator.observe();
 }
 
 export { initialize };

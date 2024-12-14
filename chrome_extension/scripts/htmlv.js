@@ -126,7 +126,6 @@ function getAllEventName() {
   }
   
   const element = document.createElement('div');
-  
   for(const key in element) {
     // プロパティ名の先頭にonがつくものはイベント名
     if(key.startsWith('on')) {
