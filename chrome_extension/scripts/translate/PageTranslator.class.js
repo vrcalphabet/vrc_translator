@@ -18,17 +18,20 @@ class PageTranslator {
   }
   
   #domChanged() {
+    // 現在のURLに基づいてxpath配列をフィルター
     const xpathRules = this.#filterXpathRules();
+    // xpathを使って要素を取得する
     const elements = this.#findElements(xpathRules);
     console.log(elements);
+    // 要素のテキストやtitle, placeholderを翻訳
     this.#replaceTranslation(elements);
   }
   
   #filterXpathRules() {
     // 末尾にスラッシュがある場合はスラッシュを消す
     const fullPath = location.pathname.replace(/\/$/, '');
-    const result = [];
     
+    const result = [];
     for(const rule of this.#rules) {
       if(this.#isIncluded(fullPath, rule)) {
         result.push(...rule.values);
@@ -102,6 +105,8 @@ class PageTranslator {
     }
   }
   
+  // 翻訳データが存在するか確認
+  // 存在する場合は翻訳後の文字列、存在しない場合はnullを返す
   #searchTranslations(key, text) {
     const findTranslation = this.#translations.find(v =>
       v.key === key && v.text === text.trim()

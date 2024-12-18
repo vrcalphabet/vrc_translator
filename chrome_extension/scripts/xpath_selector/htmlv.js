@@ -117,8 +117,8 @@ function updateTree(root, pathString, value) {
   return root;
 }
 
-const eventNameCache = [];
 // 要素に設定できるすべてのイベント名を取得（webブラウザに依存）
+const eventNameCache = [];
 function getAllEventName() {
   // 前回取得しているのなら前回の結果を返す
   if(eventNameCache.length > 0) {

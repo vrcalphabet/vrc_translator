@@ -13,7 +13,7 @@ self.addEventListener('activate', initialize);
 
 async function initialize() {
   await saveData();
-  console.log('ルールファイルと翻訳ファイルの変換が完了しました');
+  console.log('ルールファイルと翻訳ファイルの保存が完了しました');
   
   chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     if(isTabActive(changeInfo, tab)) {
