@@ -7,7 +7,7 @@ class OverlayManager {
   #overlay = null;
   
   constructor() {
-    this.#setStyle();
+    this.#loadStyle();
     this.#createElements();
   }
   
@@ -25,36 +25,9 @@ class OverlayManager {
     this.#overlay = overlay;
   }
   
-  #setStyle() {
-    StyleManager.addStyle(`
-      .vrc-translator__cover {
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        display: none;
-        background-color: rgba(0 0 0 / 40%);
-        z-index: 99999;
-      }
-      .vrc-translator__overlay {
-        position: fixed;
-        cursor: pointer;
-        border: 1px solid transparent;
-      }
-      .vrc-translator__overlay--blue {
-        background-color: rgb(0 128 255 / 30%);
-        border-color: rgb(0 128 255);
-      }
-      .vrc-translator__overlay--lime {
-        background-color: rgb(64 255 0 / 30%);
-        border-color: rgb(64 255 0);
-      }
-      .vrc-translator__overlay--highlight {
-        border-color: rgb(255 255 255);
-        background-color: rgb(255 255 255 / 30%);
-      }
-    `);
+  #loadStyle() {
+    const styleURL = chrome.runtime.getURL('/styles/style.css');
+    StyleManager.loadStyle(styleURL);
   }
   
   #hide() {

@@ -21,6 +21,7 @@
   "web_accessible_resources": [
     {
       "resources": [
+        "/styles/*",
         "/scripts/*.js",
         "/output/*.json"
       ],
