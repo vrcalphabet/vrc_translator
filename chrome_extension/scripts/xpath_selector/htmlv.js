@@ -20,7 +20,7 @@ function htmlv(strings, ...args) {
     }
     
     // それ以外の型の引数の場合
-    return arg;
+    return arg.toString();
   });
   
   // stringとmodifiedArgsを交互に追加した文字列を作成
@@ -37,22 +37,16 @@ function htmlv(strings, ...args) {
   const newString = newStrings.join('');
   
   // html文字列をパースする
+  // DOMParserだとscriptタグなどが削除されてしまい、処理に影響を及ぼすのでtemplateタグを使用
   const template = document.createElement('template');
   template.innerHTML = newString;
   const content = template.content;
   
-  // 要素変数を設定する
-  const elementVariables = {};
-  // *asがつく属性を取得
-  content.querySelectorAll('[\\*as]').forEach(element => {
-    const pathString = element.getAttribute('*as');
-    // パスをもとにツリーを更新
-    updateTree(elementVariables, pathString, element);
-    element.removeAttribute('*as');
-  });
+  // contentのツリーを作成
+  const elementVariables = generateTree(content);
   
   // イベントを設定
-  const eventNames = getAllEventName();
+  const eventNames = EventNameManager.getAllEventName();
   eventNames.forEach(eventName => {
     const fullEventName = '*on' + eventName;
     // 元の文字列にfullEventNameが含まれていない場合は最適化のためにスキップ
@@ -83,58 +77,95 @@ function htmlv(strings, ...args) {
   return result;
 }
 
-// パス文字列からツリーを更新
-function updateTree(root, pathString, value) {
-  // ピリオド(.)と各括弧で分割したうえで、ピりオドは消去し、各括弧は残す
-  const pathList = pathString.split(/\.|(?=\[\])/);
-  
-  // パスをもとにツリーを更新
-  let current = root;
-  pathList.forEach((path, index) => {
-    const isLastPath = index === pathList.length - 1;
-    const nextPath = pathList[index + 1];
-    
-    // 最後の要素ではないなら
-    if(!isLastPath) {
-      // プロパティが存在しない場合
-      if(!(path in current)) {
-        // もし次のパスが配列であるなら配列を作成、そうでなければオブジェクトを作成
-        current[path] = (nextPath === '[]' ? [] : {});
+// DOMからツリーを構築する
+function generateTree(rootElement) {
+  // 要素を再帰的に探索
+  function buildTreeStructure(parentNode, element) {
+    for(const childElement of element.children) {
+      const pathAttribute = childElement.getAttribute('*as');
+      
+      if(pathAttribute !== null) {
+        // *as属性はもう必要ないので削除する
+        childElement.removeAttribute('*as');
+        // *as属性の値を解析
+        const [nodeName, nodeType] = parsePathAttribute(pathAttribute);
+        addNodeToTree(parentNode, nodeName, nodeType, childElement);
+        continue;
       }
       
-      // 参照を更新
-      current = current[path];
-    } else {
-      // 最後のパスが配列であるなら要素を追加、そうでなければプロパティを設定
-      if(path === '[]') {
-        current.push(value);
-      } else {
-        current[path] = value;
-      }
+      // *as属性が未定義でも子要素にある可能性を考慮し、さらに深く探索
+      buildTreeStructure(parentNode, childElement);
     }
-  });
+  }
   
-  return root;
+  // ツリーに新しいノードを追加
+  function addNodeToTree(parentNode, nodeName, nodeType, element) {
+    const isParentArray = Array.isArray(parentNode);
+    const newNode = createNode(nodeName, nodeType, element);
+    
+    // もし配列なら値を追加、連想配列ならキーを追加
+    if(isParentArray) {
+      parentNode.push(newNode);
+    } else {
+      // nodeTypeが空（{}と[]のどちらでもない）なら値に要素を設定
+      // そうでなければ配列や連想配列を設定する
+      parentNode[nodeName] = nodeType ? newNode[nodeName] : element;
+    }
+    
+    // nodeTypeが空でなければさらに探索
+    if(nodeType) {
+      const targetNode = isParentArray ?
+        parentNode[parentNode.length - 1][nodeName] :
+        parentNode[nodeName];
+      buildTreeStructure(targetNode, element);
+    }
+  }
+  
+  // ノードを作成
+  function createNode(nodeName, nodeType, element) {
+    // nodeTypeが空なら要素を直に設定
+    if(nodeType === undefined) {
+      return { [nodeName]: element };
+    }
+    // そうでなければnodeTypeに基づいて型を設定
+    return { [nodeName]: nodeType === '{}' ? {} : [] };
+  }
+  
+  // *as属性の値を解析
+  function parsePathAttribute(path) {
+    return path.split(/(?=\[\]|\{\})/);
+  }
+  
+  // ベースとなるツリーをもとにDOMを探索
+  const tree = {};
+  buildTreeStructure(tree, rootElement);
+  return tree;
 }
 
 // 要素に設定できるすべてのイベント名を取得（webブラウザに依存）
-const eventNameCache = [];
-function getAllEventName() {
-  // 前回取得しているのなら前回の結果を返す
-  if(eventNameCache.length > 0) {
+class EventNameManager {
+  static #eventNameCache = null;
+  
+  static getAllEventName() {
+    // 前回取得しているのなら前回の結果を返す
+    if(this.#eventNameCache !== null) {
+      return this.#eventNameCache;
+    }
+    
+    const eventNameCache = [];
+    const element = document.createElement('div');
+    for(const key in element) {
+      // プロパティ名の先頭にonがつくものはイベント名
+      if(key.startsWith('on')) {
+        // "on"を除いたイベント名を取得
+        eventNameCache.push(key.slice(2));
+      }
+    }
+    
+    // キャッシュを作成
+    this.#eventNameCache = eventNameCache;
     return eventNameCache;
   }
-  
-  const element = document.createElement('div');
-  for(const key in element) {
-    // プロパティ名の先頭にonがつくものはイベント名
-    if(key.startsWith('on')) {
-      // "on"を除いたイベント名を取得
-      eventNameCache.push(key.slice(2));
-    }
-  }
-  
-  return eventNameCache;
 }
 
 // HTML要素のコレクション
