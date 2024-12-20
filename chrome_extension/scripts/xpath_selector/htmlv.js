@@ -185,4 +185,26 @@ class HTMLVElement {
   }
 }
 
-export { htmlv };
+// テキストをサニタイズする
+function sanitizeText(s) {
+  return s
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll('\'', '&#39;');
+}
+
+// URLをサニタイズする
+function sanitizeURI(s) {
+  return encodeURIComponent(s);
+}
+
+// 属性の値をサニタイズする
+function sanitizeAttr(s) {
+  return s
+    .replaceAll('\\', '\\\\')
+    .replaceAll('"', '\\"')
+    .replaceAll('\'', '\\\'');
+}
+
+export { htmlv, sanitizeText, sanitizeURI, sanitizeAttr };

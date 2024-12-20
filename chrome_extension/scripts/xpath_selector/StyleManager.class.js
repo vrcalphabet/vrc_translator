@@ -1,16 +1,18 @@
+import { htmlv, sanitizeAttr, sanitizeText } from "./htmlv.js";
+
 class StyleManager {
   static addStyle(content) {
-    const style = document.createElement('style');
-    style.textContent = content;
-    document.head.append(style);
+    const style = htmlv`
+      <style>${sanitizeText(content)}</style>
+    `;
+    document.head.append(...style);
   }
   
   static loadStyle(url) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = url;
-    console.log(link);
-    document.head.append(link);
+    const link = htmlv`
+      <link rel="stylesheet" href="${sanitizeAttr(url)}">
+    `
+    document.head.append(...link);
   }
 }
 

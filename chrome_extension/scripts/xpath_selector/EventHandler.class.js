@@ -1,4 +1,3 @@
-import NodeFinder from "./NodeFinder.class.js";
 import OverlayManager from "./OverlayManager.class.js";
 
 class EventHandler {

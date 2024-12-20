@@ -1,5 +1,4 @@
-@charset "UTF-8";
-.vrc-translator__cover {
+.vrc-overlay {
   width: 100%;
   height: 100%;
   position: fixed;
@@ -9,34 +8,61 @@
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 99999;
 }
-.vrc-translator__overlay {
+
+.vrc-popup {
   position: fixed;
   cursor: pointer;
   border: 1px solid transparent;
 }
-.vrc-translator__overlay--blue {
+.vrc-popup--blue {
   background-color: rgba(0, 128, 255, 0.3);
   border-color: rgb(0, 128, 255);
 }
-.vrc-translator__overlay--lime {
+.vrc-popup--lime {
   background-color: rgba(64, 255, 0, 0.3);
   border-color: rgb(64, 255, 0);
 }
-.vrc-translator__overlay--highlight {
+.vrc-popup--highlight {
   background-color: rgba(255, 255, 255, 0.3);
   border-color: rgb(255, 255, 255);
 }
-.vrc-translator__hint {
+
+.vrc-info {
+  display: flex;
+  width: 500px;
+  height: 400px;
   position: fixed;
-  bottom: 5px;
-  right: 5px;
-  font-size: 25px;
-  padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.15);
-  text-shadow: 0px 0px 5px black;
-  pointer-events: none;
+  right: 7px;
+  bottom: 7px;
+  background-color: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.35);
 }
-.vrc-translator__hint::before {
-  content: "マウスホイール上下で選択、左クリックで決定";
+.vrc-info__left {
+  flex-shrink: 0;
+  width: 75px;
+  border-right: 4px solid rgba(255, 255, 255, 0.2);
+}
+.vrc-info__right {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px 20px;
+}
+.vrc-info__index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.vrc-info__index:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+.vrc-info__index--selected {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+}
+.vrc-info__textarea {
+  resize: none;
 }/*# sourceMappingURL=style.css.map */
