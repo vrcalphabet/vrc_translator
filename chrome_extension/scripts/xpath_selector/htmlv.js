@@ -6,8 +6,15 @@ function htmlv(strings, ...args) {
   let callbackIndex = 0;
   const callbackFunctions = [];
   
+  // 埋め込み用HTMLVElementの一時保存
+  
   // 埋め込み引数(args)を条件に従って処理
   const modifiedArgs = args.map(arg => {
+    // htmlvで生成されたDOMを埋め込まれた場合は一旦別タグに変換する
+    if(arg instanceof HTMLVElement) {
+      
+    }
+    
     // 引数が文字列の場合は改行をbrタグに変換
     if(typeof arg === 'string') {
       return arg.replaceAll('\n', '<br>');
@@ -183,6 +190,16 @@ class HTMLVElement {
   *[Symbol.iterator]() {
     yield* this.#elements;
   }
+  
+  // スプレッド構文のメソッド版
+  toArray() {
+    return [...this];
+  }
+  
+  // toStringしたときに型が分かりやすくなるように
+  toString() {
+    return '[object HTMLVElement]';
+  }
 }
 
 // テキストをサニタイズする
@@ -207,4 +224,25 @@ function sanitizeAttr(s) {
     .replaceAll('\'', '\\\'');
 }
 
-export { htmlv, sanitizeText, sanitizeURI, sanitizeAttr };
+// 連想配列で定義されたスタイルを文字列に変換する
+function styleString(styles) {
+  // 各キーを処理
+  const entries = Object.entries(styles).map(([key, value]) => {
+    // キーのキャメルケースをケバブケースに変換する
+    key = key.replace(/[A-Z]/g, m => '-' + m.toLowerCase());
+    
+    // もし、値が数値なら末尾にpxを付ける
+    if(typeof value === 'number') {
+      // 値の小数点3桁以下は影響がないので削除
+      value = value.toFixed(2) + 'px';
+    }
+    
+    // キーと値をコロンでつなげる
+    return `${key}:${value}`;
+  });
+  
+  // 各スタイルをセミコロンで区切って返す
+  return entries.join(';');
+}
+
+export { htmlv, sanitizeText, sanitizeURI, sanitizeAttr, styleString };
