@@ -1,14 +1,14 @@
 import NodeFinder from "./NodeFinder.class.js";
 import StyleManager from "./StyleManager.class.js";
-import { htmlv } from "./htmlv.js";
+import { htmlv, styleString } from "./htmlv.js";
 
 class OverlayManager {
   // オーバーレイが表示されているか
   #isShow = false;
   // モーダルの背景
   #overlay = null;
-  // 要素強調表示用要素
-  #popup = null;
+  // 要素の情報表示用要素
+  #info = null;
   
   constructor() {
     this.#loadStyle();
@@ -16,29 +16,38 @@ class OverlayManager {
   }
   
   #createElements() {
-    const { overlay, popup, info } = htmlv`
+    const titleKey = ['XPath', 'textContent', 'title', 'alt', 'placeholder'];
+    const { overlay, info } = htmlv`
       <div class="vrc-overlay" *as="overlay"></div>
-      <div class="vrc-popup" *as="popup"></div>
       <div class="vrc-info" *as="info">
-        <div class="vrc-info__left">
-          <div class="vrc-info__index vrc-info__index--selected">1</div>
-          <div class="vrc-info__index">2</div>
-          <div class="vrc-info__index">3</div>
+        <div class="vrc-info__box">
+          <span class="vrc-info__title">XPath</span>
+          <textarea class="vrc-info__textarea" readonly>XPath</textarea>
         </div>
-        <div class="vrc-info__right">
+        <div class="vrc-info__box">
           <span class="vrc-info__title">textContent</span>
           <textarea class="vrc-info__textarea" readonly>textContent</textarea>
+        </div>
+        <div class="vrc-info__box">
           <span class="vrc-info__title">title</span>
           <textarea class="vrc-info__textarea" readonly>title</textarea>
+        </div>
+        <div class="vrc-info__box">
+          <span class="vrc-info__title">alt</span>
+          <textarea class="vrc-info__textarea" readonly>alt</textarea>
+        </div>
+        <div class="vrc-info__box">
           <span class="vrc-info__title">placeholder</span>
           <textarea class="vrc-info__textarea" readonly>placeholder</textarea>
         </div>
       </div>
     `;
+    
     document.body.append(overlay);
+    overlay.append(info);
 
     this.#overlay = overlay;
-    this.#popup = popup;
+    this.#info = info;
   }
   
   #loadStyle() {
@@ -57,9 +66,8 @@ class OverlayManager {
   }
   
   #reset() {
-    while(this.#overlay.firstChild) {
-      this.#overlay.firstChild.remove();
-    }
+    this.#overlay.querySelectorAll('.vrc-popup')
+      .forEach(node => node.remove());
   }
   
   #searchNodes() {
@@ -69,6 +77,7 @@ class OverlayManager {
     
     // テキストノードとtitleまたはplaceholder属性がついた要素を検索
     const foundNodes = NodeFinder.findNodes(document.body);
+    console.log(foundNodes);
     
     // 検索結果をもとにオーバーレイ画面を作成
     this.#setOverlay(foundNodes);
@@ -79,24 +88,23 @@ class OverlayManager {
     const fragment = document.createDocumentFragment();
     
     // 各ノードの座標と大きさに合わせてポップアップを複製する
-    for(const node of nodes) {
-      // titleまたはplaceholder属性を保持している場合は黄緑色、テキストのみを保持している場合は青色
+    nodes.forEach((node, index) => {
+      // titleまたはplaceholder、alt属性を保持している場合は黄緑色、テキストのみを保持している場合は青色
       const color =
-        (node.title || node.placeholder) ? 'lime' : 'blue';
-      
-      const { x, y, width, height } = node.target.getBoundingClientRect();
-      const overlayClone = this.#popup.cloneNode(false);
-      overlayClone.classList.add(`vrc-popup--${color}`);
-      
-      overlayClone.style.cssText = `
-        left: ${x}px;
-        top: ${y}px;
-        width: ${width}px;
-        height: ${height}px;
+        (node.title || node.placeholder || node.alt) ? 'lime' : 'blue';
+      const style = styleString({
+        left: node.x,
+        top: node.y,
+        width: node.width,
+        height: node.height
+      });
+        
+      const popup = htmlv`
+        <div class="vrc-popup vrc-popup--${color}" style="${style}" data-index="${index}"></div>
       `;
       
-      fragment.append(overlayClone);
-    }
+      fragment.append(...popup);
+    });
     
     this.#overlay.append(fragment);
   }
@@ -148,23 +156,12 @@ class OverlayManager {
     if(!this.#isShow) return;
     
     // カーソル上にある要素を取得
-    const hoverNodes = document.elementsFromPoint(e.clientX, e.clientY);
-    const filterNodes = this.#filterOverlayNodes(hoverNodes);
-    this.#removeNotHoveredNode(filterNodes);
-  }
-  
-  #removeNotHoveredNode(nodes) {
-    this.#reset();
-    this.#overlay.append(...nodes);
-  }
-  
-  #filterOverlayNodes(nodes) {
-    // 背景要素のインデックスを取得
-    // 背景要素が表示されている時しかこのメソッドは発火しないため、インデックスが-1の場合を考慮する必要はない
-    const coverIndex = nodes.findIndex(node => node.className === 'vrc-overlay');
+    const hoverNodes = document.elementFromPoint(e.clientX, e.clientY);
     
-    // 背景要素よりも前面のインデックスのみを返す
-    return nodes.slice(0, coverIndex);
+    // ポップアップのクリックのみ有効
+    if(!hoverNodes.classList.contains('vrc-popup')) return;
+    
+    console.log(hoverNodes);
   }
 }
 

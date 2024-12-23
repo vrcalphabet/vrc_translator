@@ -11,7 +11,7 @@ class StyleManager {
   static loadStyle(url) {
     const link = htmlv`
       <link rel="stylesheet" href="${sanitizeAttr(url)}">
-    `
+    `;
     document.head.append(...link);
   }
 }

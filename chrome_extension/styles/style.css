@@ -29,24 +29,18 @@
 
 .vrc-info {
   display: flex;
+  flex-direction: column;
+  gap: 10px;
   width: 500px;
   height: 400px;
+  padding: 10px 20px;
   position: fixed;
   right: 7px;
   bottom: 7px;
-  background-color: rgba(0, 0, 0, 0.7);
-  box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.35);
-}
-.vrc-info__left {
-  flex-shrink: 0;
-  width: 75px;
-  border-right: 4px solid rgba(255, 255, 255, 0.2);
-}
-.vrc-info__right {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 10px 20px;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.4);
+  overflow-y: scroll;
 }
 .vrc-info__index {
   display: flex;
@@ -62,6 +56,14 @@
 .vrc-info__index--selected {
   background-color: rgba(255, 255, 255, 0.8);
   color: black;
+}
+.vrc-info__box {
+  display: flex;
+  flex-direction: column;
+}
+.vrc-info__title {
+  font-size: 18px;
+  font-weight: bold;
 }
 .vrc-info__textarea {
   resize: none;
