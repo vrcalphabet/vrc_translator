@@ -245,4 +245,22 @@ function styleString(styles) {
   return entries.join(';');
 }
 
-export { htmlv, sanitizeText, sanitizeURI, sanitizeAttr, styleString };
+// データセットを属性文字列に変換する
+function dataset(attrs) {
+  // 各キーを処理
+  const entries = Object.entries(attrs).map(([key, value]) => {
+    // キーにdata-の接頭辞を付ける
+    key = `data-${key}`;
+    
+    // String型以外replaceAllメソッドが使えないので一旦文字列に変換する
+    value = value.toString();
+    
+    // サニタイズしてから属性="値"の形式にする
+    return `${key}="${sanitizeAttr(value)}"`;
+  });
+  
+  // 各属性をスペースで区切って返す
+  return entries.join(' ');
+}
+
+export { htmlv, sanitizeText, sanitizeURI, sanitizeAttr, styleString, dataset };
