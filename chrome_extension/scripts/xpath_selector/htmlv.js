@@ -355,4 +355,10 @@ function dataset(attrs) {
   return entries.join(' ');
 }
 
-export { htmlv, sanitizeText, sanitizeURI, sanitizeAttr, styleString, dataset };
+// 配列の値によって処理が変わるようなものに使う関数
+function repeat(array, callback) {
+  const result = array.map(callback);
+  return result.join('\n');
+}
+
+export { htmlv, sanitizeText, sanitizeURI, sanitizeAttr, styleString, dataset, repeat };
