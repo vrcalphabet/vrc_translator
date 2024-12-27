@@ -224,11 +224,6 @@ class HTMLVElement {
   toArray() {
     return [...this];
   }
-  
-  // toStringしたときに型が分かりやすくなるように
-  toString() {
-    return '[object HTMLVElement]';
-  }
 }
 
 class HTMLVObject {
@@ -244,11 +239,6 @@ class HTMLVObject {
   
   get TARGET() {
     return this.#target;
-  }
-  
-  // Element.append(HTMLVObjectCollection)に対応するためのメソッド
-  toString() {
-    return this.TARGET;
   }
 }
 
@@ -286,11 +276,6 @@ class HTMLVArray extends Collection {
   
   get TARGET() {
     return this.#target;
-  }
-  
-  // Element.append(HTMLVArrayCollection)に対応するためのメソッド
-  toString() {
-    return this.TARGET;
   }
 }
 
