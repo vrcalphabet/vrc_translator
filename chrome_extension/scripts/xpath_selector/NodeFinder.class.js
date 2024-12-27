@@ -59,7 +59,7 @@ class NodeFinder {
           title: null,
           placeholder: null,
           alt: null,
-          text: text
+          textContent: text
         });
       }
       
@@ -80,7 +80,7 @@ class NodeFinder {
               title: title,
               placeholder: placeholder,
               alt: alt,
-              text: null
+              textContent: null
             });
           }
         }
