@@ -1,6 +1,6 @@
 import NodeFinder from "./NodeFinder.class.js";
 import StyleManager from "./StyleManager.class.js";
-import { htmlv, styleString, dataset } from "./htmlv.js";
+import { htmlv, styleString, dataset, repeat } from "./htmlv.js";
 
 class OverlayManager {
   // オーバーレイが表示されているか
