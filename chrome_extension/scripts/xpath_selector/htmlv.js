@@ -2,17 +2,24 @@ function htmlv(strings, ...args) {
   // 空文字は無効（stringsは最低でも長さ1を取る）
   if(strings.length === 1 && strings[0].trim() === '') return null;
   
+  ////////////////////////////////////////////////////////////
+  /////                  文字列の正規化                   /////
+  ////////////////////////////////////////////////////////////
+  
   // コールバック関数とインデックスを保持
   let callbackIndex = 0;
   const callbackFunctions = [];
   
   // 埋め込み用HTMLVElementの一時保存
+  let embedIndex = 0;
+  const embedElements = [];
   
   // 埋め込み引数(args)を条件に従って処理
   const modifiedArgs = args.map(arg => {
     // htmlvで生成されたDOMを埋め込まれた場合は一旦別タグに変換する
     if(arg instanceof HTMLVElement) {
-      
+      embedElements.push(arg);
+      return `<template *id="${embedIndex++}"></template>`;
     }
     
     // 引数が文字列の場合は改行をbrタグに変換
@@ -30,6 +37,10 @@ function htmlv(strings, ...args) {
     return arg.toString();
   });
   
+  ////////////////////////////////////////////////////////////
+  /////                   文字列の結合                    /////
+  ////////////////////////////////////////////////////////////
+  
   // stringとmodifiedArgsを交互に追加した文字列を作成
   const newStrings = [];
   strings.forEach((string, index) => {
@@ -43,14 +54,34 @@ function htmlv(strings, ...args) {
   });
   const newString = newStrings.join('');
   
-  // html文字列をパースする
+  ////////////////////////////////////////////////////////////
+  /////               文字列からDOMへ変換                 /////
+  ////////////////////////////////////////////////////////////
+  
   // DOMParserだとscriptタグなどが削除されてしまい、処理に影響を及ぼすのでtemplateタグを使用
   const template = document.createElement('template');
   template.innerHTML = newString;
   const content = template.content;
   
-  // contentのツリーを作成
+  const embedTemplates = content.querySelectorAll('template[\\*id]');
+  embedTemplates.forEach(template => {
+    const id = template.getAttribute('*id');
+    const embed = embedElements[id];
+    // templateの前に埋め込み用要素を入れてtemplateを消すと、置換したように見える
+    template.before(embed);
+    template.remove();
+  });
+  
+  ////////////////////////////////////////////////////////////
+  /////                    ツリー作成                     /////
+  ////////////////////////////////////////////////////////////
+  
+  // DOMから要素変数のツリーを作成
   const elementVariables = generateTree(content);
+  
+  ////////////////////////////////////////////////////////////
+  /////                イベントリスナー設定                /////
+  ////////////////////////////////////////////////////////////
   
   // イベントを設定
   const eventNames = EventNameManager.getAllEventName();
@@ -69,6 +100,10 @@ function htmlv(strings, ...args) {
         element.removeAttribute(fullEventName);
       });
   });
+  
+  ////////////////////////////////////////////////////////////
+  /////                  要素のフィルター                 /////
+  ////////////////////////////////////////////////////////////
   
   // 空文字の削除（フィルター）
   const filteredContent = [...content.childNodes].filter(element => {
@@ -107,50 +142,44 @@ function generateTree(rootElement) {
   
   // ツリーに新しいノードを追加
   function addNodeToTree(parentNode, nodeName, nodeType, element) {
-    const isParentArray = Array.isArray(parentNode);
-    const newNode = createNode(nodeName, nodeType, element);
+    const isParentNodeArray = parentNode instanceof HTMLVArray;
+    const newNode = createNode(nodeType, element);
+    const targetNode = newNode;
     
     // もし配列なら値を追加、連想配列ならキーを追加
-    if(isParentArray) {
-      parentNode.push(newNode);
+    if(isParentNodeArray) {
+      parentNode.add(newNode);
     } else {
-      // nodeTypeが空（{}と[]のどちらでもない）なら値に要素を設定
+      // nodeTypeが空（[]ではない）なら値に要素を設定
       // そうでなければ配列や連想配列を設定する
-      parentNode[nodeName] = nodeType ? newNode[nodeName] : element;
+      parentNode.set(nodeName, newNode);
     }
     
-    // nodeTypeが空でなければさらに探索
-    if(nodeType) {
-      const targetNode = isParentArray ?
-        parentNode[parentNode.length - 1][nodeName] :
-        parentNode[nodeName];
-      buildTreeStructure(targetNode, element);
-    }
+    // nodeTypeが空でもさらに探索を続ける
+    buildTreeStructure(targetNode, element);
   }
   
   // ノードを作成
-  function createNode(nodeName, nodeType, element) {
-    // nodeTypeが空なら要素を直に設定
-    if(nodeType === undefined) {
-      return { [nodeName]: element };
-    }
-    // そうでなければnodeTypeに基づいて型を設定
-    return { [nodeName]: nodeType === '{}' ? {} : [] };
+  function createNode(nodeType, element) {
+    // nodeType（[]かどうか）に基づいて型を設定
+    return nodeType === '[]' ?
+      new HTMLVArray(element) : new HTMLVObject(element);
   }
   
   // *as属性の値を解析
   function parsePathAttribute(path) {
-    return path.split(/(?=\[\]|\{\})/);
+    return path.split(/(?=\[\])/);
   }
   
   // ベースとなるツリーをもとにDOMを探索
-  const tree = {};
+  const tree = new HTMLVObject(null);
   buildTreeStructure(tree, rootElement);
   return tree;
 }
 
 // 要素に設定できるすべてのイベント名を取得（webブラウザに依存）
 class EventNameManager {
+  // イベント名のキャッシュ
   static #eventNameCache = null;
   
   static getAllEventName() {
@@ -199,6 +228,69 @@ class HTMLVElement {
   // toStringしたときに型が分かりやすくなるように
   toString() {
     return '[object HTMLVElement]';
+  }
+}
+
+class HTMLVObject {
+  #target = null;
+  
+  constructor(target) {
+    this.#target = target;
+  }
+  
+  set(key, value) {
+    Object.assign(this, { [key]: value })
+  }
+  
+  get TARGET() {
+    return this.#target;
+  }
+  
+  // Element.append(HTMLVObjectCollection)に対応するためのメソッド
+  toString() {
+    return this.TARGET;
+  }
+}
+
+class Collection {
+  #elements = null;
+  
+  constructor() {
+    this.#elements = [];
+  }
+  
+  add(value) {
+    this.#elements.push(value);
+  }
+  
+  forEach(callback) {
+    this.#elements.forEach(callback);
+  }
+  
+  map(callback) {
+    this.#elements.map(callback);
+  }
+  
+  *[Symbol.iterator]() {
+    yield* this.#elements;
+  }
+}
+
+class HTMLVArray extends Collection {
+  #target = null;
+  
+  constructor(target) {
+    super();
+    this.#target = target;
+  }
+  
+  get TARGET() {
+    return this.#target;
+  }
+  
+  // Element.append(HTMLVArrayCollection)に対応するためのメソッド
+  toString() {
+    return this.TARGET;
   }
 }
 
