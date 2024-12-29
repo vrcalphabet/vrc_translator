@@ -22,11 +22,6 @@ function htmlv(strings, ...args) {
       return `<template *id="${embedIndex++}"></template>`;
     }
     
-    // 引数が文字列の場合は改行をbrタグに変換
-    if(typeof arg === 'string') {
-      return arg.replaceAll('\n', '<br>');
-    }
-    
     // 引数が関数の場合はコールバック関数だと判定し、一時配列に追加
     if(arg instanceof Function) {
       callbackFunctions.push(arg);
@@ -119,64 +114,6 @@ function htmlv(strings, ...args) {
   return result;
 }
 
-// DOMからツリーを構築する
-function generateTree(rootElement) {
-  // 要素を再帰的に探索
-  function buildTreeStructure(parentNode, element) {
-    for(const childElement of element.children) {
-      const pathAttribute = childElement.getAttribute('*as');
-      
-      if(pathAttribute !== null) {
-        // *as属性はもう必要ないので削除する
-        childElement.removeAttribute('*as');
-        // *as属性の値を解析
-        const [nodeName, nodeType] = parsePathAttribute(pathAttribute);
-        addNodeToTree(parentNode, nodeName, nodeType, childElement);
-        continue;
-      }
-      
-      // *as属性が未定義でも子要素にある可能性を考慮し、さらに深く探索
-      buildTreeStructure(parentNode, childElement);
-    }
-  }
-  
-  // ツリーに新しいノードを追加
-  function addNodeToTree(parentNode, nodeName, nodeType, element) {
-    const isParentNodeArray = parentNode instanceof HTMLVArray;
-    const newNode = createNode(nodeType, element);
-    const targetNode = newNode;
-    
-    // もし配列なら値を追加、連想配列ならキーを追加
-    if(isParentNodeArray) {
-      parentNode.add(newNode);
-    } else {
-      // nodeTypeが空（[]ではない）なら値に要素を設定
-      // そうでなければ配列や連想配列を設定する
-      parentNode.set(nodeName, newNode);
-    }
-    
-    // nodeTypeが空でもさらに探索を続ける
-    buildTreeStructure(targetNode, element);
-  }
-  
-  // ノードを作成
-  function createNode(nodeType, element) {
-    // nodeType（[]かどうか）に基づいて型を設定
-    return nodeType === '[]' ?
-      new HTMLVArray(element) : new HTMLVObject(element);
-  }
-  
-  // *as属性の値を解析
-  function parsePathAttribute(path) {
-    return path.split(/(?=\[\])/);
-  }
-  
-  // ベースとなるツリーをもとにDOMを探索
-  const tree = new HTMLVObject(null);
-  buildTreeStructure(tree, rootElement);
-  return tree;
-}
-
 // 要素に設定できるすべてのイベント名を取得（webブラウザに依存）
 class EventNameManager {
   // イベント名のキャッシュ
@@ -204,6 +141,21 @@ class EventNameManager {
   }
 }
 
+// 要素変数ツリーを作成
+function generateTree(content) {
+  const result = {};
+  
+  const elements = content.querySelectorAll('[\\*as]');
+  elements.forEach(element => {
+    const as = element.getAttribute('*as');
+    result[as] = element;
+    
+    element.removeAttribute('*as');
+  });
+  
+  return result;
+}
+
 // HTML要素のコレクション
 class HTMLVElement {
   #elements;
@@ -223,59 +175,6 @@ class HTMLVElement {
   // スプレッド構文のメソッド版
   toArray() {
     return [...this];
-  }
-}
-
-class HTMLVObject {
-  #target = null;
-  
-  constructor(target) {
-    this.#target = target;
-  }
-  
-  set(key, value) {
-    Object.assign(this, { [key]: value })
-  }
-  
-  get TARGET() {
-    return this.#target;
-  }
-}
-
-class Collection {
-  #elements = null;
-  
-  constructor() {
-    this.#elements = [];
-  }
-  
-  add(value) {
-    this.#elements.push(value);
-  }
-  
-  forEach(callback) {
-    this.#elements.forEach(callback);
-  }
-  
-  map(callback) {
-    this.#elements.map(callback);
-  }
-  
-  *[Symbol.iterator]() {
-    yield* this.#elements;
-  }
-}
-
-class HTMLVArray extends Collection {
-  #target = null;
-  
-  constructor(target) {
-    super();
-    this.#target = target;
-  }
-  
-  get TARGET() {
-    return this.#target;
   }
 }
 
