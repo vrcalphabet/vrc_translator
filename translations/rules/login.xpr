@@ -23,7 +23,7 @@ FORM //form#login-form {
   LOGIN_BUTTON /div.e7cdgnz2/button.e7cdgnz1
   % アカウント作成ボタン
   CREATE_ACCOUNT_BUTTON /a.e18c1r7j6
-  % 他の種類のアカウントを使用していますか
+  % 他の種類のアカウントを使用しているか
   USING_OTHER_ACCOUNTS /p[1] {
     /text()[1]
     /a[1]
