@@ -5,10 +5,8 @@ import { htmlv, styleString, dataset, repeat } from "./htmlv.js";
 class OverlayManager {
   // オーバーレイが表示されているか
   #isShow = false;
-  // モーダルの背景
-  #overlay = null;
-  // 要素の情報表示用要素
-  #info = null;
+  // 作成した要素
+  #component = null;
   // 取得したノードたち
   #foundNodes = null;
   
@@ -19,25 +17,24 @@ class OverlayManager {
   
   #createElements() {
     const titleKey = ['XPath', 'textContent', 'title', 'alt', 'placeholder'];
-    const { overlay, info } = htmlv`
+    const component = htmlv`
       <div class="vrc-overlay" *as="overlay"></div>
-      <div class="vrc-info" *as="info[]">
+      <div class="vrc-info" *as="info">
         ${repeat(titleKey, key => {
           return /* html */`
             <div class="vrc-info__box">
-              <span class="vrc-info__title">XPath</span>
-              <textarea class="vrc-info__textarea" readonly ${dataset({ key })} *as=""></textarea>
+              <span class="vrc-info__title">${key}</span>
+              <textarea class="vrc-info__textarea" readonly ${dataset({ key })} *as="${key}"></textarea>
             </div>
           `;
         })}
       </div>
     `;
     
-    document.body.append(overlay);
-    overlay.append(info);
+    document.body.append(component.overlay);
+    component.overlay.append(component.info);
 
-    this.#overlay = overlay;
-    this.#info = info;
+    this.#component = component;
   }
   
   #loadStyle() {
@@ -46,18 +43,18 @@ class OverlayManager {
   }
   
   #hide() {
-    this.#overlay.style.display = 'none';
+    this.#component.overlay.style.display = 'none';
     this.#isShow = false;
   }
   
   #show() {
-    this.#overlay.style.display = 'block';
+    this.#component.overlay.style.display = 'block';
     this.#isShow = true;
   }
   
-  #reset() {
-    this.#overlay.querySelectorAll('.vrc-popup')
-      .forEach(node => node.remove());
+  #removeAllPopup() {
+    const popup = this.#component.overlay.querySelectorAll('.vrc-popup')
+    popup.forEach(node => node.remove());
   }
   
   #setOverlay(nodes) {
@@ -85,16 +82,17 @@ class OverlayManager {
       fragment.append(...popup);
     });
     
-    this.#overlay.append(fragment);
+    this.#component.overlay.append(fragment);
   }
   
   #searchNodes() {
     // 背景要素を表示したままだとelementFromPointが正常に機能しないため一旦隠す
     this.#hide();
-    this.#reset();
+    this.#removeAllPopup();
     
     // テキストノードとtitleまたはplaceholder属性がついた要素を検索
-    const foundNodes = NodeFinder.findNodes(document.body);
+    const mainContent = document.querySelector('div#app > main');
+    const foundNodes = NodeFinder.findNodes(mainContent);
     this.#foundNodes = foundNodes;
     console.log(this.#foundNodes);
     
@@ -105,7 +103,8 @@ class OverlayManager {
   
   #removeHighlight() {
     // 既にハイライトされている要素のハイライトを削除
-    const highlightedElement = this.#overlay.querySelector('.vrc-popup--highlight');
+    const highlightedElement =
+      this.#component.overlay.querySelector('.vrc-popup--highlight');
     if(highlightedElement !== null) {
       highlightedElement.classList.remove('vrc-popup--highlight');
     }
@@ -136,9 +135,11 @@ class OverlayManager {
     if(!this.#isShow) return;
     this.#removeHighlight();
     
+    // カーソル上のポップアップを取得
     const target = this.#getPopup(e);
     if(target === null) return;
     
+    // ポップアップを白くする
     this.#highlightOverlay(target);
   }
   
@@ -146,18 +147,18 @@ class OverlayManager {
     // 背景が表示されている間のみ有効
     if(!this.#isShow) return;
     
+    // カーソル上のポップアップを取得
     const target = this.#getPopup(e);
     if(target === null) return;
     
     console.log(target);
-    console.log(this.#info);
     
     const id = target.dataset.index;
     const property = this.#foundNodes[id];
     
-    const keys = ['textContent', 'title', 'alt', 'placeholder'];
+    const keys = ['XPath', 'textContent', 'title', 'alt', 'placeholder'];
     keys.forEach(key => {
-      this.#info[key].value = property[key];
+      this.#component[key].value = property[key];
     });
   }
   
