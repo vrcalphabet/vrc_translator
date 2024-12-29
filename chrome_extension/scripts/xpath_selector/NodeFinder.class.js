@@ -42,9 +42,10 @@ class NodeFinder {
     };
     
     // 除外するタグ
-    const excludedTags = new Set(['BR', 'IFRAME', 'IMG', 'INPUT', 'NOSCRIPT', 'SCRIPT', 'SVG']);
+    // ※svg要素のみタグ名は小文字で扱われるため小文字にしている
+    const excludedTags = new Set(['BR', 'IFRAME', 'IMG', 'INPUT', 'NOSCRIPT', 'SCRIPT', 'TEXTAREA', 'svg']);
     
-    function traverse(node) {
+    const traverse = (node) => {
       // テキストノードの場合
       if(node instanceof Text) {
         const parent = node.parentElement;
@@ -56,6 +57,7 @@ class NodeFinder {
         
         addNode({
           target: node,
+          XPath: null,
           title: null,
           placeholder: null,
           alt: null,
@@ -77,6 +79,7 @@ class NodeFinder {
             // 属性の値が設定されていない場合は自動的にnullになるので、nullを考慮する必要はない
             addNode({
               target: node,
+              XPath: this.#getXPath(node),
               title: title,
               placeholder: placeholder,
               alt: alt,
@@ -98,12 +101,12 @@ class NodeFinder {
     // 要素を再帰的に探索
     traverse(rootElement);
     
-    this.setSize(nodes);
+    this.#setSize(nodes);
     return nodes;
   }
   
   // 要素の位置を幅の情報を追加
-  static setSize(nodes) {
+  static #setSize(nodes) {
     // テキストノードの位置と幅を取得
     const getTextNodeSize = (node) => {
       const range = document.createRange();
@@ -157,6 +160,61 @@ class NodeFinder {
       
       const { x, y, width, height } = size;
       Object.assign(node, { x, y, width, height });
+    }
+  }
+  
+  // xprで使うxpathを取得
+  // TODO: テキストノードのxpathを取得できるようにする
+  static #getXPath(target) {
+    // ルート(body/div#main/main)からターゲットまでの要素をリスト
+    const nodeTree = [];
+    while(target.tagName !== 'MAIN') {
+      nodeTree.unshift(target);
+      target = target.parentElement;
+    }
+    
+    // ルートからターゲットまでの要素のxpathを構築する
+    const result = [];
+    let current = document.querySelector('main');
+    for(const node of nodeTree) {
+      const tagName = node.tagName.toLowerCase();
+      
+      if(node.id) {
+        // 要素にidがある場合今までのxpathを破棄して相対パスに変更
+        result.length = 0;
+        // パスの追加（//タグ名#ID）
+        result.push(`//${tagName}#${node.id}`);
+      } else {
+        // 識別子クラスがある場合はそれを付与したうえで検索
+        // ない場合はutilClassNameは空文字のためタグ名のみで検索できる
+        const utilClassName = getUtilClassName(node);
+        const children = current.querySelectorAll(tagName + utilClassName);
+        
+        // 要素の位置を取得する
+        const index = [...children].indexOf(node);
+        // パスの追加（/タグ名.クラス名[要素位置]）
+        result.push(`/${tagName}${utilClassName}[${index}]`);
+        
+      }
+      
+      current = node;
+    }
+  
+    return result.join('');
+  
+    // 識別子クラス（例: .e1buxcrw1）を取得する関数
+    function getUtilClassName(node) {
+      // 識別子クラスはeで始まり英数字が続き数字で終わる
+      const classNamePattern = /^e[a-z0-9]+\d$/;
+      
+      // 要素のクラスリストを取得し、識別子クラスを検索する
+      const classNames = [...node.classList];
+      const utilClassName = classNames.find(name => classNamePattern.test(name));
+      
+      // 識別子クラスがある場合は先頭にピリオドを付けて返す
+      if(utilClassName) return '.' + utilClassName;
+      // ない場合は空文字を返す
+      return '';
     }
   }
 }
