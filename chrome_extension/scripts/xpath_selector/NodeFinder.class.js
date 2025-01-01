@@ -50,7 +50,7 @@ class NodeFinder {
         
         // テキストが空文字の場合
         if(text === '') return;
-        if(isVisuallyHidden(parent));
+        if(isVisuallyHidden(parent)) return;
         
         addNode({
           target: node,
