@@ -9,7 +9,7 @@ class OverlayManager {
   #component = null;
   // 取得したノードたち
   #foundNodes = null;
-  // 現在選択されているポップアップの参照元
+  // 現在選択されているポップアップの参照ID
   #currentId = null;
   
   constructor() {
