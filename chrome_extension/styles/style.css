@@ -12,7 +12,7 @@
 .vrc-popup {
   position: fixed;
   cursor: pointer;
-  border: 1px solid transparent;
+  border: 0.0625rem solid transparent;
 }
 .vrc-popup--blue {
   background-color: rgba(0, 128, 255, 0.3);
@@ -30,23 +30,23 @@
 .vrc-info {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 500px;
-  height: 400px;
-  padding: 10px 20px;
+  gap: 0.625rem;
+  width: 31.25rem;
+  height: 25rem;
+  padding: 0.625rem 1.25rem;
   position: fixed;
-  right: 7px;
-  bottom: 7px;
+  right: 0.4375rem;
+  bottom: 0.4375rem;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 0.4375rem rgba(255, 255, 255, 0.4);
   overflow-y: scroll;
 }
 .vrc-info__index {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 45px;
+  height: 2.8125rem;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -62,7 +62,7 @@
   flex-direction: column;
 }
 .vrc-info__title {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: bold;
 }
 .vrc-info__textarea {
