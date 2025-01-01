@@ -71,6 +71,8 @@
   padding: 0.125rem 0.3125rem;
   background-color: #3b3b3b;
   border: initial;
+  overflow-y: auto;
+  overflow-wrap: break-word;
 }
 .vrc-info__fade {
   color: grey;
