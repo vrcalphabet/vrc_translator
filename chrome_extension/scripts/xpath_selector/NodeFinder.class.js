@@ -199,7 +199,7 @@ class NodeFinder {
         // 識別子クラスがある場合はそれを付与したうえで検索
         // ない場合はutilClassNameは空文字のためタグ名のみで検索できる
         const utilClassName = getUtilClassName(node);
-        const children = current.querySelectorAll(tagName + utilClassName);
+        const children = current.querySelectorAll(`:scope > ${tagName}${utilClassName}`);
         
         // 要素の位置を取得する
         const index = [...children].indexOf(node);

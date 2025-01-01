@@ -97,7 +97,6 @@ class OverlayManager {
     
     // テキストノードとtitleまたはplaceholder属性がついた要素を検索
     const mainContent = document.querySelector('div#app > main');
-    // TODO: world infoがdiv[10]になってる問題を修正
     const foundNodes = NodeFinder.findNodes(mainContent);
     this.#foundNodes = foundNodes;
     
