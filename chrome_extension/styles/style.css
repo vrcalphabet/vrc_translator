@@ -76,4 +76,15 @@
 }
 .vrc-info__fade {
   color: grey;
+}
+.vrc-info__button {
+  flex-shrink: 0;
+  height: 2.5rem;
+  border-radius: 0.375rem;
+  background-color: #478699;
+  border: initial;
+}
+.vrc-info__button:active {
+  padding-top: 4px;
+  box-shadow: inset 0px 4px 0px rgba(0, 0, 0, 0.5);
 }/*# sourceMappingURL=style.css.map */

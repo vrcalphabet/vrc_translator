@@ -90,6 +90,7 @@ function htmlv(strings, ...args) {
       .forEach(element => {
         // 要素からコールバック関数のインデックスを取得
         const callbackIndex = element.getAttribute(fullEventName);
+        console.log(callbackFunctions[callbackIndex]);
         // イベントリスナーを追加
         element.addEventListener(eventName, callbackFunctions[callbackIndex]);
         element.removeAttribute(fullEventName);

@@ -9,6 +9,8 @@ class OverlayManager {
   #component = null;
   // 取得したノードたち
   #foundNodes = null;
+  // 現在選択されているポップアップの参照元
+  #currentId = null;
   
   constructor() {
     this.#loadStyle();
@@ -33,6 +35,7 @@ class OverlayManager {
             </div>
           `;
         })}
+        <button class="vrc-info__button" *onclick=${this.logElement.bind(this)}>要素をコンソールに表示する</button>
       </div>
     `;
     
@@ -159,6 +162,7 @@ class OverlayManager {
     
     const id = target.dataset.index;
     const property = this.#foundNodes[id];
+    this.#currentId = id;
     
     const keys = ['XPath', 'textContent', 'title', 'alt', 'placeholder'];
     keys.forEach(key => {
@@ -200,6 +204,14 @@ class OverlayManager {
     });
 
     return smallestElement.target;
+  }
+  
+  // 要素をコンソールに出力する
+  logElement() {
+    if(this.#currentId === null) return;
+    
+    const target = this.#foundNodes[this.#currentId].target;
+    console.log(target);
   }
 }
 
