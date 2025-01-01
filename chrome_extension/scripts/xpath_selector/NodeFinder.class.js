@@ -57,7 +57,7 @@ class NodeFinder {
         
         addNode({
           target: node,
-          XPath: null,
+          XPath: this.#getXPath(node),
           title: null,
           placeholder: null,
           alt: null,
@@ -164,7 +164,6 @@ class NodeFinder {
   }
   
   // xprで使うxpathを取得
-  // TODO: テキストノードのxpathを取得できるようにする
   static #getXPath(target) {
     // ルート(body/div#main/main)からターゲットまでの要素をリスト
     const nodeTree = [];
@@ -177,11 +176,23 @@ class NodeFinder {
     const result = [];
     let current = document.querySelector('main');
     for(const node of nodeTree) {
+      // ノードがテキストノードの場合
+      if(node instanceof Text) {
+        // 現在のノードと同じ階層にいるテキストノードをすべて取得
+        const childTextNodes = getChildTextNodes(node.parentElement);
+        // その中で自分は何番目に存在するかを取得
+        const index = childTextNodes.indexOf(node);
+        // パスの追加（/text()[要素位置]）
+        // xpathの場合インデックスは1始まりなので1加算する
+        result.push(`/text()[${index + 1}]`);
+        
+        // テキストノードの子は存在しないのでここで終了
+        break;
+      }
+      
       const tagName = node.tagName.toLowerCase();
       
       if(node.id) {
-        // 要素にidがある場合今までのxpathを破棄して相対パスに変更
-        result.length = 0;
         // パスの追加（//タグ名#ID）
         result.push(`//${tagName}#${node.id}`);
       } else {
@@ -193,7 +204,8 @@ class NodeFinder {
         // 要素の位置を取得する
         const index = [...children].indexOf(node);
         // パスの追加（/タグ名.クラス名[要素位置]）
-        result.push(`/${tagName}${utilClassName}[${index}]`);
+        // xpathの場合インデックスは1始まりなので1加算する
+        result.push(`/${tagName}${utilClassName}[${index + 1}]`);
         
       }
       
@@ -215,6 +227,11 @@ class NodeFinder {
       if(utilClassName) return '.' + utilClassName;
       // ない場合は空文字を返す
       return '';
+    }
+    
+    // 要素の子のテキストノードをすべて取得する
+    function getChildTextNodes(node) {
+      return [...node.childNodes].filter(node => node instanceof Text);
     }
   }
 }
