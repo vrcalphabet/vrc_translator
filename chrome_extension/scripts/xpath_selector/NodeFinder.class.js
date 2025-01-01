@@ -31,9 +31,6 @@ class NodeFinder {
     const isVisuallyHidden = (element) => {
       const { left, top, width, height } = element.getBoundingClientRect();
       
-      // 要素が小さい場合
-      if (width <= 10 || height <= 10) return true;
-      
       // 要素の上に別の要素が重なっているかどうかを判定
       const midX = left + width / 2;
       const midY = top + height / 2;
