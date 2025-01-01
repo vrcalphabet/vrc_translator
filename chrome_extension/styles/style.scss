@@ -80,5 +80,13 @@ $black-color: rgba(0, 0, 0);
   
   &__textarea {
     resize: none;
+    height: 4rem;
+    padding: 0.125rem 0.3125rem;
+    background-color: #3b3b3b;
+    border: initial;
+  }
+  
+  &__fade {
+    color: grey;
   }
 }

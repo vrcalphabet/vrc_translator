@@ -16,10 +16,15 @@ class OverlayManager {
   }
   
   #createElements() {
-    const titleKey = ['XPath', 'textContent', 'title', 'alt', 'placeholder'];
+    const titleKey = ['textContent', 'title', 'alt', 'placeholder'];
+    // TODO: 要素のモジュール化
     const component = htmlv`
       <div class="vrc-overlay" *as="overlay"></div>
       <div class="vrc-info" *as="info">
+        <div class="vrc-info__box">
+          <span class="vrc-info__title">XPath</span>
+          <div class="vrc-info__textarea" readonly ${dataset({ key: 'XPath' })} *as="XPath"></div>
+        </div>
         ${repeat(titleKey, key => {
           return /* html */`
             <div class="vrc-info__box">
@@ -92,9 +97,9 @@ class OverlayManager {
     
     // テキストノードとtitleまたはplaceholder属性がついた要素を検索
     const mainContent = document.querySelector('div#app > main');
+    // TODO: world infoがdiv[10]になってる問題を修正
     const foundNodes = NodeFinder.findNodes(mainContent);
     this.#foundNodes = foundNodes;
-    console.log(this.#foundNodes);
     
     // 検索結果をもとにオーバーレイ画面を作成
     this.#setOverlay(this.#foundNodes);
@@ -158,6 +163,13 @@ class OverlayManager {
     
     const keys = ['XPath', 'textContent', 'title', 'alt', 'placeholder'];
     keys.forEach(key => {
+      if(key === 'XPath') {
+        // もし途中に相対パスがある場合、それ以降を強調する置換処理
+        const value = property[key].replace(/^(.+)(?=\/\/)/, '<span class="vrc-info__fade">$1</span>');
+        this.#component[key].innerHTML = value;
+        return;
+      }
+      
       this.#component[key].value = property[key];
     });
   }

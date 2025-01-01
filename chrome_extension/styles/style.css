@@ -67,4 +67,11 @@
 }
 .vrc-info__textarea {
   resize: none;
+  height: 4rem;
+  padding: 0.125rem 0.3125rem;
+  background-color: #3b3b3b;
+  border: initial;
+}
+.vrc-info__fade {
+  color: grey;
 }/*# sourceMappingURL=style.css.map */
