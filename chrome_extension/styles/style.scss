@@ -1,7 +1,12 @@
+@import "svg/_svg";
+
 $blue-color: rgba(0, 128, 255);
 $lime-color: rgba(64, 255, 0);
 $white-color: rgba(255, 255, 255);
 $black-color: rgba(0, 0, 0);
+$grey-color: rgba(64, 64, 64);
+
+$base: 0.625rem;
 
 .vrc-overlay {
   width: 100%;
@@ -17,7 +22,7 @@ $black-color: rgba(0, 0, 0);
 .vrc-popup {
   position: fixed;
   cursor: pointer;
-  border: 0.0625rem solid transparent;
+  border: (.2 * $base) solid transparent;
   
   &--blue {
     background-color: rgba($blue-color, 30%);
@@ -38,33 +43,48 @@ $black-color: rgba(0, 0, 0);
 .vrc-info {
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
-  width: 31.25rem;
-  height: 25rem;
-  padding: 0.625rem 1.25rem;
+  gap: $base;
+  width: 50 * $base;
+  height: 40 * $base;
+  padding: $base;
   position: fixed;
-  right: 0.4375rem;
-  bottom: 0.4375rem;
+  right: 0;
+  bottom: 0;
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 0 0 0.4375rem rgba(255, 255, 255, 0.4);
+  background-color: rgba($black-color, 80%);
+  border: (.7 * $base) solid rgba($white-color, 40%);
+  border-left: none;
   overflow-y: scroll;
   
-  &__index {
+  &__wing {
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 2.8125rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    width: 3.2 * $base;
+    height: 40 * $base;
+    position: fixed;
+    bottom: 0;
+    right: 50 * $base;
+    background-color: rgba($black-color, 80%);
+    border: solid rgba($white-color, 40%);
+    border-width: .7 * $base;
+    border-right-width: (.1 * $base);
+    transition: background-color .2s;
     
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.3);
+    &::before {
+      content: "";
+      flex-shrink: 0;
+      display: block;
+      width: 2 * $base;
+      height: 2 * $base;
+      background-image: url($caret-down-svg);
+      background-position: center;
+      background-size: 2 * $base;
+      filter: invert(.9);
+      transform: rotate(90deg);
     }
     
-    &--selected {
-      background-color: rgba(255, 255, 255, 0.8);
-      color: black;
+    &:hover {
+      background-color: rgba($grey-color, 0.8);
     }
   }
   
@@ -74,14 +94,14 @@ $black-color: rgba(0, 0, 0);
   }
   
   &__title {
-    font-size: 1.125rem;
+    font-size: 1.8 * $base;
     font-weight: bold;
   }
   
   &__textarea {
     resize: none;
-    height: 4rem;
-    padding: 0.125rem 0.3125rem;
+    height: 6 * $base;
+    padding: (.2 * $base) (.5 * $base);
     background-color: #3b3b3b;
     border: initial;
     overflow-y: auto;
@@ -94,14 +114,14 @@ $black-color: rgba(0, 0, 0);
   
   &__button {
     flex-shrink: 0;
-    height: 2.5rem;
-    border-radius: 0.375rem;
-    background-color: #478699;
+    height: 4 * $base;
+    border-radius: .6 * $base;
+    background: linear-gradient(90deg, rgb(0,95,175) 0%, rgb(0,176,217) 100%);
     border: initial;
     
     &:active {
-      padding-top: 4px;
-      box-shadow: inset 0px 4px 0px rgb(0 0 0 / 0.5);
+      padding-top: .4 * $base;
+      box-shadow: inset 0px (.4 * $base) 0px rgba($black-color, 50%);
     }
   }
 }

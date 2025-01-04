@@ -23,6 +23,7 @@ class OverlayManager {
     const component = htmlv`
       <div class="vrc-overlay" *as="overlay"></div>
       <div class="vrc-info" *as="info" *onclick=${e => e.stopPropagation()}>
+        <button class="vrc-info__wing"></button>
         <div class="vrc-info__box">
           <span class="vrc-info__title">XPath</span>
           <div class="vrc-info__textarea" readonly ${dataset({ key: 'XPath' })} *as="XPath"></div>
