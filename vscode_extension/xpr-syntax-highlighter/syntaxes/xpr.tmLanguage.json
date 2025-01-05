@@ -55,7 +55,7 @@
 		"strings": {
 			"patterns": [{
 				"name": "string.quoted.double.xpr",
-				"match": "/[a-zA-Z0-9#./,:=\\-()\\[\\]]+(?=\\s|$)"
+				"match": "/[a-zA-Z0-9#./,:=_\\-()\\[\\]]+(?=\\s|$)"
 			}]
 		}
 	},

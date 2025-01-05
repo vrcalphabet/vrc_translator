@@ -2,7 +2,7 @@
   "name": "tsr-converter",
   "displayName": "tsr-converter",
   "description": "translate file merger",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^0.43.5"
   },
@@ -14,7 +14,7 @@
   "contributes": {
     "commands": [{
       "command": "extension.mergeFiles",
-      "title": "Merge translated files"
+      "title": "翻訳ファイルを統合する"
     }]
   }
 }
