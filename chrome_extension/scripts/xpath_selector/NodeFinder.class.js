@@ -52,6 +52,11 @@ class NodeFinder {
         if(text === '') return;
         if(isVisuallyHidden(parent)) return;
         
+        // テキストノード一つしかない場合は親をターゲットにする
+        if(parent.childNodes.length === 1) {
+          node = parent;
+        }
+        
         addNode({
           target: node,
           XPath: this.#getXPath(node),
@@ -61,9 +66,8 @@ class NodeFinder {
           textContent: text
         });
       }
-      
       // 要素ノードの場合
-      if(node instanceof Element) {
+      else if(node instanceof Element) {
         if(isHidden(node)) return;
         
         // 要素にtitleまたはplaceholder、alt属性がついている場合
