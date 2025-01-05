@@ -39,8 +39,8 @@
   bottom: 0;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.8);
-  border: 0.4375rem solid rgba(255, 255, 255, 0.4);
-  border-left: none;
+  border: solid rgba(255, 255, 255, 0.4);
+  border-width: 0.4375rem 0.4375rem 0.4375rem 0;
   overflow-y: scroll;
 }
 .vrc-info__wing {
@@ -53,8 +53,7 @@
   right: 31.25rem;
   background-color: rgba(0, 0, 0, 0.8);
   border: solid rgba(255, 255, 255, 0.4);
-  border-width: 0.4375rem;
-  border-right-width: 0.0625rem;
+  border-width: 0.4375rem 0.0625rem 0.4375rem 0.4375rem;
   transition: background-color 0.2s;
 }
 .vrc-info__wing::before {
@@ -67,7 +66,7 @@
   background-position: center;
   background-size: 1.25rem;
   filter: invert(0.9);
-  transform: rotate(90deg);
+  transform: rotate(90deg) translateY(6px);
 }
 .vrc-info__wing:hover {
   background-color: rgba(64, 64, 64, 0.8);
@@ -89,6 +88,10 @@
   overflow-y: auto;
   overflow-wrap: break-word;
 }
+.vrc-info__textarea--novalue {
+  height: 1.25rem;
+  overflow-y: hidden;
+}
 .vrc-info__fade {
   color: grey;
 }
@@ -102,4 +105,16 @@
 .vrc-info__button:active {
   padding-top: 0.25rem;
   box-shadow: inset 0px 0.25rem 0px rgba(0, 0, 0, 0.5);
+}
+
+.vrc-info.vrc-info--left {
+  left: 0px;
+  border-width: 0.4375rem 0 0.4375rem 0.4375rem;
+}
+.vrc-info.vrc-info--left .vrc-info__wing {
+  left: 31.25rem;
+  border-width: 0.4375rem 0.4375rem 0.4375rem 0.0625rem;
+}
+.vrc-info.vrc-info--left .vrc-info__wing::before {
+  transform: rotate(-90deg);
 }/*# sourceMappingURL=style.css.map */

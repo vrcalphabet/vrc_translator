@@ -18,30 +18,28 @@ class OverlayManager {
   }
   
   #createElements() {
-    const titleKey = ['textContent', 'title', 'alt', 'placeholder'];
+    const titleKey = ['XPath', 'textContent', 'title', 'alt', 'placeholder'];
     // TODO: 要素のモジュール化
     const component = htmlv`
-      <div class="vrc-overlay" *as="overlay"></div>
-      <div class="vrc-info" *as="info" *onclick=${e => e.stopPropagation()}>
-        <button class="vrc-info__wing"></button>
-        <div class="vrc-info__box">
-          <span class="vrc-info__title">XPath</span>
-          <div class="vrc-info__textarea" readonly ${dataset({ key: 'XPath' })} *as="XPath"></div>
+      <div class="vrc-overlay" *as="overlay">
+        <!-- この要素は「VRChat日本語化アドオン」によって追加されました -->
+        <div class="vrc-info" *as="info" *onclick=${e => e.stopPropagation()}>
+          <button class="vrc-info__wing" *onclick=${this.changePosition.bind(this)}></button>
+          ${repeat(titleKey, key => {
+            const tagName = key === 'XPath' ? 'div' : 'textarea';
+            return /* html */`
+              <div class="vrc-info__box">
+                <span class="vrc-info__title">${key}</span>
+                <${tagName} class="vrc-info__textarea" readonly ${dataset({ key })} *as="${key}"></${tagName}>
+              </div>
+            `;
+          })}
+          <button class="vrc-info__button" *onclick=${this.logElement.bind(this)}>要素をコンソールに表示する</button>
         </div>
-        ${repeat(titleKey, key => {
-          return /* html */`
-            <div class="vrc-info__box">
-              <span class="vrc-info__title">${key}</span>
-              <textarea class="vrc-info__textarea" readonly ${dataset({ key })} *as="${key}"></textarea>
-            </div>
-          `;
-        })}
-        <button class="vrc-info__button" *onclick=${this.logElement.bind(this)}>要素をコンソールに表示する</button>
       </div>
     `;
     
     document.body.append(component.overlay);
-    component.overlay.append(component.info);
 
     this.#component = component;
   }
@@ -52,7 +50,7 @@ class OverlayManager {
   }
   
   #hide() {
-    this.#component.overlay.style.display = 'none';
+    this.#component.overlay.style.display = null;
     this.#isShow = false;
   }
   
@@ -83,7 +81,6 @@ class OverlayManager {
       });
       
       const datasetIndex = dataset({ index });
-        
       const popup = htmlv`
         <div class="vrc-popup vrc-popup--${color}" style="${style}" ${datasetIndex}></div>
       `;
@@ -127,6 +124,11 @@ class OverlayManager {
     // 文書の読み込みがすべて完了しているか
     if(document.readyState !== 'complete') return;
     
+    // Alt、infoの一時非表示
+    if(this.#isShow && e.key === 'Alt') {
+      this.#component.info.style.display = 'none';
+    }
+    
     // Esc
     if(e.key === 'Escape') {
       this.#hide();
@@ -135,6 +137,14 @@ class OverlayManager {
     // Alt + H
     if(e.key === 'h' && e.altKey) {
       this.#searchNodes();
+    }
+  }
+  
+  handleKeyUp(e) {
+    // Alt、infoの一時表示
+    if(this.#isShow && e.key === 'Alt') {
+      this.#component.info.style.display = null;
+      e.preventDefault();
     }
   }
   
@@ -159,22 +169,29 @@ class OverlayManager {
     const target = this.#getPopup(e);
     if(target === null) return;
     
-    console.log(target);
-    
     const id = target.dataset.index;
     const property = this.#foundNodes[id];
     this.#currentId = id;
     
     const keys = ['XPath', 'textContent', 'title', 'alt', 'placeholder'];
     keys.forEach(key => {
-      if(key === 'XPath') {
-        // もし途中に相対パスがある場合、それ以降を強調する置換処理
-        const value = property[key].replace(/^(.+)(?=\/\/)/, '<span class="vrc-info__fade">$1</span>');
-        this.#component[key].innerHTML = value;
+      const name = key === 'XPath' ? 'innerHTML' : 'value';
+      let value = property[key];
+      
+      // 値がない場合はvalueをクリア
+      if(value === null) {
+        this.#component[key].classList.add('vrc-info__textarea--novalue');
+        this.#component[key][name] = '';
         return;
       }
       
-      this.#component[key].value = property[key];
+      // もし途中に相対パスがある場合、それ以降を強調する置換処理
+      if(key === 'XPath') {
+        value = value.replace(/^(.+)(?=\/\/)/, '<span class="vrc-info__fade">$1</span>');
+      }
+      
+      this.#component[key].classList.remove('vrc-info__textarea--novalue');
+      this.#component[key][name] = value;
     });
   }
   
@@ -189,7 +206,6 @@ class OverlayManager {
     if(filteredElements.length === 0) return null;
     
     // 各要素の面積を計算する
-    // TODO: 面積の計算をあらかじめキャッシュする
     const areas = filteredElements.map(element => {
       const client = element.getBoundingClientRect();
       const { width, height } = client;
@@ -213,6 +229,11 @@ class OverlayManager {
     
     const target = this.#foundNodes[this.#currentId].target;
     console.log(target);
+  }
+  
+  // info要素の位置を切り替える
+  changePosition() {
+    this.#component.info.classList.toggle('vrc-info--left');
   }
 }
 

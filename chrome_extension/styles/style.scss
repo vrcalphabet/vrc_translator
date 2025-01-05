@@ -52,8 +52,8 @@ $base: 0.625rem;
   bottom: 0;
   z-index: 1;
   background-color: rgba($black-color, 80%);
-  border: (.7 * $base) solid rgba($white-color, 40%);
-  border-left: none;
+  border: solid rgba($white-color, 40%);
+  border-width: (.7 * $base) (.7 * $base) (.7 * $base) 0;
   overflow-y: scroll;
   
   &__wing {
@@ -66,8 +66,7 @@ $base: 0.625rem;
     right: 50 * $base;
     background-color: rgba($black-color, 80%);
     border: solid rgba($white-color, 40%);
-    border-width: .7 * $base;
-    border-right-width: (.1 * $base);
+    border-width: (.7 * $base) (.1 * $base) (.7 * $base) (.7 * $base);
     transition: background-color .2s;
     
     &::before {
@@ -80,7 +79,7 @@ $base: 0.625rem;
       background-position: center;
       background-size: 2 * $base;
       filter: invert(.9);
-      transform: rotate(90deg);
+      transform: rotate(90deg) translateY(6px);
     }
     
     &:hover {
@@ -106,6 +105,11 @@ $base: 0.625rem;
     border: initial;
     overflow-y: auto;
     overflow-wrap: break-word;
+    
+    &--novalue {
+      height: 2 * $base;
+      overflow-y: hidden;
+    }
   }
   
   &__fade {
@@ -116,12 +120,26 @@ $base: 0.625rem;
     flex-shrink: 0;
     height: 4 * $base;
     border-radius: .6 * $base;
-    background: linear-gradient(90deg, rgb(0,95,175) 0%, rgb(0,176,217) 100%);
+    background: linear-gradient(90deg, rgb(0, 95, 175) 0%, rgb(0, 176, 217) 100%);
     border: initial;
     
     &:active {
       padding-top: .4 * $base;
       box-shadow: inset 0px (.4 * $base) 0px rgba($black-color, 50%);
+    }
+  }
+}
+
+.vrc-info.vrc-info--left {
+  left: 0px;
+  border-width: (.7 * $base) 0 (.7 * $base) (.7 * $base);
+  
+  .vrc-info__wing {
+    left: 50 * $base;
+    border-width: (.7 * $base) (.7 * $base) (.7 * $base) (.1 * $base);
+    
+    &::before {
+      transform: rotate(-90deg);
     }
   }
 }

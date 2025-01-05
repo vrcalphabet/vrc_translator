@@ -10,12 +10,17 @@ class EventHandler {
   
   #initializeEventListener() {
     document.addEventListener('keydown', e => this.#handleKeyDown(e));
+    document.addEventListener('keyup', e => this.#handleKeyUp(e));
     document.addEventListener('mousemove', e => this.#handleMouseMove(e));
     document.addEventListener('click', e => this.#handleClick(e));
   }
   
   #handleKeyDown(e) {
     this.#overlayManager.handleKeyDown(e);
+  }
+  
+  #handleKeyUp(e) {
+    this.#overlayManager.handleKeyUp(e);
   }
   
   #handleMouseMove(e) {
