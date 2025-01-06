@@ -15,10 +15,10 @@
         "Password": null
       },
       "LOGIN_FORGOT": {
-        "password": null,
-        "email address": null,
         "Forgot your": null,
+        "password": null,
         "or": null,
+        "email address": null,
         "?": null
       },
       "LOGIN_BUTTON": {
@@ -35,6 +35,69 @@
     "WORLD_INFO": {
       "World:": null,
       "Author:": null
+    }
+  },
+  "REGISTER": {
+    "FORM": {
+      "TITLE": {
+        "Create a New Account": null
+      },
+      "LABEL": {
+        "Display Name": null,
+        "Email": null,
+        "Password": null,
+        "Date of Birth": null
+      },
+      "REGISTER_INPUT": {
+        "Re-enter email address": null,
+        "Re-enter password": null,
+        "Day": null,
+        "Year": null
+      },
+      "VALIDATION_MESSAGE": {
+        "This is the name shown to other users in-app, you may only change your display name once per 90 days.": null,
+        "That display name is too short": null,
+        "That display name is too long": null,
+        "That display name is already taken.": null,
+        "That's an invalid email": null,
+        "This email is already taken.": null,
+        "Emails do not match": null,
+        "That password is too short \n \n    We recommend using a password which is:\n      •   At least 8 characters long\n      •   Unique to this account and not in use anywhere else\n      •   Uses a combination of letters, numbers, and symbols\n      •   Stored in a Password Manager": null,
+        "Please try a more secure password \n \n    We recommend using a password which is:\n      •   At least 8 characters long\n      •   Unique to this account and not in use anywhere else\n      •   Uses a combination of letters, numbers, and symbols\n      •   Stored in a Password Manager": null,
+        "Passwords do not match": null,
+        "That's not a valid year": null
+      },
+      "AGE_MONTH": {
+        "January": null,
+        "February": null,
+        "March": null,
+        "April": null,
+        "May": null,
+        "June": null,
+        "July": null,
+        "August": null,
+        "September": null,
+        "October": null,
+        "November": null,
+        "December": null
+      },
+      "CONSENT": {
+        "I have read and agree to the": null,
+        "Privacy Policy": null,
+        ",": null,
+        "Community Guidelines": null,
+        "and": null,
+        "Terms of Service": null,
+        ".": null,
+        "I agree to receive updates from VRChat about its products, services and promotions.": null
+      },
+      "REGISTER_BUTTON": {
+        "Create Account": null
+      },
+      "LOGIN": {
+        "Have an account?": null,
+        "Log in": null
+      }
     }
   }
 }

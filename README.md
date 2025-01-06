@@ -9,8 +9,8 @@
 - [x] 翻訳データが作成しやすくなる拡張機能を作成
 - [ ] 各ページの対応
   - [x] /home/login
+  - [x] /home/register
   - [ ] /home/password
   - [ ] /home/forgot-email
-  - [ ] /home/register
   - [ ] /home/verify
   - [ ] /home/failedverify
