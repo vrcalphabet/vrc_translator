@@ -46,7 +46,7 @@ class NodeFinder {
       // テキストノードの場合
       if(node instanceof Text) {
         const parent = node.parentElement;
-        const text = node.textContent.trim();
+        const text = node.textContent.trim().replaceAll('\n', '\\n');
         
         // テキストが空文字の場合
         if(text === '') return;

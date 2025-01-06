@@ -22,7 +22,6 @@ class PageTranslator {
     const xpathRules = this.#filterXpathRules();
     // xpathを使って要素を取得する
     const elements = this.#findElements(xpathRules);
-    console.log(elements);
     // 要素のテキストやtitle, placeholderを翻訳
     this.#replaceTranslation(elements);
   }
@@ -94,7 +93,7 @@ class PageTranslator {
       const newText = this.#searchTranslations(key, text);
       if(newText === null) continue;
       
-      console.log(key, text, newText);
+      console.log(`[${key}] "${text}" -> "${newText}"`);
       if(target instanceof Text) {
         target.nodeValue = newText;
       } else if(attribute !== null) {
