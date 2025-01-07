@@ -10,7 +10,7 @@
 - [ ] 各ページの対応
   - [x] /home/login
   - [x] /home/register
+  - [x] /home/verify
   - [ ] /home/password
   - [ ] /home/forgot-email
-  - [ ] /home/verify
   - [ ] /home/failedverify

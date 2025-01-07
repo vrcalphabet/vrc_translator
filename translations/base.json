@@ -99,5 +99,45 @@
         "Log in": null
       }
     }
+  },
+  "VERIFY": {
+    "FORM": {
+      "TITLE": {
+        "Email Verification": null
+      },
+      "VERIFY_MESSAGE": {
+        "We’ve resent you the verification email.": null,
+        "Failed to verify, Please check your inbox (or spam folder) to verify your email.": null,
+        "Your email has been updated.": null
+      },
+      "DESCRIPTION": {
+        "We've sent an email to": null,
+        "Please check your inbox (or spam folder) to verify your email, it may take a few minutes.": null,
+        "If you entered your email address incorrectly, you can update it here": null
+      },
+      "RESEND": {
+        "Can't find the email? Send again": null
+      },
+      "NEW_INPUT": {
+        "New Email": null,
+        "Re-Enter Email": null,
+        "Enter Your Password": null
+      },
+      "UPDATE_BUTTON": {
+        "Update Email": null
+      },
+      "VALIDATION_MESSAGE": {
+        "This is not a valid email": null,
+        "This email is already taken": null,
+        "Emails do not match": null
+      },
+      "VERIFIED": {
+        "Okay, I've verified my Email!": null
+      },
+      "LOGOUT": {
+        "Log out and start over": null,
+        "Logout": null
+      }
+    }
   }
 }

@@ -1,0 +1,28 @@
+@rootkey VERIFY
+@includes {
+  /home/verify
+}
+
+% フォーム画面
+FORM //form[1]/div[1] {
+  % タイトル
+  TITLE /h4[1]
+  % 再送信に成功、認証に失敗
+  VERIFY_MESSAGE /p[1]/text()[1]
+  % 説明
+  DESCRIPTION /p[1]/text()[1]
+  DESCRIPTION /p[2:3]
+  % 再送信
+  RESEND /div[2]/span[1]
+  % 新しいメールアドレス、パスワード
+  NEW_INPUT /div.e1buxcrw2/input * [placeholder]
+  % エラー
+  VALIDATION_MESSAGE /div.e2a7b8x3[1]
+  % メールアドレス更新
+  UPDATE_BUTTON /div.e7cdgnz2[1]/button.e7cdgnz1[1]
+  % 認証済み
+  VERIFIED /div.e7cdgnz2[1]/button.e7cdgnz1[1]
+  % ログアウト
+  LOGOUT /a.e18c1r7j6[1]
+  LOGOUT /a.e18c1r7j6[1] [title]
+}

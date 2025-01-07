@@ -2,6 +2,7 @@
   "output": "../../chrome_extension/output/rules.json",
   "files": [
     "./login.xpr",
-    "./register.xpr"
+    "./register.xpr",
+    "./verify.xpr"
   ]
 }
