@@ -3,7 +3,7 @@
   /home/login
 }
 
-% フォーム画面
+% ログイン画面
 FORM //form#login-form {
   % タイトル
   TITLE /h4 *

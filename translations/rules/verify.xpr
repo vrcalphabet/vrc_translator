@@ -16,7 +16,7 @@ FORM //form[1]/div[1] {
   RESEND /div[2]/span[1]
   % 新しいメールアドレス、パスワード
   NEW_INPUT /div.e1buxcrw2/input * [placeholder]
-  % エラー
+  % エラーメッセージ
   VALIDATION_MESSAGE /div.e2a7b8x3[1]
   % メールアドレス更新
   UPDATE_BUTTON /div.e7cdgnz2[1]/button.e7cdgnz1[1]
