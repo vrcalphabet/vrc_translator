@@ -139,5 +139,42 @@
         "Logout": "ログアウト"
       }
     }
+  },
+  "PASSWORD": {
+    "FORM": {
+      "FORM_EMAIL": {
+        "TITLE": {
+          "Reset Password": "パスワードのリセット"
+        },
+        "DESCRIPTION": {
+          "Please enter the email address associated with your account.": "アカウントに関連付けられているメールアドレスを入力してください。"
+        },
+        "EMAIL_INPUT": {
+          "Email": "メールアドレス"
+        },
+        "RESET_BUTTON": {
+          "Reset your password": "パスワードをリセットする"
+        },
+        "VALIDATION_MESSAGE": {
+          "Invalid Email Address": "無効なメールアドレスです"
+        },
+        "LOGIN": {
+          "Back to login": "ログイン画面に戻る"
+        }
+      },
+      "FORM_CHECK_EMAIL": {
+        "TITLE": {
+          "Check Your Email": "メールを確認してください"
+        },
+        "DESCRIPTION": {
+          "If we have an account associated with": "",
+          ", we have sent you a password reset link!": " に関連付けられたアカウントをお持ちの場合は、指定されたメールアドレスにパスワードリセットリンクをお送りしました。",
+          "You may need to check your spam folder if you don't see it within a few minutes.": "数分以内に受信されない場合は、迷惑メールフォルダにある可能性があります。"
+        },
+        "LOGIN": {
+          "Back to login": "ログイン画面に戻る"
+        }
+      }
+    }
   }
 }

@@ -139,5 +139,42 @@
         "Logout": null
       }
     }
+  },
+  "PASSWORD": {
+    "FORM": {
+      "FORM_EMAIL": {
+        "TITLE": {
+          "Reset Password": null
+        },
+        "DESCRIPTION": {
+          "Please enter the email address associated with your account.": null
+        },
+        "EMAIL_INPUT": {
+          "Email": null
+        },
+        "RESET_BUTTON": {
+          "Reset your password": null
+        },
+        "VALIDATION_MESSAGE": {
+          "Invalid Email Address": null
+        },
+        "LOGIN": {
+          "Back to login": null
+        }
+      },
+      "FORM_CHECK_EMAIL": {
+        "TITLE": {
+          "Check Your Email": null
+        },
+        "DESCRIPTION": {
+          "If we have an account associated with": null,
+          ", we have sent you a password reset link!": null,
+          "You may need to check your spam folder if you don't see it within a few minutes.": null
+        },
+        "LOGIN": {
+          "Back to login": null
+        }
+      }
+    }
   }
 }

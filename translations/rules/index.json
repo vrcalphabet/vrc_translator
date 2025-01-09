@@ -3,6 +3,7 @@
   "files": [
     "./login.xpr",
     "./register.xpr",
-    "./verify.xpr"
+    "./verify.xpr",
+    "./password.xpr"
   ]
 }
