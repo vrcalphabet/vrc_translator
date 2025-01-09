@@ -174,6 +174,49 @@
         "LOGIN": {
           "Back to login": null
         }
+      },
+      "FORM_RESET_PASSWORD": {
+        "TITLE": {
+          "Reset Password": null
+        },
+        "DESCRIPTION": {
+          "Almost there! Type your new password and you'll be all set.": null
+        },
+        "PASSWORD_INPUT": {
+          "New Password": null,
+          "Re-Enter Password": null
+        },
+        "VALIDATION_MESSAGE": {
+          "That password is too short": null,
+          "Please try a more secure password": null,
+          "Passwords do not match": null,
+          "Please verify the password recovery link has not already been used!": null
+        },
+        "RESET_BUTTON": {
+          "Change Password": null
+        },
+        "LOGIN": {
+          "Back to login": null
+        },
+        "STRONG_PASSWORD": {
+          "Use a strong password": null,
+          "We recommend using a password which is:": null,
+          "At least 8 characters long": null,
+          "Unique to this account and not in use anywhere else": null,
+          "Uses a combination of letters, numbers and symbols": null,
+          "Stored in a Password Manager": null
+        }
+      }
+    },
+    "FORM_SUCCESS": {
+      "TITLE": {
+        "Successful password reset!": null
+      },
+      "DESCRIPTION": {
+        "You can now use your new password to log in to your account!": null
+      },
+      "LOGIN": {
+        "Login": null
       }
     }
   }

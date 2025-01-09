@@ -174,6 +174,49 @@
         "LOGIN": {
           "Back to login": "ログイン画面に戻る"
         }
+      },
+      "FORM_RESET_PASSWORD": {
+        "TITLE": {
+          "Reset Password": "パスワードのリセット"
+        },
+        "DESCRIPTION": {
+          "Almost there! Type your new password and you'll be all set.": "もう少しです！新しいパスワードを入力すると完了します。"
+        },
+        "PASSWORD_INPUT": {
+          "New Password": "新しいパスワード",
+          "Re-Enter Password": "新しいパスワード（確認）"
+        },
+        "VALIDATION_MESSAGE": {
+          "That password is too short": "パスワードが短すぎます",
+          "Please try a more secure password": "パスワードをもっと強力にしてください",
+          "Passwords do not match": "パスワードが一致しません",
+          "Please verify the password recovery link has not already been used!": "パスワードリセットリンクが無効になっている可能性があります！リンクがまだ有効であるかどうかを確認してください。"
+        },
+        "RESET_BUTTON": {
+          "Change Password": "パスワードを変更する"
+        },
+        "LOGIN": {
+          "Back to login": "ログイン画面に戻る"
+        },
+        "STRONG_PASSWORD": {
+          "Use a strong password": "強いパスワードにするためのヒント",
+          "We recommend using a password which is:": "次のようなパスワードにすることを推奨します：",
+          "At least 8 characters long": "最低8文字以上であること",
+          "Unique to this account and not in use anywhere else": "このアカウント専用のパスワードを使用すること",
+          "Uses a combination of letters, numbers and symbols": "文字、数字、記号を組み合わせること",
+          "Stored in a Password Manager": "パスワードマネージャーに保存して管理すること"
+        }
+      }
+    },
+    "FORM_SUCCESS": {
+      "TITLE": {
+        "Successful password reset!": "パスワードのリセットが完了しました！"
+      },
+      "DESCRIPTION": {
+        "You can now use your new password to log in to your account!": "今後、新しいパスワードを利用してアカウントにログインできます！"
+      },
+      "LOGIN": {
+        "Login": "ログイン    "
       }
     }
   }
