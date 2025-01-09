@@ -11,6 +11,6 @@
   - [x] /home/login
   - [x] /home/register
   - [x] /home/verify
-  - [ ] /home/password
+  - [x] /home/password
   - [ ] /home/forgot-email
   - [ ] /home/failedverify
