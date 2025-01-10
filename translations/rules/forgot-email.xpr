@@ -1,0 +1,29 @@
+@rootkey FORGOT_EMAIL
+@includes {
+  /home/forgot-email
+}
+
+FORM //form#email-recovery-form {
+  % [ユーザ名入力画面]
+  FORM_USERNAME /div[1][count(*)=7] {
+    % タイトル
+    TITLE /h4[1]
+    % 説明
+    DESCRIPTION /div[2]/div[1]/p[1]
+    DESCRIPTION /div[3]/p[1]
+    % ユーザ名入力欄
+    USERNAME_INPUT /div[2]/div.e1buxcrw2[1]/input.e1buxcrw1[1] [placeholder]
+    % エラーメッセージ
+    VALIDATION_MESSAGE /div[2]/p[1]
+    VALIDATION_MESSAGE /p[1]
+    % 送信ボタン
+    REMINDER_BUTTON /div.e7cdgnz2[1]/button.e7cdgnz1[1]
+    % ログイン
+    LOGIN /div[6]/a[1]
+  }
+  % [メール確認画面]
+  FORM_CHECK_EMAIL /div[1][count(*)=5] {
+    % 説明
+    DESCRIPTION /div[3]/p[1,2] *
+  }
+}

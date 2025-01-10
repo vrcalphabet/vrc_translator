@@ -219,5 +219,37 @@
         "Login": "ログイン"
       }
     }
+  },
+  "FORGOT_EMAIL": {
+    "FORM": {
+      "FORM_USERNAME": {
+        "TITLE": {
+          "Forgot Email Address": "メールアドレスを忘れた"
+        },
+        "DESCRIPTION": {
+          "Please enter the user or display name of your account.": "以下にアカウントの表示名（ユーザ名）を入力してください。",
+          "If the name is associated with a verified email address, we will send a reminder message to that address.": "ユーザ名が認証済みのメールアドレスと関連付けられている場合は、そのメールアドレス宛に確認メールが送信されます。"
+        },
+        "USERNAME_INPUT": {
+          "Username": "ユーザ名"
+        },
+        "VALIDATION_MESSAGE": {
+          "That name is too long": "名前が長すぎます",
+          ": Sorry, you can't request email address reminders that often": "確認メールの送信を頻繁にリクエストすることはできません"
+        },
+        "REMINDER_BUTTON": {
+          "Request reminder message": "確認メールを送信"
+        },
+        "LOGIN": {
+          "Back to login": "ログイン画面に戻る"
+        }
+      },
+      "FORM_CHECK_EMAIL": {
+        "DESCRIPTION": {
+          "We have attempted to send a reminder to your registered email address!": "登録されているメールアドレスに確認メールを送信しました！",
+          "You may need to check your spam folder if you don't see it within a few minutes.": "数分以内に受信されない場合は、迷惑メールフォルダにある可能性があります。"
+        }
+      }
+    }
   }
 }

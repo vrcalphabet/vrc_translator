@@ -219,5 +219,37 @@
         "Login": null
       }
     }
+  },
+  "FORGOT_EMAIL": {
+    "FORM": {
+      "FORM_USERNAME": {
+        "TITLE": {
+          "Forgot Email Address": null
+        },
+        "DESCRIPTION": {
+          "Please enter the user or display name of your account.": null,
+          "If the name is associated with a verified email address, we will send a reminder message to that address.": null
+        },
+        "USERNAME_INPUT": {
+          "Username": null
+        },
+        "VALIDATION_MESSAGE": {
+          "That name is too long": null,
+          ": Sorry, you can't request email address reminders that often": null
+        },
+        "REMINDER_BUTTON": {
+          "Request reminder message": null
+        },
+        "LOGIN": {
+          "Back to login": null
+        }
+      },
+      "FORM_CHECK_EMAIL": {
+        "DESCRIPTION": {
+          "We have attempted to send a reminder to your registered email address!": null,
+          "You may need to check your spam folder if you don't see it within a few minutes.": null
+        }
+      }
+    }
   }
 }
