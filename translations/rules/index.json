@@ -5,6 +5,7 @@
     "./register.xpr",
     "./verify.xpr",
     "./password.xpr",
-    "./forgot-email.xpr"
+    "./forgot-email.xpr",
+    "./emailtwofactorauth.xpr"
   ]
 }

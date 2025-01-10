@@ -251,5 +251,32 @@
         }
       }
     }
+  },
+  "EMAILTWOFACTORAUTH": {
+    "FORM": {
+      "TITLE": {
+        "Email One-Time Code": null
+      },
+      "DESCRIPTION": {
+        "Enter the numeric code we sent to your email.": null
+      },
+      "VALIDATION_MESSAGE": {
+        "Oops, that code didn't work.": null
+      },
+      "NEXT_BUTTON": {
+        "Next": null
+      },
+      "WHATS_THIS": {
+        "TITLE": {
+          "What's this?": null
+        },
+        "DESCRIPTION": {
+          "To help keep your account secure we've sent a code to your registered email address. You'll need to enter it above to access VRChat.": null
+        }
+      },
+      "LOGOUT": {
+        "Log out": null
+      }
+    }
   }
 }
