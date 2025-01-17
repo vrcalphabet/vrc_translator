@@ -6,6 +6,7 @@
     "./verify.xpr",
     "./password.xpr",
     "./forgot-email.xpr",
-    "./emailtwofactorauth.xpr"
+    "./emailtwofactorauth.xpr",
+    "./failedverify.xpr"
   ]
 }

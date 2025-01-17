@@ -1,0 +1,14 @@
+@rootkey FAILEDVERIFY
+@includes {
+  /home/failedverify
+}
+
+% 認証失敗
+FORM /div[2]/div[2]/div[1]/div[1] {
+  % タイトル
+  TITLE /h4[1]
+  % 説明
+  DESCRIPTION /p[1]
+  % ログイン
+  LOGIN /a.e18c1r7j6[1]
+}

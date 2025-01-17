@@ -14,4 +14,4 @@
   - [x] /home/password
   - [x] /home/forgot-email
     - 正しい手順を踏んでも確認メールが届かないため、メール内のリンク先のページは翻訳できません。
-  - [ ] /home/failedverify
+  - [x] /home/failedverify

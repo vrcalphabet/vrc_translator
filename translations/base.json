@@ -278,5 +278,18 @@
         "Log out": null
       }
     }
+  },
+  "FAILEDVERIFY": {
+    "FORM": {
+      "TITLE": {
+        "Verification Failed": null
+      },
+      "DESCRIPTION": {
+        "The link you followed is either invalid, or you are already verified. Please log in and request a new verification link if prompted.": null
+      },
+      "LOGIN": {
+        "Back to login": null
+      }
+    }
   }
 }
