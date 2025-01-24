@@ -1,0 +1,30 @@
+@name EMAILTWOFACTORAUTH
+@includes {
+  /home/emailtwofactorauth
+  /home/a
+  /home/b
+}
+@excludes {
+  /a%f
+}
+
+% 確認コード入力画面
+FORM //form.e2a7b8x6[1]/div[1] {
+  % タイトル
+  TITLE /h4[1]
+  % 説明
+  DESCRIPTION /p[1]
+  % エラーメッセージ
+  VALIDATION_MESSAGE /div[2]/p[1]
+  % 次へ
+  NEXT_BUTTON /div.e7cdgnz2[1]/button.e7cdgnz1[1]
+  % これは何？
+  WHATS_THIS /div.e1cgibpb4[1] {
+    % タイトル
+    TITLE /div.e1cgibpb3[1]/div.e1cgibpb2[1]
+    % 説明
+    DESCRIPTION /div.e1cgibpb1[1]
+  }
+  % ログアウト
+  LOGOUT /a.e18c1r7j6[1]
+}

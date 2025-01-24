@@ -87,8 +87,6 @@ class RuleParser {
           .replaceAll(/(\d+),(\d+)/g, 'position() = $1 or position() = $2')
           .replaceAll(/,(\d+)/g, ' or position() = $1')
           .replaceAll(/(\d+),/g, 'position() = $1 or ')
-          // 特定の要素数をカウントする記法に変換
-          .replaceAll(/([\w-]+)\*(\d+)/g, 'count($1) = $2')
         );
       }
     }

@@ -1,0 +1,65 @@
+{
+  "name": "xpr-tsr",
+  "displayName": ".xprと翻訳ファイルの拡張機能パック",
+  "description": ".xprと翻訳ファイルをそれぞれ統合するための拡張機能",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^0.44.11"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "xpr",
+        "aliases": [
+          "xpath-rule file",
+          "xpr"
+        ],
+        "extensions": [
+          ".xpr"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "xpr",
+        "scopeName": "source.xpr",
+        "path": "./syntaxes/xpr.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "extension.mergeXprAndTsrFiles",
+        "title": "翻訳用ファイルの統合"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./ && npm run minify",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "minify": "for %f in (./out/*.js) do npx uglify-js \"./out/%f\" --compress --mangle -o \"./out/%f\""
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.9",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
+    "@typescript-eslint/eslint-plugin": "^8.10.0",
+    "@typescript-eslint/parser": "^8.7.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "uglify-js": "^3.19.3"
+  }
+}
