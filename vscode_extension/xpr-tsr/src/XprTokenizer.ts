@@ -1,5 +1,7 @@
+import XprTokens from "./XprTokens";
+
 /** xpr形式の文字列をトークンに分割するためのクラス */
-export class XprTokenizer {
+export default class XprTokenizer {
   /** コメントを抽出するための正規表現 */
   private static commentRegex = /%-.*?-%|%.*?(?=\n)/gs;
   
@@ -36,36 +38,5 @@ export class XprTokenizer {
     // FIXME: デバッグ用
     console.log(tokens);
     return tokens;
-  }
-}
-
-/** トークンを格納し、順次アクセスを可能にするクラス */
-export class XprTokens {
-  private tokens: Array<string>;
-  private index;
-
-  constructor() {
-    this.tokens = [];
-    this.index = 0;
-  }
-
-  /**
-   * トークンを格納します。
-   * @param token 格納するトークン
-   */
-  add(...token: string[]): void {
-    this.tokens.push(...token);
-  }
-
-  /**
-   * 次のトークンを取得します。
-   * @returns 次のトークンで、無い場合はnull
-   */
-  nextToken(): string | null {
-    // 配列の範囲外にポインタが当たっている場合
-    if (this.index >= this.tokens.length) {
-      return null;
-    }
-    return this.tokens[this.index++];
   }
 }

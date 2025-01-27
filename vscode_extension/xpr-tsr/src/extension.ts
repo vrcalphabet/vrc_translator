@@ -4,7 +4,11 @@ import Console from './Console';
 
 export function activate() {
   vscode.commands.registerCommand('extension.mergeXprAndTsrFiles', () => {
-    MergeFiles.execute();
+    try {
+      MergeFiles.execute();
+    } catch (e: any) {
+      Console.error(e.stack);
+    }
   });
 }
 

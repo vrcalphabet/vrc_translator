@@ -1,11 +1,9 @@
-// Place your settings in this file to overwrite default and user settings.
 {
-	"files.exclude": {
-		"out": false // set this to true to hide the "out" folder with the compiled JS files
-	},
-	"search.exclude": {
-		"out": true // set this to false to include "out" folder in search results
-	},
-	// Turn off tsc task auto detection since we have the necessary tasks as npm scripts
-	"typescript.tsc.autoDetect": "off"
+  "editor.defaultFormatter": "rvest.vs-code-prettier-eslint",
+  "editor.formatOnType": false, // 必須
+  "editor.formatOnPaste": true, // 任意
+  "editor.formatOnSave": true, // 任意
+  "editor.formatOnSaveMode": "file", // 保存時にフォーマットするために必須
+  "files.autoSave": "onFocusChange", // 推奨だが任意
+  "vs-code-prettier-eslint.prettierLast": false // trueに設定すると最後に'prettier'を実行する
 }

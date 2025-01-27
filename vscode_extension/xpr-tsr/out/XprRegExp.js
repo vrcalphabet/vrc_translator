@@ -1,0 +1,1 @@
+Object.defineProperty(exports,"__esModule",{value:!0}),exports.default={IDENTIFIER:/^[A-Z0-9_]+$/,DIRECTORY_PATH:/^\/.*$/,KEY:/^[A-Z0-9_]+$/,XPATH:/^\/.*$/,ATTRIBUTE:/^\[a-zA-Z0-9-\]$/};

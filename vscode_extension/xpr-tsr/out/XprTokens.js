@@ -1,0 +1,1 @@
+Object.defineProperty(exports,"__esModule",{value:!0});class XprTokens{tokens;index;constructor(){this.tokens=[],this.index=0}add(...e){this.tokens.push(...e)}currentToken(){return this.index>=this.tokens.length?null:this.tokens[this.index]}nextToken(){return this.index>=this.tokens.length?null:this.tokens[this.index++]}}exports.default=XprTokens;
