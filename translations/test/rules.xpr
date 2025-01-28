@@ -5,7 +5,7 @@
   /home/b
 }
 @excludes {
-  /a%f
+  /a/@f
 }
 
 % 確認コード入力画面

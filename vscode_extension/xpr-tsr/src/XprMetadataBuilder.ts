@@ -5,27 +5,43 @@ import ERROR_MESSAGE from './XprErrorMessages';
 import REGEXP from './XprRegExp';
 
 export default class XprMetadataBuilder {
+  /** トークンの配列 */
   private tokens!: XprTokens;
+  /** 現在のトークン */
+  private token: string | null;
 
+  /** シングルトンのインスタンス */
   private static readonly INSTANCE = new XprMetadataBuilder();
-  private constructor() {}
+  private constructor() {
+    this.token = null;
+  }
 
+  /** インスタンスを取得します。 */
   public static getInstance(): XprMetadataBuilder {
     return this.INSTANCE;
   }
 
+  /** メタデータを解析します。 */
   public buildTree(tokens: XprTokens): XprMetadata | null {
     this.tokens = tokens;
 
+    /** name識別子 */
     let name: string | null = null;
+    /** includesディレクトリパスの配列 */
     let includes: Array<string> | null = null;
+    /** excludesディレクトリパスの配列 */
     let excludes: Array<string> | null = null;
 
     while (true) {
-      let token = this.nextToken();
-      if (token === null) return null;
+      this.nextToken();
+      // メタデータに何も記述されていない場合、エラー
+      if (this.token === null) {
+        Console.error(ERROR_MESSAGE.GENERAL.MISSING_METADATA);
+        return null;
+      }
 
-      switch (token) {
+      switch (this.token) {
+        // メタデータ
         case '@name':
           name = this.parseToken(name, this.parseName, ERROR_MESSAGE.NAME);
           if (name === null) return null;
@@ -38,13 +54,17 @@ export default class XprMetadataBuilder {
           excludes = this.parseToken(excludes, this.parseExcludes, ERROR_MESSAGE.INCLUDES);
           if (excludes === null) return null;
           break;
+        // メタデータの終わり
         default:
-          console.log(token);
+          // ノードトークンを読んでしまっているので、カーソルを前に戻す
+          this.prevToken();
+
+          // nameかincludesが無い場合はエラー
           if (name === null || includes === null) {
             Console.error(ERROR_MESSAGE.GENERAL.MISSING_METADATA);
             return null;
           }
-
+          // excludesは任意なので無い場合は空の配列にする
           if (excludes === null) {
             excludes = [];
           }
@@ -58,32 +78,51 @@ export default class XprMetadataBuilder {
     }
   }
 
+  /**
+   * 各メタデータを解析します。
+   *
+   * currentではnullかどうかをチェックし、非nullの場合はメタデータの重複のためエラーを出します
+   * @param current 各メタデータの現在の値
+   * @param parseFunc 解析したいメタデータのメソッド
+   * @param ERROR_BLOCK エラーメッセージのブロック
+   * @returns メタデータの値、構文が間違っている場合はnull
+   */
   private parseToken<T>(
     current: T | null,
     parseFunc: () => T | null,
     ERROR_BLOCK: XprErrorMessageBlock
   ): T | null {
+    // 非nullの場合は値が既に設定されているということなので、エラー
     if (current !== null) {
       Console.error(ERROR_BLOCK.DUPLICATE);
       return null;
     }
-    return parseFunc();
+    // メタデータの値を取得し、返す
+    return parseFunc.call(this);
   }
 
+  /**
+   * `@name`文を解析します。
+   * @returns `identifier` name識別子
+   */
   private parseName(): string | null {
-    let token = this.nextToken();
-    if (token === null || token === ',') {
+    this.nextToken();
+    // 次のトークンが無いか、カンマの場合はエラー
+    if (this.token === null || this.validateToken(',')) {
       Console.error(ERROR_MESSAGE.NAME.MISSING_IDENTIFIER);
       return null;
     }
-    if (!this.validateRegex(token, REGEXP.IDENTIFIER)) {
+    // 次のトークンが正規表現パターンにマッチしない場合はエラー
+    if (!this.validateRegex(REGEXP.IDENTIFIER)) {
       Console.error(ERROR_MESSAGE.NAME.INVALID_FORMAT);
       return null;
     }
 
-    const name = token;
-    token = this.nextToken();
-    if (token !== ',') {
+    /** name識別子 */
+    const name = this.token;
+    this.nextToken();
+    // 次のトークンがカンマでない場合はエラー
+    if (!this.validateToken(',')) {
       Console.error(ERROR_MESSAGE.NAME.MISSING_COMMA);
       return null;
     }
@@ -91,41 +130,60 @@ export default class XprMetadataBuilder {
     return name;
   }
 
+  /**
+   * `@includes`文を解析します。
+   * @returns `directory-path[]` includesディレクトリパスの配列
+   */
   private parseIncludes(): Array<string> | null {
+    /** ディレクトリパスの配列 */
     const directories = this.parseDirectories(true, ERROR_MESSAGE.INCLUDES);
     if (directories === null) return null;
-    if(0) {0}
-    
+
     return directories;
   }
 
+  /**
+   * `@excludes`文を解析します。
+   * @returns `directory-path[]` excludesディレクトリパスの配列
+   */
   private parseExcludes(): Array<string> | null {
+    /** ディレクトリパスの配列 */
     const directories = this.parseDirectories(false, ERROR_MESSAGE.EXCLUDES);
-    if (directories === null) return null; 
+    if (directories === null) return null;
 
     return directories;
   }
 
+  /**
+   * ディレクトリパスの配列を取得します。
+   * @param lengthCheck true: 長さ0の配列を許容しません、false: 長さ0の配列を許容します
+   * @param ERROR_BLOCK エラーメッセージのブロック
+   * @returns `directory-path[]` ディレクトリパスの配列
+   */
   private parseDirectories(
     lengthCheck: boolean,
     ERROR_BLOCK: XprErrorMessageBlock
   ): Array<string> | null {
-    let token = this.nextToken();
-    if (token !== '{') {
+    this.nextToken();
+    // 次のトークンがブロックの始まりでなければエラー
+    if (!this.validateToken('{')) {
       Console.error(ERROR_BLOCK.BLOCK_NOT_STARTED);
       return null;
     }
 
     const directories: Array<string> = [];
     while (true) {
-      let token = this.nextToken();
-      if (token === '}') break;
+      this.nextToken();
+      // 次のトークンがブロックの終わりの場合は終了
+      if (this.validateToken('}')) break;
 
-      const directory = this.parseDirectory(token, ERROR_BLOCK);
+      /** ディレクトリパス */
+      const directory = this.parseDirectory(ERROR_BLOCK);
       if (directory === null) return null;
       directories.push(directory);
     }
 
+    // 長さチェックが有効でかつ配列の長さが0の場合はエラー
     if (lengthCheck && directories.length === 0) {
       Console.error(ERROR_BLOCK.EMPTY_DIRECTORIES);
       return null;
@@ -134,20 +192,28 @@ export default class XprMetadataBuilder {
     return directories;
   }
 
-  private parseDirectory(token: string | null, ERROR_BLOCK: XprErrorMessageBlock): string | null {
-    if (token === null) {
+  /**
+   * 次のディレクトリパスを取得します。
+   * @param ERROR_BLOCK エラーメッセージのブロック
+   * @returns 1つのディレクトリパス
+   */
+  private parseDirectory(ERROR_BLOCK: XprErrorMessageBlock): string | null {
+    // 次のトークンがない場合はエラー
+    if (this.token === null) {
       Console.error(ERROR_BLOCK.MISSING_DIRECTORY);
       return null;
     }
-    if (!this.validateRegex(token, REGEXP.DIRECTORY_PATH)) {
+    // 次のトークンが正規表現パターンにマッチしない場合はエラー
+    if (!this.validateRegex(REGEXP.DIRECTORY_PATH)) {
       Console.error(ERROR_BLOCK.INVALID_FORMAT);
       return null;
     }
 
-    const directory = token;
-
-    token = this.nextToken();
-    if (!this.validateComma(token)) {
+    /** ディレクトリパス */
+    const directory = this.token;
+    this.nextToken();
+    // 次のトークンがカンマでない場合はエラー
+    if (!this.validateToken(',')) {
       Console.error(ERROR_BLOCK.MISSING_COMMA);
       return null;
     }
@@ -156,29 +222,30 @@ export default class XprMetadataBuilder {
   }
 
   /**
-   * トークンがカンマかどうかを判定します。
-   * @param token トークン
-   * @returns true: カンマである場合、false: カンマ以外の場合
+   * 現在のトークンが指定した文字であるかどうかを判定します。
+   * @param expectedTokens 期待するトークン、複数ある場合はいずれかにマッチすればtrue
+   * @returns true: マッチする場合、false: マッチしない場合
    */
-  private validateComma(token: string | null): boolean {
-    return token === ',';
+  private validateToken(...expectedTokens: Array<string>): boolean {
+    return this.token !== null && expectedTokens.includes(this.token);
   }
 
   /**
-   * トークンが正規表現パターンにマッチしているかを判定します。
-   * @param token トークン
+   * 現在のトークンが正規表現パターンにマッチしているかを判定します。
    * @param regex 正規表現パターン
    * @returns true: 正規表現パターンにマッチしている場合、false: マッチしていない場合
    */
-  private validateRegex(token: string | null, regex: RegExp): boolean {
-    return token !== null && regex.test(token);
+  private validateRegex(regex: RegExp): boolean {
+    return this.token !== null && regex.test(this.token);
   }
 
-  /**
-   * this.tokens.nextTokenを呼び出します。
-   * @returns 次のトークン
-   */
-  private nextToken(): string | null {
-    return this.tokens.nextToken();
+  /** 次のトークンをthis.tokenに格納します。 */
+  private nextToken(): void {
+    this.token = this.tokens.nextToken();
+  }
+
+  /** 前のトークンをthis.tokenに格納します。 */
+  private prevToken(): void {
+    this.token = this.tokens.prevToken();
   }
 }

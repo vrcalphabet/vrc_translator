@@ -27,4 +27,16 @@ export default class XprTokens {
     }
     return this.tokens[this.index++];
   }
+
+  /**
+   * 前のトークンを取得します。
+   * @return 前のトークンで、無い場合はnull
+   */
+  public prevToken(): string | null {
+    // 配列の範囲外にポインタが当たっている場合
+    if (this.index <= 0) {
+      return null;
+    }
+    return this.tokens[--this.index];
+  }
 }

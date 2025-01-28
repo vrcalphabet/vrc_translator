@@ -4,22 +4,32 @@ export type XprMetadata = {
   excludes: Array<string>;
 };
 
-export type XprFile = XprMetadata & {
-  nodes: Array<XprParentNode | XprChildNode>;
-};
+export enum XprValueType {
+  KEY,
+  XPATH,
+  MULTI,
+  ATTRIBUTE,
+  BRACKET_OPEN,
+  BRACKET_CLOSE,
+  COMMA,
+}
 
-export type XprParentNode = {
-  key: string;
-  xpath: string;
-  nodes: Array<XprParentNode | XprChildNode>;
-};
+// export type XprFile = XprMetadata & {
+//   nodes: Array<XprParentNode | XprChildNode>;
+// };
 
-export type XprChildNode = {
-  key: string | null;
-  xpath: string;
-  multi: boolean;
-  attribute: string | null;
-};
+// export type XprParentNode = {
+//   key: string;
+//   xpath: string;
+//   nodes: Array<XprParentNode | XprChildNode>;
+// };
+
+// export type XprChildNode = {
+//   key: string | null;
+//   xpath: string;
+//   multi: boolean;
+//   attribute: string | null;
+// };
 
 export type XprErrorMessageGroup = {
   [key: string]: XprErrorMessageBlock;

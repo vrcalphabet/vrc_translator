@@ -1,1 +1,19 @@
-var __importDefault=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});let Console_1=__importDefault(require("./Console")),XprErrorMessages_1=__importDefault(require("./XprErrorMessages")),XprRegExp_1=__importDefault(require("./XprRegExp"));class XprBuilder{tokens;static INSTANCE=new XprBuilder;constructor(){}static getInstance(){return this.INSTANCE}buildTree(e){this.tokens=e;let r=!1,l=null,s=null,t=null;for(;;){var n=this.tokens.nextToken();if(null===n)return;if(!1===r)if("@name"===n){if(null===(l=this.parseToken(l,this.parseName,XprErrorMessages_1.default.NAME)))return}else if("@includes"===n){if(null===(s=this.parseToken(s,this.parseIncludes,XprErrorMessages_1.default.INCLUDES)))return}else if("@excludes"===n){if(null===(t=this.parseToken(t,this.parseExcludes,XprErrorMessages_1.default.INCLUDES)))return}else{if(null===l||null===s)return void Console_1.default.error(XprErrorMessages_1.default.GENERAL.MISSING_METADATA);r=!0}else n.startsWith("@")?Console_1.default.error(XprErrorMessages_1.default.GENERAL.AFTER_COMPLETE):Console_1.default.log("終わり")}}parseToken(e,r,l){return null!==e?(Console_1.default.error(l.DUPLICATE),null):r()}parseName(){var e=this.tokens.nextToken();return null===e||","===e?(Console_1.default.error(XprErrorMessages_1.default.NAME.MISSING_IDENTIFIER),null):this.validateRegex(e,XprRegExp_1.default.IDENTIFIER)?(e=e,","!==this.tokens.nextToken()?(Console_1.default.error(XprErrorMessages_1.default.NAME.MISSING_COMMA),null):e):(Console_1.default.error(XprErrorMessages_1.default.NAME.INVALID_FORMAT),null)}parseIncludes(){var e=this.parseDirectories(!0,XprErrorMessages_1.default.INCLUDES);return null===e?null:e}parseExcludes(){var e=this.parseDirectories(!1,XprErrorMessages_1.default.EXCLUDES);return null===e?null:e}parseDirectories(e,r){if("{"!==this.tokens.nextToken())return Console_1.default.error(r.BLOCK_NOT_STARTED),null;for(var l=[];;){var s=this.tokens.nextToken();if("}"===s)break;s=this.parseDirectory(s,r);if(null===s)return null;l.push(s)}return e&&0===l.length?(Console_1.default.error(r.EMPTY_DIRECTORIES),null):l}parseDirectory(e,r){var l;return null===e?(Console_1.default.error(r.MISSING_DIRECTORY),null):this.validateRegex(e,XprRegExp_1.default.DIRECTORY_PATH)?(l=e,e=this.tokens.nextToken(),this.validateComma(e)?l:(Console_1.default.error(r.MISSING_COMMA),null)):(Console_1.default.error(r.INVALID_FORMAT),null)}validateComma(e){return","===e}validateRegex(e,r){return null!==e&&r.test(e)}}exports.default=XprBuilder;
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const XprMetadataBuilder_1 = __importDefault(require("./XprMetadataBuilder"));
+const XprNodeBuilder_1 = __importDefault(require("./XprNodeBuilder"));
+class XprBuilder {
+    static buildTree(tokens) {
+        const metadataBuilder = XprMetadataBuilder_1.default.getInstance();
+        const nodeBuilder = XprNodeBuilder_1.default.getInstance();
+        const metadata = metadataBuilder.buildTree(tokens);
+        const node = nodeBuilder.buildTree(tokens);
+        console.log(metadata);
+        console.log(node);
+    }
+}
+exports.default = XprBuilder;
+//# sourceMappingURL=XprBuilder.js.map

@@ -4,6 +4,8 @@ export default {
   GENERAL: {
     MISSING_METADATA: '@nameと@includesの指定は必須です。',
     AFTER_COMPLETE: 'ノード定義部分にメタデータを定義することはできません。',
+    INVALID_TOKEN: '無効なトークンです。',
+    INVALID_TOKEN_END: 'トークンをここで終わらすことはできません。',
   },
   NAME: {
     DUPLICATE: '@nameを2度宣言することはできません。',
@@ -14,8 +16,8 @@ export default {
   INCLUDES: {
     DUPLICATE: '@includesを2度宣言することはできません。',
     BLOCK_NOT_STARTED: '@includesブロックが開始されていません。',
-    EMPTY_DIRECTORIES: '@includesにはディレクトリを最低でも1つ指定する必要があります。',
     MISSING_DIRECTORY: '@includesブロックが終了されていません。',
+    EMPTY_DIRECTORIES: '@includesにはディレクトリを最低でも1つ指定する必要があります。',
     INVALID_FORMAT: '@includesで指定するディレクトリはスラッシュ`/`から始める必要があります。',
     MISSING_COMMA: '@includesの各ディレクトリの後はカンマ`,`もしくは改行を入れなければいけません。',
   },

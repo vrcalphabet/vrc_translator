@@ -1,1 +1,52 @@
-var __createBinding=this&&this.__createBinding||(Object.create?function(e,t,r,o){void 0===o&&(o=r);var n=Object.getOwnPropertyDescriptor(t,r);n&&("get"in n?t.__esModule:!n.writable&&!n.configurable)||(n={enumerable:!0,get:function(){return t[r]}}),Object.defineProperty(e,o,n)}:function(e,t,r,o){e[o=void 0===o?r:o]=t[r]}),__setModuleDefault=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),__importStar=this&&this.__importStar||(()=>{var n=function(e){return(n=Object.getOwnPropertyNames||function(e){var t,r=[];for(t in e)Object.prototype.hasOwnProperty.call(e,t)&&(r[r.length]=t);return r})(e)};return function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var r=n(e),o=0;o<r.length;o++)"default"!==r[o]&&__createBinding(t,e,r[o]);return __setModuleDefault(t,e),t}})();Object.defineProperty(exports,"__esModule",{value:!0});let vscode=__importStar(require("vscode"));class Console{static log(...e){vscode.window.showInformationMessage(this.formatMessage(e))}static warn(...e){vscode.window.showWarningMessage(this.formatMessage(e))}static error(...e){vscode.window.showErrorMessage(this.formatMessage(e))}static formatMessage(e){return e.map(e=>e.toString()).join(" ")}}exports.default=Console;
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const vscode = __importStar(require("vscode"));
+class Console {
+    static log(...message) {
+        vscode.window.showInformationMessage(this.formatMessage(message));
+    }
+    static warn(...message) {
+        vscode.window.showWarningMessage(this.formatMessage(message));
+    }
+    static error(...message) {
+        vscode.window.showErrorMessage(this.formatMessage(message));
+    }
+    static formatMessage(message) {
+        return message.map((msg) => msg.toString()).join(' ');
+    }
+}
+exports.default = Console;
+//# sourceMappingURL=Console.js.map

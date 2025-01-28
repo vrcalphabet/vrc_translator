@@ -1,1 +1,93 @@
-var __createBinding=this&&this.__createBinding||(Object.create?function(e,t,r,i){void 0===i&&(i=r);var n=Object.getOwnPropertyDescriptor(t,r);n&&("get"in n?t.__esModule:!n.writable&&!n.configurable)||(n={enumerable:!0,get:function(){return t[r]}}),Object.defineProperty(e,i,n)}:function(e,t,r,i){e[i=void 0===i?r:i]=t[r]}),__setModuleDefault=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),__importStar=this&&this.__importStar||(()=>{var n=function(e){return(n=Object.getOwnPropertyNames||function(e){var t,r=[];for(t in e)Object.prototype.hasOwnProperty.call(e,t)&&(r[r.length]=t);return r})(e)};return function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var r=n(e),i=0;i<r.length;i++)"default"!==r[i]&&__createBinding(t,e,r[i]);return __setModuleDefault(t,e),t}})(),__importDefault=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0});let vscode=__importStar(require("vscode")),path_1=__importDefault(require("path")),fs_1=__importDefault(require("fs")),XprConverter_1=__importDefault(require("./XprConverter"));class MergeFiles{static execute(){var e=vscode.window.activeTextEditor;e?(e=e.document,"index.json"!==path_1.default.basename(e.uri.fsPath)?vscode.window.showErrorMessage("`index.json`を開いた上で実行してください"):(e=path_1.default.dirname(e.uri.fsPath),e=this.readFileInFolders(e),console.log(JSON.stringify(e)))):vscode.window.showErrorMessage("アクティブなテキストエディタが見つかりません")}static getSubdirectories(t){return fs_1.default.readdirSync(t).filter(e=>{e=path_1.default.join(t,e);return fs_1.default.statSync(e).isDirectory()})}static readFileContent(e){try{return fs_1.default.readFileSync(e,"utf8")}catch(e){return null}}static readFileInFolders(r){return this.getSubdirectories(r).forEach(e=>{var e=path_1.default.join(r,e),t=path_1.default.join(e,"rules.xpr"),e=path_1.default.join(e,"trans.json"),t=this.readFileContent(t),e=this.readFileContent(e);null!==t&&null!==e&&XprConverter_1.default.convert(t)}),[]}}exports.default=MergeFiles;
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const vscode = __importStar(require("vscode"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const XprConverter_1 = __importDefault(require("./XprConverter"));
+class MergeFiles {
+    static execute() {
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+            vscode.window.showErrorMessage('アクティブなテキストエディタが見つかりません');
+            return;
+        }
+        const document = activeEditor.document;
+        const fileName = path_1.default.basename(document.uri.fsPath);
+        if (fileName !== 'index.json') {
+            vscode.window.showErrorMessage('`index.json`を開いた上で実行してください');
+            return;
+        }
+        const baseDirectoryPath = path_1.default.dirname(document.uri.fsPath);
+        const rulesTrans = this.readFileInFolders(baseDirectoryPath);
+        console.log(JSON.stringify(rulesTrans));
+    }
+    static getSubdirectories(directoryPath) {
+        const items = fs_1.default.readdirSync(directoryPath);
+        const folders = items.filter((item) => {
+            const itemPath = path_1.default.join(directoryPath, item);
+            return fs_1.default.statSync(itemPath).isDirectory();
+        });
+        return folders;
+    }
+    static readFileContent(filePath) {
+        try {
+            return fs_1.default.readFileSync(filePath, 'utf8');
+        }
+        catch (error) {
+            return null;
+        }
+    }
+    static readFileInFolders(directoryPath) {
+        const folders = this.getSubdirectories(directoryPath);
+        const rulesTrans = [];
+        folders.forEach((folder) => {
+            const folderPath = path_1.default.join(directoryPath, folder);
+            const rulesFilePath = path_1.default.join(folderPath, 'rules.xpr');
+            const transFilePath = path_1.default.join(folderPath, 'trans.json');
+            const rulesContent = this.readFileContent(rulesFilePath);
+            const transContent = this.readFileContent(transFilePath);
+            if (rulesContent !== null && transContent !== null) {
+                XprConverter_1.default.convert(rulesContent);
+            }
+        });
+        return rulesTrans;
+    }
+}
+exports.default = MergeFiles;
+//# sourceMappingURL=mergeFiles.js.map

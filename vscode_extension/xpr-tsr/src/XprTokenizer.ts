@@ -1,10 +1,10 @@
-import XprTokens from "./XprTokens";
+import XprTokens from './XprTokens';
 
 /** xpr形式の文字列をトークンに分割するためのクラス */
 export default class XprTokenizer {
   /** コメントを抽出するための正規表現 */
   private static commentRegex = /%-.*?-%|%.*?(?=\n)/gs;
-  
+
   /**
    * 入力された文字列をトークンに分割します。
    * @param input トークン化する入力文字列

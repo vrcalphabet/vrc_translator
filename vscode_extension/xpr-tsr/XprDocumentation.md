@@ -52,7 +52,7 @@ xpathを定義するためのファイル（xpath rule definition file）です�
 
 - メタデータの定義
 ファイルがどのような振る舞いをしてほしいかを定義します。
-メタデータはファイルの先頭に記述し、ノードより後に記述することはできません。
+メタデータはファイルの先頭に記述し、**ノードより後に記述することはできません**。
   - `@name`
   ファイルを識別するための識別子です。通常はフォルダ名を大文字にしたものと同じにすべきです。この項目は省略できません。
     - `@name <identifier>`
@@ -67,10 +67,10 @@ xpathを定義するためのファイル（xpath rule definition file）です�
     - `@excludes { [directory-path], ... }`
 
 - ノードの定義
-  - ノード
+  - ノード (`node`)
   xpathで要素を選択する一つのノードです。ネストされている場合、親のネストで指定されているxpathとmultiSelectを継承します。
     - `[key] <xpath> [multiSelect] [attribute]`
-  - ネスト
+  - ノードのネスト
   指定したxpathの中に複数のノードを含めることができます。ネストされている場合、親のネストで指定されているxpathとmultiSelectを継承します。
     - `<key> <xpath> [multiSelect] { <node>, [node], ... }`
 

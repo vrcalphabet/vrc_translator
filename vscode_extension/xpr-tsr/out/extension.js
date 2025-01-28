@@ -1,1 +1,55 @@
-var __createBinding=this&&this.__createBinding||(Object.create?function(e,t,r,i){void 0===i&&(i=r);var n=Object.getOwnPropertyDescriptor(t,r);n&&("get"in n?t.__esModule:!n.writable&&!n.configurable)||(n={enumerable:!0,get:function(){return t[r]}}),Object.defineProperty(e,i,n)}:function(e,t,r,i){e[i=void 0===i?r:i]=t[r]}),__setModuleDefault=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),__importStar=this&&this.__importStar||(()=>{var n=function(e){return(n=Object.getOwnPropertyNames||function(e){var t,r=[];for(t in e)Object.prototype.hasOwnProperty.call(e,t)&&(r[r.length]=t);return r})(e)};return function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var r=n(e),i=0;i<r.length;i++)"default"!==r[i]&&__createBinding(t,e,r[i]);return __setModuleDefault(t,e),t}})(),__importDefault=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(exports,"__esModule",{value:!0}),exports.activate=activate,exports.deactivate=deactivate;let vscode=__importStar(require("vscode")),mergeFiles_1=__importDefault(require("./mergeFiles")),Console_1=__importDefault(require("./Console"));function activate(){vscode.commands.registerCommand("extension.mergeXprAndTsrFiles",()=>{try{mergeFiles_1.default.execute()}catch(e){Console_1.default.error(e.stack)}})}function deactivate(){}
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.activate = activate;
+exports.deactivate = deactivate;
+const vscode = __importStar(require("vscode"));
+const mergeFiles_1 = __importDefault(require("./mergeFiles"));
+const Console_1 = __importDefault(require("./Console"));
+function activate() {
+    vscode.commands.registerCommand('extension.mergeXprAndTsrFiles', () => {
+        try {
+            mergeFiles_1.default.execute();
+        }
+        catch (e) {
+            Console_1.default.error(e.stack);
+        }
+    });
+}
+function deactivate() { }
+//# sourceMappingURL=extension.js.map

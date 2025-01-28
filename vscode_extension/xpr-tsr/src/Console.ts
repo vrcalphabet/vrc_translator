@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 
 /** vscodeの通知を表示するクラス */
 export default class Console {
-  
   /**
    * 情報をvscodeの通知として表示します。
    * @param message 表示したいメッセージ
@@ -35,5 +34,4 @@ export default class Console {
   private static formatMessage(message: any[]): string {
     return message.map((msg) => msg.toString()).join(' ');
   }
-  
 }
