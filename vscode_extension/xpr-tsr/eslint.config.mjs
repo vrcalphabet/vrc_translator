@@ -19,7 +19,6 @@ export default [{
             selector: "import",
             format: ["camelCase", "PascalCase"],
         }],
-        "@typescript-eslint/no-duplicate-type-constituents": "error",
         curly: "off",
         eqeqeq: "warn",
         "no-throw-literal": "warn",
