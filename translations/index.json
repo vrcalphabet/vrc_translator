@@ -1,7 +1,5 @@
 {
-  "output": "../chrome_extension/output/translations.json",
-  "base": "./base.json",
-  "files": [
-    "./ja-jp.json"
-  ]
+  "input": "./",
+  "output": "../out/",
+  "excludes": ["rules"]
 }

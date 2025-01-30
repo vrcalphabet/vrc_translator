@@ -2,7 +2,7 @@ import XprTokens from './XprTokens';
 import ERROR_MESSAGE from './XprErrorMessages';
 import REGEXP from './XprRegExp';
 import Console from './Console';
-import { XprValueType } from './xpr';
+import { XprChildNode, XprNodes, XprParentNode, XprValueType } from './xpr';
 
 export default class XprNodeBuilder {
   /** トークンの配列 */
@@ -21,26 +21,58 @@ export default class XprNodeBuilder {
     return this.INSTANCE;
   }
 
-  /** ノードを解析します。 */
-  public buildTree(tokens: XprTokens): void | null {
+  /**
+   * ノードを解析します。
+   * @param tokens トークンの配列
+   * @returns ノードの配列、null: エラーが発生した場合
+   */
+  public buildTree(tokens: XprTokens): XprNodes | null {
     this.tokens = tokens;
+    const nodes: XprNodes = [];
+    
+    while (true) {
+      /** 一つの子ノード、もしくは親ノード */
+      const node = this.recursive(false);
+      if (node === null) return null;
+      nodes.push(node);
+      
+      const token = this.peekToken();
+      if (token === null) break;
+    }
+    return nodes;
+  }
 
+  /**
+   * 再帰的にノードを解析します。
+   * @param baseMulti マルチセレクタの初期値
+   * @returns ノードの配列、null: エラーが発生した場合
+   */
+  private recursive(baseMulti: boolean): XprParentNode | XprChildNode | null {
+    /** キーの一時保存用変数 */
     let key: string | null = null;
+    /** XPathの一時保存用変数 */
     let xpath: string | null = null;
-    let multi: boolean = false;
+    /** マルチセレクタの一時保存用変数 */
+    let multi: boolean = baseMulti;
+    /** 属性名の一時保存用変数 */
+    let attribute: string | null = null;
+    /** ノードの一時保存用変数 */
+    const nodes: Array<XprParentNode | XprChildNode> = [];
 
     while (true) {
       this.nextToken();
       // トークンがない場合、エラー
       if (this.token === null) {
-        Console.error(ERROR_MESSAGE.GENERAL.INVALID_TOKEN_END);
+        this.error(ERROR_MESSAGE.GENERAL.INVALID_TOKEN_END);
         return null;
       }
 
+      /** トークンの種類 */
       const type = this.checkType();
       if (type === null) return null;
 
       switch (type) {
+        // 通常ノード
         case XprValueType.KEY:
           key = this.token;
           break;
@@ -51,14 +83,49 @@ export default class XprNodeBuilder {
           multi = true;
           break;
         case XprValueType.ATTRIBUTE:
+          // 属性は[]で囲まれているので、先頭と末尾の文字を削除
+          attribute = this.token.slice(1, -1);
           break;
+        // 特殊記号
         case XprValueType.BRACKET_OPEN:
-          console.log({ key, xpath, multi });
-          return null;
+          while (true) {
+            // 入れ子を探索
+            const node = this.recursive(multi);
+            if (node === null) return null;
+            nodes.push(node);
+            
+            // 次のトークンが`}`の場合、XprValueType.BRACKET_CLOSEに移動する
+            const token = this.peekToken();
+            if (token === '}') break;
+          }
+          break;
         case XprValueType.BRACKET_CLOSE:
-          break;
+          if (key === null || xpath === null) {
+            this.error(ERROR_MESSAGE.NODE.MISSING_KEY_OR_XPATH);
+            return null;
+          }
+          if (nodes.length === 0) {
+            this.error(ERROR_MESSAGE.NODE.MISSING_NODE);
+            return null;
+          }
+        
+          return {
+            key: key,
+            xpath: xpath,
+            nodes: nodes
+          } satisfies XprParentNode;
         case XprValueType.COMMA:
-          break;
+          if (xpath === null) {
+            this.error(ERROR_MESSAGE.NODE.MISSING_XPATH);
+            return null;
+          }
+
+          return {
+            key: key,
+            xpath: xpath,
+            multi: multi,
+            attribute: attribute
+          } satisfies XprChildNode;
       }
     }
   }
@@ -90,7 +157,7 @@ export default class XprNodeBuilder {
       return XprValueType.COMMA;
     }
 
-    Console.error(ERROR_MESSAGE.GENERAL.INVALID_TOKEN);
+    this.error(ERROR_MESSAGE.GENERAL.INVALID_TOKEN);
     return null;
   }
 
@@ -111,9 +178,19 @@ export default class XprNodeBuilder {
   private validateRegex(regex: RegExp): boolean {
     return this.token !== null && regex.test(this.token);
   }
+  
+  // 次のトークンを取得します。ポインタが移動することはありません。
+  private peekToken(): string | null {
+    return this.tokens.peekToken();
+  }
 
   /** 次のトークンをthis.tokenに格納します。 */
   private nextToken(): void {
     this.token = this.tokens.nextToken();
+  }
+  
+  /** エラーメッセージを表示します。 */
+  private error(message: string): void {
+    Console.error(message + ' ' + this.tokens.get());
   }
 }

@@ -3,9 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Console_1 = __importDefault(require("./Console"));
 const XprErrorMessages_1 = __importDefault(require("./XprErrorMessages"));
 const XprRegExp_1 = __importDefault(require("./XprRegExp"));
+const Console_1 = __importDefault(require("./Console"));
 class XprMetadataBuilder {
     tokens;
     token;
@@ -24,7 +24,7 @@ class XprMetadataBuilder {
         while (true) {
             this.nextToken();
             if (this.token === null) {
-                Console_1.default.error(XprErrorMessages_1.default.GENERAL.MISSING_METADATA);
+                this.error(XprErrorMessages_1.default.GENERAL.MISSING_METADATA);
                 return null;
             }
             switch (this.token) {
@@ -46,7 +46,7 @@ class XprMetadataBuilder {
                 default:
                     this.prevToken();
                     if (name === null || includes === null) {
-                        Console_1.default.error(XprErrorMessages_1.default.GENERAL.MISSING_METADATA);
+                        this.error(XprErrorMessages_1.default.GENERAL.MISSING_METADATA);
                         return null;
                     }
                     if (excludes === null) {
@@ -62,7 +62,7 @@ class XprMetadataBuilder {
     }
     parseToken(current, parseFunc, ERROR_BLOCK) {
         if (current !== null) {
-            Console_1.default.error(ERROR_BLOCK.DUPLICATE);
+            this.error(ERROR_BLOCK.DUPLICATE);
             return null;
         }
         return parseFunc.call(this);
@@ -70,17 +70,17 @@ class XprMetadataBuilder {
     parseName() {
         this.nextToken();
         if (this.token === null || this.validateToken(',')) {
-            Console_1.default.error(XprErrorMessages_1.default.NAME.MISSING_IDENTIFIER);
+            this.error(XprErrorMessages_1.default.NAME.MISSING_IDENTIFIER);
             return null;
         }
         if (!this.validateRegex(XprRegExp_1.default.IDENTIFIER)) {
-            Console_1.default.error(XprErrorMessages_1.default.NAME.INVALID_FORMAT);
+            this.error(XprErrorMessages_1.default.NAME.INVALID_FORMAT);
             return null;
         }
         const name = this.token;
         this.nextToken();
         if (!this.validateToken(',')) {
-            Console_1.default.error(XprErrorMessages_1.default.NAME.MISSING_COMMA);
+            this.error(XprErrorMessages_1.default.NAME.MISSING_COMMA);
             return null;
         }
         return name;
@@ -100,7 +100,7 @@ class XprMetadataBuilder {
     parseDirectories(lengthCheck, ERROR_BLOCK) {
         this.nextToken();
         if (!this.validateToken('{')) {
-            Console_1.default.error(ERROR_BLOCK.BLOCK_NOT_STARTED);
+            this.error(ERROR_BLOCK.BLOCK_NOT_STARTED);
             return null;
         }
         const directories = [];
@@ -114,24 +114,24 @@ class XprMetadataBuilder {
             directories.push(directory);
         }
         if (lengthCheck && directories.length === 0) {
-            Console_1.default.error(ERROR_BLOCK.EMPTY_DIRECTORIES);
+            this.error(ERROR_BLOCK.EMPTY_DIRECTORIES);
             return null;
         }
         return directories;
     }
     parseDirectory(ERROR_BLOCK) {
         if (this.token === null) {
-            Console_1.default.error(ERROR_BLOCK.MISSING_DIRECTORY);
+            this.error(ERROR_BLOCK.MISSING_DIRECTORY);
             return null;
         }
         if (!this.validateRegex(XprRegExp_1.default.DIRECTORY_PATH)) {
-            Console_1.default.error(ERROR_BLOCK.INVALID_FORMAT);
+            this.error(ERROR_BLOCK.INVALID_FORMAT);
             return null;
         }
         const directory = this.token;
         this.nextToken();
         if (!this.validateToken(',')) {
-            Console_1.default.error(ERROR_BLOCK.MISSING_COMMA);
+            this.error(ERROR_BLOCK.MISSING_COMMA);
             return null;
         }
         return directory;
@@ -147,6 +147,9 @@ class XprMetadataBuilder {
     }
     prevToken() {
         this.token = this.tokens.prevToken();
+    }
+    error(message) {
+        Console_1.default.error(message + ' ' + this.tokens.get());
     }
 }
 exports.default = XprMetadataBuilder;

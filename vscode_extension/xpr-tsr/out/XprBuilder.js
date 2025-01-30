@@ -10,9 +10,16 @@ class XprBuilder {
         const metadataBuilder = XprMetadataBuilder_1.default.getInstance();
         const nodeBuilder = XprNodeBuilder_1.default.getInstance();
         const metadata = metadataBuilder.buildTree(tokens);
-        const node = nodeBuilder.buildTree(tokens);
-        console.log(metadata);
-        console.log(node);
+        if (metadata === null)
+            return;
+        const nodes = nodeBuilder.buildTree(tokens);
+        if (nodes === null)
+            return;
+        const file = {
+            ...metadata,
+            nodes
+        };
+        console.log(JSON.stringify(file));
     }
 }
 exports.default = XprBuilder;

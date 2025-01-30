@@ -1,8 +1,8 @@
-import Console from './Console';
 import { XprErrorMessageBlock, XprMetadata } from './xpr';
 import XprTokens from './XprTokens';
 import ERROR_MESSAGE from './XprErrorMessages';
 import REGEXP from './XprRegExp';
+import Console from './Console';
 
 export default class XprMetadataBuilder {
   /** トークンの配列 */
@@ -36,7 +36,7 @@ export default class XprMetadataBuilder {
       this.nextToken();
       // メタデータに何も記述されていない場合、エラー
       if (this.token === null) {
-        Console.error(ERROR_MESSAGE.GENERAL.MISSING_METADATA);
+        this.error(ERROR_MESSAGE.GENERAL.MISSING_METADATA);
         return null;
       }
 
@@ -61,7 +61,7 @@ export default class XprMetadataBuilder {
 
           // nameかincludesが無い場合はエラー
           if (name === null || includes === null) {
-            Console.error(ERROR_MESSAGE.GENERAL.MISSING_METADATA);
+            this.error(ERROR_MESSAGE.GENERAL.MISSING_METADATA);
             return null;
           }
           // excludesは任意なので無い場合は空の配列にする
@@ -94,7 +94,7 @@ export default class XprMetadataBuilder {
   ): T | null {
     // 非nullの場合は値が既に設定されているということなので、エラー
     if (current !== null) {
-      Console.error(ERROR_BLOCK.DUPLICATE);
+      this.error(ERROR_BLOCK.DUPLICATE);
       return null;
     }
     // メタデータの値を取得し、返す
@@ -109,12 +109,12 @@ export default class XprMetadataBuilder {
     this.nextToken();
     // 次のトークンが無いか、カンマの場合はエラー
     if (this.token === null || this.validateToken(',')) {
-      Console.error(ERROR_MESSAGE.NAME.MISSING_IDENTIFIER);
+      this.error(ERROR_MESSAGE.NAME.MISSING_IDENTIFIER);
       return null;
     }
     // 次のトークンが正規表現パターンにマッチしない場合はエラー
     if (!this.validateRegex(REGEXP.IDENTIFIER)) {
-      Console.error(ERROR_MESSAGE.NAME.INVALID_FORMAT);
+      this.error(ERROR_MESSAGE.NAME.INVALID_FORMAT);
       return null;
     }
 
@@ -123,7 +123,7 @@ export default class XprMetadataBuilder {
     this.nextToken();
     // 次のトークンがカンマでない場合はエラー
     if (!this.validateToken(',')) {
-      Console.error(ERROR_MESSAGE.NAME.MISSING_COMMA);
+      this.error(ERROR_MESSAGE.NAME.MISSING_COMMA);
       return null;
     }
 
@@ -167,7 +167,7 @@ export default class XprMetadataBuilder {
     this.nextToken();
     // 次のトークンがブロックの始まりでなければエラー
     if (!this.validateToken('{')) {
-      Console.error(ERROR_BLOCK.BLOCK_NOT_STARTED);
+      this.error(ERROR_BLOCK.BLOCK_NOT_STARTED);
       return null;
     }
 
@@ -185,7 +185,7 @@ export default class XprMetadataBuilder {
 
     // 長さチェックが有効でかつ配列の長さが0の場合はエラー
     if (lengthCheck && directories.length === 0) {
-      Console.error(ERROR_BLOCK.EMPTY_DIRECTORIES);
+      this.error(ERROR_BLOCK.EMPTY_DIRECTORIES);
       return null;
     }
 
@@ -200,12 +200,12 @@ export default class XprMetadataBuilder {
   private parseDirectory(ERROR_BLOCK: XprErrorMessageBlock): string | null {
     // 次のトークンがない場合はエラー
     if (this.token === null) {
-      Console.error(ERROR_BLOCK.MISSING_DIRECTORY);
+      this.error(ERROR_BLOCK.MISSING_DIRECTORY);
       return null;
     }
     // 次のトークンが正規表現パターンにマッチしない場合はエラー
     if (!this.validateRegex(REGEXP.DIRECTORY_PATH)) {
-      Console.error(ERROR_BLOCK.INVALID_FORMAT);
+      this.error(ERROR_BLOCK.INVALID_FORMAT);
       return null;
     }
 
@@ -214,7 +214,7 @@ export default class XprMetadataBuilder {
     this.nextToken();
     // 次のトークンがカンマでない場合はエラー
     if (!this.validateToken(',')) {
-      Console.error(ERROR_BLOCK.MISSING_COMMA);
+      this.error(ERROR_BLOCK.MISSING_COMMA);
       return null;
     }
 
@@ -247,5 +247,10 @@ export default class XprMetadataBuilder {
   /** 前のトークンをthis.tokenに格納します。 */
   private prevToken(): void {
     this.token = this.tokens.prevToken();
+  }
+  
+  /** エラーメッセージを表示します。 */
+  private error(message: string): void {
+    Console.error(message + ' ' + this.tokens.get());
   }
 }

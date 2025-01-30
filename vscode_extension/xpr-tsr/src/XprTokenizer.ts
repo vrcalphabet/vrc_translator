@@ -1,10 +1,8 @@
 import XprTokens from './XprTokens';
+import REGEXP from './XprRegExp';
 
 /** xpr形式の文字列をトークンに分割するためのクラス */
 export default class XprTokenizer {
-  /** コメントを抽出するための正規表現 */
-  private static commentRegex = /%-.*?-%|%.*?(?=\n)/gs;
-
   /**
    * 入力された文字列をトークンに分割します。
    * @param input トークン化する入力文字列
@@ -12,9 +10,9 @@ export default class XprTokenizer {
    */
   public static tokenize(input: string): XprTokens {
     /** コメントを除去したinput */
-    const strippedInput = input.replaceAll(this.commentRegex, '');
-    /** 1行ごとまたはカンマ区切りで分割されたinput */
-    const lines = strippedInput.split(/,|\n/);
+    const strippedInput = input.replaceAll(REGEXP.COMMENT, '');
+    /** 1行ごとに分割されたinput */
+    const lines = strippedInput.split(/\n/);
     /** トークンの配列 */
     const tokens = new XprTokens();
 
@@ -34,9 +32,7 @@ export default class XprTokenizer {
         tokens.add(',');
       }
     });
-
-    // FIXME: デバッグ用
-    console.log(tokens);
+    
     return tokens;
   }
 }

@@ -1,1 +1,1 @@
-{"version":3,"file":"XprRegExp.js","sourceRoot":"","sources":["../src/XprRegExp.ts"],"names":[],"mappings":";;AAEA,kBAAe;IACb,UAAU,EAAE,cAAc;IAC1B,cAAc,EAAE,QAAQ;IACxB,GAAG,EAAE,cAAc;IACnB,KAAK,EAAE,QAAQ;IACf,KAAK,EAAE,MAAM;IACb,SAAS,EAAE,kBAAkB;CACD,CAAC"}
+{"version":3,"file":"XprRegExp.js","sourceRoot":"","sources":["../src/XprRegExp.ts"],"names":[],"mappings":";;AAEA,kBAAe;IACb,OAAO,EAAE,sBAAsB;IAC/B,UAAU,EAAE,cAAc;IAC1B,cAAc,EAAE,QAAQ;IACxB,GAAG,EAAE,cAAc;IACnB,KAAK,EAAE,QAAQ;IACf,KAAK,EAAE,MAAM;IACb,SAAS,EAAE,qBAAqB;CACJ,CAAC"}

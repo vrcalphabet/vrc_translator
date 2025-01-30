@@ -5,8 +5,9 @@
 
 `index.json`は以下のプロパティが設定可能です：
 
-`in?: string`  - 入力の相対的なフォルダパス。デフォルトは`index.json`と同じディレクトリです。
-`out?: string` - 出力先の相対的なフォルダパス。デフォルトは`index.json`と同じディレクトリです。
+`in?: string`  - 入力の相対的なフォルダパス。デフォルトは`./`です。
+`out?: string` - 出力先の相対的なフォルダパス。デフォルトは`./`です。
+`excludes?: string[]` - 無視する入力フォルダ名。パスではありません。デフォルトは`[]`です。
 
 ディレクトリ例：
 ```
@@ -25,7 +26,7 @@ src/
 このフォルダは、各ページごとや各機能ごとなどに分けることができます。
 
 統合方法：
-`out/`に出力したいため、`index.json`に以下を記述します。
+`../out/`に出力したいため、`index.json`に以下を記述します。
 ```json
 {
   "out": "../out/"
@@ -34,4 +35,4 @@ src/
 
 `index.json`を開きフォーカスした上で、`extension.mergeXprAndTsrFiles`（翻訳用ファイルの統合）を実行します。
 
-`out/`に統合された`rules.json`と`translations.json`が作成されます。
+`../out/`に統合された`rules.json`と`translations.json`が作成されます。

@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const XprTokens_1 = __importDefault(require("./XprTokens"));
+const XprRegExp_1 = __importDefault(require("./XprRegExp"));
 class XprTokenizer {
-    static commentRegex = /%-.*?-%|%.*?(?=\n)/gs;
     static tokenize(input) {
-        const strippedInput = input.replaceAll(this.commentRegex, '');
-        const lines = strippedInput.split(/,|\n/);
+        const strippedInput = input.replaceAll(XprRegExp_1.default.COMMENT, '');
+        const lines = strippedInput.split(/\n/);
         const tokens = new XprTokens_1.default();
         lines.forEach((line) => {
             if (line.trim().length === 0) {
@@ -20,7 +20,6 @@ class XprTokenizer {
                 tokens.add(',');
             }
         });
-        console.log(tokens);
         return tokens;
     }
 }

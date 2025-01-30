@@ -19,13 +19,28 @@ class XprNodeBuilder {
     }
     buildTree(tokens) {
         this.tokens = tokens;
+        const nodes = [];
+        while (true) {
+            const node = this.recursive(false);
+            if (node === null)
+                return null;
+            nodes.push(node);
+            const token = this.peekToken();
+            if (token === null)
+                break;
+        }
+        return nodes;
+    }
+    recursive(baseMulti) {
         let key = null;
         let xpath = null;
-        let multi = false;
+        let multi = baseMulti;
+        let attribute = null;
+        const nodes = [];
         while (true) {
             this.nextToken();
             if (this.token === null) {
-                Console_1.default.error(XprErrorMessages_1.default.GENERAL.INVALID_TOKEN_END);
+                this.error(XprErrorMessages_1.default.GENERAL.INVALID_TOKEN_END);
                 return null;
             }
             const type = this.checkType();
@@ -42,14 +57,44 @@ class XprNodeBuilder {
                     multi = true;
                     break;
                 case xpr_1.XprValueType.ATTRIBUTE:
+                    attribute = this.token.slice(1, -1);
                     break;
                 case xpr_1.XprValueType.BRACKET_OPEN:
-                    console.log({ key, xpath, multi });
-                    return null;
+                    while (true) {
+                        const node = this.recursive(multi);
+                        if (node === null)
+                            return null;
+                        nodes.push(node);
+                        const token = this.peekToken();
+                        if (token === '}')
+                            break;
+                    }
+                    break;
                 case xpr_1.XprValueType.BRACKET_CLOSE:
-                    break;
+                    if (key === null || xpath === null) {
+                        this.error(XprErrorMessages_1.default.NODE.MISSING_KEY_OR_XPATH);
+                        return null;
+                    }
+                    if (nodes.length === 0) {
+                        this.error(XprErrorMessages_1.default.NODE.MISSING_NODE);
+                        return null;
+                    }
+                    return {
+                        key: key,
+                        xpath: xpath,
+                        nodes: nodes
+                    };
                 case xpr_1.XprValueType.COMMA:
-                    break;
+                    if (xpath === null) {
+                        this.error(XprErrorMessages_1.default.NODE.MISSING_XPATH);
+                        return null;
+                    }
+                    return {
+                        key: key,
+                        xpath: xpath,
+                        multi: multi,
+                        attribute: attribute
+                    };
             }
         }
     }
@@ -75,7 +120,7 @@ class XprNodeBuilder {
         if (this.validateToken(',')) {
             return xpr_1.XprValueType.COMMA;
         }
-        Console_1.default.error(XprErrorMessages_1.default.GENERAL.INVALID_TOKEN);
+        this.error(XprErrorMessages_1.default.GENERAL.INVALID_TOKEN);
         return null;
     }
     validateToken(...expectedTokens) {
@@ -84,8 +129,14 @@ class XprNodeBuilder {
     validateRegex(regex) {
         return this.token !== null && regex.test(this.token);
     }
+    peekToken() {
+        return this.tokens.peekToken();
+    }
     nextToken() {
         this.token = this.tokens.nextToken();
+    }
+    error(message) {
+        Console_1.default.error(message + ' ' + this.tokens.get());
     }
 }
 exports.default = XprNodeBuilder;
