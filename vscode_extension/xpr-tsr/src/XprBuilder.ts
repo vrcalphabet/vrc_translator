@@ -12,10 +12,10 @@ export default class XprBuilder {
     if (metadata === null) return;
     const nodes = nodeBuilder.buildTree(tokens);
     if (nodes === null) return;
-    
+
     const file = {
       ...metadata,
-      nodes
+      nodes,
     } satisfies XprFile;
     console.log(JSON.stringify(file));
   }

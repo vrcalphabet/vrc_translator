@@ -29,13 +29,13 @@ export default class XprNodeBuilder {
   public buildTree(tokens: XprTokens): XprNodes | null {
     this.tokens = tokens;
     const nodes: XprNodes = [];
-    
+
     while (true) {
       /** 一つの子ノード、もしくは親ノード */
       const node = this.recursive(false);
       if (node === null) return null;
       nodes.push(node);
-      
+
       const token = this.peekToken();
       if (token === null) break;
     }
@@ -93,7 +93,7 @@ export default class XprNodeBuilder {
             const node = this.recursive(multi);
             if (node === null) return null;
             nodes.push(node);
-            
+
             // 次のトークンが`}`の場合、XprValueType.BRACKET_CLOSEに移動する
             const token = this.peekToken();
             if (token === '}') break;
@@ -108,11 +108,11 @@ export default class XprNodeBuilder {
             this.error(ERROR_MESSAGE.NODE.MISSING_NODE);
             return null;
           }
-        
+
           return {
             key: key,
             xpath: xpath,
-            nodes: nodes
+            nodes: nodes,
           } satisfies XprParentNode;
         case XprValueType.COMMA:
           if (xpath === null) {
@@ -124,7 +124,7 @@ export default class XprNodeBuilder {
             key: key,
             xpath: xpath,
             multi: multi,
-            attribute: attribute
+            attribute: attribute,
           } satisfies XprChildNode;
       }
     }
@@ -178,7 +178,7 @@ export default class XprNodeBuilder {
   private validateRegex(regex: RegExp): boolean {
     return this.token !== null && regex.test(this.token);
   }
-  
+
   // 次のトークンを取得します。ポインタが移動することはありません。
   private peekToken(): string | null {
     return this.tokens.peekToken();
@@ -188,7 +188,7 @@ export default class XprNodeBuilder {
   private nextToken(): void {
     this.token = this.tokens.nextToken();
   }
-  
+
   /** エラーメッセージを表示します。 */
   private error(message: string): void {
     Console.error(message + ' ' + this.tokens.get());

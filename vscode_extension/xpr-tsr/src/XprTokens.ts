@@ -15,7 +15,7 @@ export default class XprTokens {
   public add(...token: string[]): void {
     this.tokens.push(...token);
   }
-  
+
   /**
    * ポインタを移動せずに次のトークンを取得します。
    * @returns 次のトークンで、無い場合はnull
@@ -51,7 +51,7 @@ export default class XprTokens {
     }
     return this.tokens[--this.index];
   }
-  
+
   /**
    * 現在のポインタのトークンの前後を取得します。
    * @param offset 前後のトークン数で、デフォルトは5
@@ -59,8 +59,8 @@ export default class XprTokens {
    */
   public get(offset: number = 5): string {
     const index = Math.max(0, Math.min(this.index, this.tokens.length - 1));
-    const tokens = this.tokens.map((token, i) => i === index ? `>>>${token}<<<` : token);
-    
+    const tokens = this.tokens.map((token, i) => (i === index ? `>>>${token}<<<` : token));
+
     const left = Math.max(0, this.index - offset);
     const right = Math.min(this.tokens.length, this.index + offset);
     return tokens.slice(left, right).join(' ');

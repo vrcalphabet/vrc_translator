@@ -10,7 +10,7 @@ export enum XprValueType {
   BRACKET_CLOSE,
   /** カンマ(`,`) */
   COMMA,
-};
+}
 
 /** メタデータ */
 export type XprMetadata = {

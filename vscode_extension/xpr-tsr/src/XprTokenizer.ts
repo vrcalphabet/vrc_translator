@@ -32,7 +32,7 @@ export default class XprTokenizer {
         tokens.add(',');
       }
     });
-    
+
     return tokens;
   }
 }

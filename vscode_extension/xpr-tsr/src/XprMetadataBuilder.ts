@@ -248,7 +248,7 @@ export default class XprMetadataBuilder {
   private prevToken(): void {
     this.token = this.tokens.prevToken();
   }
-  
+
   /** エラーメッセージを表示します。 */
   private error(message: string): void {
     Console.error(message + ' ' + this.tokens.get());
