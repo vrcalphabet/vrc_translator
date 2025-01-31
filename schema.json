@@ -3,6 +3,9 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string"
+    },
     "input": {
       "description": "入力元の親フォルダのパス。",
       "type": "string",
