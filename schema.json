@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "input": {
+      "description": "入力元の親フォルダのパス。",
+      "type": "string",
+      "minLength": 1,
+      "default": "./"
+    },
+    "output": {
+      "description": "出力先のフォルダパス。",
+      "type": "string",
+      "minLength": 1,
+      "default": "./"
+    },
+    "ignore": {
+      "description": "無視するフォルダ名。",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "format": {
+      "description": "出力JSONをインデントするか。",
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
