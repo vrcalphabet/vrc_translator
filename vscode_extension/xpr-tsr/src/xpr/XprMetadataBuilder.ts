@@ -1,9 +1,11 @@
 import { XprErrorMessageBlock, XprMetadata } from './xpr';
 import XprTokens from './XprTokens';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import ERROR_MESSAGE from './XprErrorMessages';
 import REGEXP from './XprRegExp';
-import Console from './Console';
+import Console from '../Console';
 
+/** トークンからメタデータのみのトークンツリーを作成するクラス */
 export default class XprMetadataBuilder {
   /** トークンの配列 */
   private tokens!: XprTokens;
@@ -21,7 +23,11 @@ export default class XprMetadataBuilder {
     return this.INSTANCE;
   }
 
-  /** メタデータを解析します。 */
+  /**
+   * メタデータを解析します。
+   * @param tokens トークンの配列
+   * @returns ノードの配列、null: エラーが発生した場合
+   */
   public buildTree(tokens: XprTokens): XprMetadata | null {
     this.tokens = tokens;
 

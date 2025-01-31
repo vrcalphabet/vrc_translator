@@ -44,7 +44,7 @@ const Console_1 = __importDefault(require("./Console"));
 function activate() {
     vscode.commands.registerCommand('extension.mergeXprAndTsrFiles', () => {
         try {
-            mergeFiles_1.default.execute();
+            mergeFiles_1.default.merge();
         }
         catch (e) {
             Console_1.default.error(e.stack);

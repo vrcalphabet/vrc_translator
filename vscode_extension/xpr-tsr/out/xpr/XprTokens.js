@@ -30,7 +30,7 @@ class XprTokens {
     }
     get(offset = 5) {
         const index = Math.max(0, Math.min(this.index, this.tokens.length - 1));
-        const tokens = this.tokens.map((token, i) => i === index ? `>>>${token}<<<` : token);
+        const tokens = this.tokens.map((token, i) => (i === index ? `>>>${token}<<<` : token));
         const left = Math.max(0, this.index - offset);
         const right = Math.min(this.tokens.length, this.index + offset);
         return tokens.slice(left, right).join(' ');

@@ -32,6 +32,6 @@ exports.default = {
         MISSING_XPATH: 'xpathが指定されていません。',
         MISSING_KEY_OR_XPATH: 'keyまたはxpathが指定されていません。',
         MISSING_NODE: 'ネストの中に最低でも1つのノードが必要です。',
-    }
+    },
 };
 //# sourceMappingURL=XprErrorMessages.js.map

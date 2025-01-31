@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const XprErrorMessages_1 = __importDefault(require("./XprErrorMessages"));
 const XprRegExp_1 = __importDefault(require("./XprRegExp"));
-const Console_1 = __importDefault(require("./Console"));
+const Console_1 = __importDefault(require("../Console"));
 class XprMetadataBuilder {
     tokens;
     token;

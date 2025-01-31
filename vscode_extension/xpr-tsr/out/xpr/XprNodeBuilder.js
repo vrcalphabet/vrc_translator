@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const XprErrorMessages_1 = __importDefault(require("./XprErrorMessages"));
 const XprRegExp_1 = __importDefault(require("./XprRegExp"));
-const Console_1 = __importDefault(require("./Console"));
+const Console_1 = __importDefault(require("../Console"));
 const xpr_1 = require("./xpr");
 class XprNodeBuilder {
     tokens;
@@ -82,7 +82,7 @@ class XprNodeBuilder {
                     return {
                         key: key,
                         xpath: xpath,
-                        nodes: nodes
+                        nodes: nodes,
                     };
                 case xpr_1.XprValueType.COMMA:
                     if (xpath === null) {
@@ -93,7 +93,7 @@ class XprNodeBuilder {
                         key: key,
                         xpath: xpath,
                         multi: multi,
-                        attribute: attribute
+                        attribute: attribute,
                     };
             }
         }

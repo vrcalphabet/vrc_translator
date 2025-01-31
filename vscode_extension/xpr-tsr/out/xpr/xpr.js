@@ -11,5 +11,4 @@ var XprValueType;
     XprValueType[XprValueType["BRACKET_CLOSE"] = 5] = "BRACKET_CLOSE";
     XprValueType[XprValueType["COMMA"] = 6] = "COMMA";
 })(XprValueType || (exports.XprValueType = XprValueType = {}));
-;
 //# sourceMappingURL=xpr.js.map

@@ -1,9 +1,11 @@
 import XprTokens from './XprTokens';
+// eslint-disable-next-line @typescript-eslint/naming-convention
 import ERROR_MESSAGE from './XprErrorMessages';
 import REGEXP from './XprRegExp';
-import Console from './Console';
+import Console from '../Console';
 import { XprChildNode, XprNodes, XprParentNode, XprValueType } from './xpr';
 
+/** トークンからノードデータのみのトークンツリーを作成するクラス */
 export default class XprNodeBuilder {
   /** トークンの配列 */
   private tokens!: XprTokens;

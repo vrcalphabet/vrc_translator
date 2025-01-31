@@ -1,5 +1,5 @@
 {
-  "input": "./",
-  "output": "../out/",
-  "excludes": ["rules"]
+  "output": "../chrome_extension/out/",
+  "ignore": ["test", "rules"],
+  "format": true
 }

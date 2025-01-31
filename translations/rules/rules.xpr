@@ -1,4 +1,4 @@
-@rootkey LOGIN
+@name LOGIN
 @includes {
   /home/login
 }

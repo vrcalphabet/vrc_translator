@@ -8,7 +8,7 @@ const XprTokenizer_1 = __importDefault(require("./XprTokenizer"));
 class XprConverter {
     static convert(input) {
         const tokens = XprTokenizer_1.default.tokenize(input);
-        XprBuilder_1.default.buildTree(tokens);
+        return XprBuilder_1.default.buildTree(tokens);
     }
 }
 exports.default = XprConverter;

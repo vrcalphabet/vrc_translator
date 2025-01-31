@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "in": {
+      "type": "string"
+    },
+    "out": {
+      "type": "string"
+    },
+    "excludes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "format": {
+      "type": "boolean"
+    }
+  }
+}

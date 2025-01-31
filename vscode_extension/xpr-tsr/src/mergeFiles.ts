@@ -1,113 +1,167 @@
 import * as vscode from 'vscode';
 import path from 'path';
-import fs from 'fs';
-import XprConverter from './XprConverter';
-
-/** ルール定義ファイルと翻訳定義ファイルを格納するための型 */
-type RulesTrans = { rules: string; trans: string };
+import Console from './Console';
+import { IndexDefinition } from '.';
+import IndexValidator from './IndexValidator';
+import FileReader from './FileReader';
+import XprConverter from './xpr/XprConverter';
+import { XprFile } from './xpr/xpr';
 
 /** .xprファイルと翻訳定義ファイルをそれぞれ統合するクラス */
 export default class MergeFiles {
   /**
    * .xprファイルと翻訳定義ファイルをそれぞれ統合します。
    */
-  public static execute(): void {
+  public static merge(): void {
+    /** アクティブなテキストエディタ */
+    const activeEditor = this.getActiveEditor();
+    if (activeEditor === null) return;
+
+    /** index.jsonのパス */
+    const filePath = this.getCurrentFilePath(activeEditor);
+    /** ファイル名 */
+    const fileName = path.basename(filePath);
+    if (fileName !== 'index.json') {
+      Console.error('`index.json`を開いた上で実行してください');
+      return;
+    }
+
+    /** index.jsonファイルの中身 */
+    const index = this.getIndex(filePath);
+    if (index === null) return;
+
+    const { inputPath, outputPath } = this.getPath(filePath, index);
+    this.setRules(inputPath, outputPath, index.ignore, index.format);
+    Console.log('統合が完了しました');
+  }
+
+  /**
+   * `index.json`の内容から入力ファイルと出力ファイルのパスを取得します。
+   * @param filePath `index.json`のパス
+   * @param index `index.json`の内容
+   * @returns 入力ファイルと出力ファイルのパス
+   */
+  private static getPath(
+    filePath: string,
+    index: IndexDefinition
+  ): { inputPath: string; outputPath: string } {
+    /** index.jsonが存在するフォルダパス */
+    const basePath = path.dirname(filePath);
+    const inputPath = path.join(basePath, index.input);
+    const outputPath = path.join(basePath, index.output);
+    return { inputPath, outputPath };
+  }
+
+  /**
+   * アクティブなエディターを取得します。
+   * @returns アクティブなエディター。エディターが存在しない場合はnull
+   */
+  private static getActiveEditor(): vscode.TextEditor | null {
     /** アクティブなテキストエディタ */
     const activeEditor = vscode.window.activeTextEditor;
-    if (!activeEditor) {
+    if (activeEditor === undefined) {
       /* コマンドを実行するにはテキストエディタをアクティブにしなければいけないため、
          通常はこの処理に入ることはない */
-      vscode.window.showErrorMessage('アクティブなテキストエディタが見つかりません');
-      return;
-    }
-
-    /** フォーカスされているファイル */
-    const document = activeEditor.document;
-    /** フォーカスされているファイル名 */
-    const fileName = path.basename(document.uri.fsPath);
-    if (fileName !== 'index.json') {
-      vscode.window.showErrorMessage('`index.json`を開いた上で実行してください');
-      return;
-    }
-
-    /** index.jsonが存在するディレクトリパス */
-    const baseDirectoryPath = path.dirname(document.uri.fsPath);
-
-    const rulesTrans = this.readFileInFolders(baseDirectoryPath);
-
-    console.log(JSON.stringify(rulesTrans));
-  }
-
-  /**
-   * 指定したディレクトリ直下のすべてのフォルダ名を取得します。
-   * @param directoryPath 探索するディレクトリパス
-   * @returns ディレクトリ直下のすべてのフォルダ名
-   */
-  private static getSubdirectories(directoryPath: string): Array<string> {
-    /** ディレクトリ直下のすべてのファイルフォルダ名 */
-    const items = fs.readdirSync(directoryPath);
-
-    /** ディレクトリ直下のすべてのフォルダ名 */
-    const folders = items.filter((item) => {
-      /** itemの絶対パス */
-      const itemPath = path.join(directoryPath, item);
-      /** itemがフォルダであるか */
-      return fs.statSync(itemPath).isDirectory();
-    });
-
-    return folders;
-  }
-
-  /**
-   * 指定したパスのファイルの内容を取得します。
-   *
-   * **注: ファイルが存在するかを確認するためにこのメソッドを使用しないでください。**
-   * @param filePath 内容を取得するファイルのパス
-   * @returns ファイルの中身。ファイルが存在しない場合はnull
-   */
-  private static readFileContent(filePath: string): string | null {
-    try {
-      return fs.readFileSync(filePath, 'utf8');
-    } catch (error) {
-      // ファイルが存在しない場合
+      Console.error('アクティブなテキストエディタが見つかりません');
       return null;
     }
+    return activeEditor;
   }
 
   /**
-   * ディレクトリ直下の各フォルダ内のルール定義ファイルと翻訳定義ファイルを取得します。
-   * @param directoryPath 取得するフォルダのパス
-   * @returns ルール定義ファイルと翻訳定義ファイルが格納された配列
+   * 現在フォーカスされているファイルのパスを取得します。
+   * @param activeEditor アクティブなエディター
+   * @returns 現在フォーカスされているファイルのパス
    */
-  private static readFileInFolders(directoryPath: string): Array<RulesTrans> {
-    /** ディレクトリ直下のすべてのフォルダ名 */
-    const folders = this.getSubdirectories(directoryPath);
+  private static getCurrentFilePath(activeEditor: vscode.TextEditor): string {
+    /** フォーカスされているファイル */
+    const document = activeEditor.document;
+    /** ファイルパス */
+    return document.uri.fsPath;
+  }
 
-    /** ルール定義ファイルと翻訳定義ファイルを格納するための配列 */
-    const rulesTrans: RulesTrans[] = [];
-    folders.forEach((folder) => {
-      /** フォルダの絶対パス */
-      const folderPath = path.join(directoryPath, folder);
+  /**
+   * `index.json`の内容をバリデートした上で取得します。
+   * @param path `index.json`のパス
+   * @returns バリデートした`index.json`の内容。バリデートに失敗した場合はnull
+   */
+  private static getIndex(path: string): IndexDefinition | null {
+    const index = FileReader.readFileContent(path);
+    if (index === null) return null;
 
-      /** ルール定義ファイルのパス */
-      const rulesFilePath = path.join(folderPath, 'rules.xpr');
-      /** 翻訳定義ファイルのパス */
-      const transFilePath = path.join(folderPath, 'trans.json');
+    const validatedIndex = IndexValidator.validate(index);
+    if (validatedIndex === null) return null;
 
-      /** ルール定義ファイルの中身 */
-      const rulesContent = this.readFileContent(rulesFilePath);
-      /** 翻訳定義ファイルの中身 */
-      const transContent = this.readFileContent(transFilePath);
+    return validatedIndex;
+  }
 
-      // ルール定義ファイルと翻訳定義ファイルが存在しているか
-      if (rulesContent !== null && transContent !== null) {
-        // TODO:
-        XprConverter.convert(rulesContent);
+  /**
+   * basePath直下のディレクトリの全てのrules.xprを統合し、rules.jsonを作成します。
+   * @param inputPath 探索対象の親ディレクトリのパス
+   * @param outputPath 出力先のディレクトリのパス
+   * @param format インデントをするかどうか、true: インデントする、false: インデントしない
+   * @returns 正常に書き込めたか
+   */
+  private static setRules(
+    inputPath: string,
+    outputPath: string,
+    ignoreFolders: Array<string>,
+    format: boolean
+  ): boolean {
+    /** 各rules.xprファイルの配列 */
+    const files = this.readRules(inputPath, ignoreFolders);
+    if (files === null) return false;
 
-        // rulesTrans.push({ rules: rulesContent, trans: transContent });
-      }
-    });
+    /** フォーマットされたjson */
+    const content = this.stringifyJSON(files, format);
+    return this.writeRulesFile(outputPath, content);
+  }
+  
+  /**
+   * 指定したフォルダ内の全てのrules.xprファイルを読み込みます。
+   * @param inputPath 親ディレクトリのパス
+   * @param ignoreFolders 無視するフォルダ名の配列
+   * @returns rules.xprファイルの配列、エラーの場合はnull
+   */
+  private static readRules(inputPath: string, ignoreFolders: Array<string>): Array<XprFile> | null {
+    /** 各rules.xprファイルの配列 */
+    const files = FileReader.readFileInFolders(inputPath, ignoreFolders, 'rules.xpr', (content) => {
+      return XprConverter.convert(content);
+    }) as Array<XprFile> | null;
 
-    return rulesTrans;
+    if (files === null) {
+      Console.error('`rules.xpr`が存在しないディレクトリがあります');
+      return null;
+    }
+    return files;
+  }
+  
+  /**
+   * rules.jsonを出力します。
+   * @param outputPath 出力先のディレクトリのパス
+   * @param content rules.jsonの内容
+   * @returns 正常に書き込めたか
+   */
+  private static writeRulesFile(outputPath: string, content: string): boolean {
+    const rulesPath = path.join(outputPath, 'rules.json');
+    const success = FileReader.writeFileContent(rulesPath, content);
+    if (!success) {
+      Console.error('`rules.json`に書き込めませんでした');
+    }
+    return success;
+  }
+
+  /**
+   * オブジェクトをJSON文字列に変換します。
+   * @param json 変換対象のデータ
+   * @param format インデントをするかどうか、true: インデントする、false: インデントしない
+   * @returns JSON文字列
+   */
+  private static stringifyJSON(json: any, format: boolean): string {
+    if (format) {
+      return JSON.stringify(json, null, 2);
+    } else {
+      return JSON.stringify(json);
+    }
   }
 }
