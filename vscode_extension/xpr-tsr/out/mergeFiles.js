@@ -43,42 +43,53 @@ const IndexValidator_1 = __importDefault(require("./IndexValidator"));
 const FileReader_1 = __importDefault(require("./FileReader"));
 const XprConverter_1 = __importDefault(require("./xpr/XprConverter"));
 class MergeFiles {
-    static merge() {
-        const activeEditor = this.getActiveEditor();
-        if (activeEditor === null)
-            return;
-        const filePath = this.getCurrentFilePath(activeEditor);
-        const fileName = path_1.default.basename(filePath);
+    editor;
+    indexFilePath = '';
+    index;
+    directories;
+    inputPath = '';
+    outputPath = '';
+    static INSTANCE = new MergeFiles();
+    constructor() { }
+    static getInstance() {
+        return this.INSTANCE;
+    }
+    merge() {
+        this.setActiveEditor();
+        this.setIndex();
+        this.setPath();
+        this.mergeRules();
+        this.mergeTrans();
+        Console_1.default.log('統合が完了しました');
+    }
+    setIndex() {
+        this.indexFilePath = this.editor.document.uri.fsPath;
+        const fileName = path_1.default.basename(this.indexFilePath);
         if (fileName !== 'index.json') {
             Console_1.default.error('`index.json`を開いた上で実行してください');
             return;
         }
-        const index = this.getIndex(filePath);
+        const index = this.getIndex(this.indexFilePath);
         if (index === null)
             return;
-        const { inputPath, outputPath } = this.getPath(filePath, index);
-        this.setRules(inputPath, outputPath, index.ignore, index.format);
-        Console_1.default.log('統合が完了しました');
+        this.index = index;
     }
-    static getPath(filePath, index) {
-        const basePath = path_1.default.dirname(filePath);
-        const inputPath = path_1.default.join(basePath, index.input);
-        const outputPath = path_1.default.join(basePath, index.output);
-        return { inputPath, outputPath };
+    setPath() {
+        const basePath = path_1.default.dirname(this.indexFilePath);
+        const directories = FileReader_1.default.getSubdirectories(basePath);
+        this.directories = directories.filter(directory => !this.index.ignore.includes(directory));
+        this.inputPath = path_1.default.join(basePath, this.index.input);
+        this.outputPath = path_1.default.join(basePath, this.index.output);
     }
-    static getActiveEditor() {
+    setActiveEditor() {
         const activeEditor = vscode.window.activeTextEditor;
         if (activeEditor === undefined) {
             Console_1.default.error('アクティブなテキストエディタが見つかりません');
-            return null;
+            return;
         }
-        return activeEditor;
+        this.editor = activeEditor;
     }
-    static getCurrentFilePath(activeEditor) {
-        const document = activeEditor.document;
-        return document.uri.fsPath;
-    }
-    static getIndex(path) {
+    getIndex(path) {
         const index = FileReader_1.default.readFileContent(path);
         if (index === null)
             return null;
@@ -87,33 +98,62 @@ class MergeFiles {
             return null;
         return validatedIndex;
     }
-    static setRules(inputPath, outputPath, ignoreFolders, format) {
-        const files = this.readRules(inputPath, ignoreFolders);
+    mergeRules() {
+        const files = this.readRules();
         if (files === null)
             return false;
-        const content = this.stringifyJSON(files, format);
-        return this.writeRulesFile(outputPath, content);
+        const content = this.stringifyJSON(files);
+        return this.writeRulesFile(content);
     }
-    static readRules(inputPath, ignoreFolders) {
-        const files = FileReader_1.default.readFileInFolders(inputPath, ignoreFolders, 'rules.xpr', (content) => {
+    readRules() {
+        const files = FileReader_1.default.readFileInFolders(this.inputPath, this.directories, 'rules.xpr', (content, folder) => {
+            if (content === null) {
+                Console_1.default.error(`フォルダ ${folder} に \`trans.json\` が存在しません`);
+                return null;
+            }
             return XprConverter_1.default.convert(content);
         });
-        if (files === null) {
-            Console_1.default.error('`rules.xpr`が存在しないディレクトリがあります');
+        if (files === null)
             return null;
-        }
         return files;
     }
-    static writeRulesFile(outputPath, content) {
-        const rulesPath = path_1.default.join(outputPath, 'rules.json');
+    writeRulesFile(content) {
+        const rulesPath = path_1.default.join(this.outputPath, 'rules.json');
         const success = FileReader_1.default.writeFileContent(rulesPath, content);
         if (!success) {
             Console_1.default.error('`rules.json`に書き込めませんでした');
         }
         return success;
     }
-    static stringifyJSON(json, format) {
-        if (format) {
+    mergeTrans() {
+        const files = this.readTrans();
+        if (files === null)
+            return false;
+        const content = this.stringifyJSON(files);
+        return this.writeTransFile(content);
+    }
+    readTrans() {
+        const files = FileReader_1.default.readFileInFolders(this.inputPath, this.directories, 'trans.json', (content, folder) => {
+            if (content === null) {
+                Console_1.default.error(`フォルダ ${folder} に \`trans.json\` が存在しません`);
+                return null;
+            }
+            return JSON.parse(content);
+        });
+        if (files === null)
+            return null;
+        return files;
+    }
+    writeTransFile(content) {
+        const transPath = path_1.default.join(this.outputPath, 'trans.json');
+        const success = FileReader_1.default.writeFileContent(transPath, content);
+        if (!success) {
+            Console_1.default.error('`trans.json`に書き込めませんでした');
+        }
+        return success;
+    }
+    stringifyJSON(json) {
+        if (this.index.format) {
             return JSON.stringify(json, null, 2);
         }
         else {

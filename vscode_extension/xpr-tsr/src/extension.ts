@@ -5,7 +5,8 @@ import Console from './Console';
 export function activate() {
   vscode.commands.registerCommand('extension.mergeXprAndTsrFiles', () => {
     try {
-      MergeFiles.merge();
+      const merger = MergeFiles.getInstance();
+      merger.merge();
     } catch (e: any) {
       Console.error(e.stack);
     }

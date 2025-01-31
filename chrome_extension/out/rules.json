@@ -1,1 +1,53 @@
-[]
+[
+  {
+    "name": "REGISTER",
+    "includes": [
+      "/home/register"
+    ],
+    "excludes": [],
+    "nodes": [
+      {
+        "key": "FORM",
+        "xpath": "//form[1]/div[1]",
+        "nodes": [
+          {
+            "key": "TITLE",
+            "xpath": "/h4[1]",
+            "multi": false,
+            "attribute": null
+          },
+          {
+            "key": "REGISTER_INPUT",
+            "xpath": "/div[2:3]/input.e1buxcrw1[1]",
+            "multi": true,
+            "attribute": "placeholder"
+          },
+          {
+            "key": "AGE_MONTH",
+            "xpath": "//select#age_month/option",
+            "multi": true,
+            "attribute": null
+          },
+          {
+            "key": "CONSENT",
+            "xpath": "/div[5]/label.eazy3iu0[1]",
+            "nodes": [
+              {
+                "key": null,
+                "xpath": "/p[1]/text()[1,4]",
+                "multi": true,
+                "attribute": null
+              },
+              {
+                "key": null,
+                "xpath": "/p[1]/a[1:3]",
+                "multi": true,
+                "attribute": null
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

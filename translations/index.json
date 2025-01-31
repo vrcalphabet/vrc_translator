@@ -1,5 +1,6 @@
 {
+  "$schema": "https://raw.githubusercontent.com/vrcalphabet/vrc_translator/refs/heads/main/schema.json",
   "output": "../chrome_extension/out/",
-  "ignore": ["test", "rules"],
+  "ignore": ["rules"],
   "format": true
 }

@@ -27,28 +27,30 @@ class FileReader {
             return false;
         }
     }
-    static getSubdirectories(directoryPath, ignoreFolders) {
+    static getSubdirectories(directoryPath) {
+        console.log('directoryPath:', directoryPath);
         const items = fs_1.default.readdirSync(directoryPath);
-        console.log(items, ignoreFolders);
         const folders = items.filter((item) => {
             const itemPath = path_1.default.join(directoryPath, item);
-            return (!ignoreFolders.includes(item) &&
-                fs_1.default.statSync(itemPath).isDirectory());
+            return fs_1.default.statSync(itemPath).isDirectory();
         });
+        console.log('folders:', folders);
         return folders;
     }
-    static readFileInFolders(directoryPath, ignoreFolders, fileName, callbackFn) {
-        const folders = this.getSubdirectories(directoryPath, ignoreFolders);
+    static readFileInFolders(baseDirectoryPath, directories, fileName, callbackFn) {
         const results = [];
-        for (const folder of folders) {
-            const folderPath = path_1.default.join(directoryPath, folder);
+        for (const directory of directories) {
+            const folderPath = path_1.default.join(baseDirectoryPath, directory);
             const filePath = path_1.default.join(folderPath, fileName);
             const content = this.readFileContent(filePath);
-            if (content === null) {
-                return null;
+            if (callbackFn !== undefined) {
+                const cb = callbackFn(content, directory);
+                if (cb === null)
+                    return null;
+                results.push(cb);
             }
             else {
-                results.push(callbackFn(content));
+                results.push(content);
             }
         }
         return results;

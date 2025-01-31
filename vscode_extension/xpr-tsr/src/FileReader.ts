@@ -17,7 +17,7 @@ export default class FileReader {
       return null;
     }
   }
-  
+
   /**
    * 指定したファイルに内容を書き込みます。
    * @param filePath 書き込むファイルのパス
@@ -31,7 +31,7 @@ export default class FileReader {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
-      
+
       fs.writeFileSync(filePath, content, 'utf8');
       return true;
     } catch (error) {
@@ -42,59 +42,58 @@ export default class FileReader {
   /**
    * 指定したディレクトリ直下のすべてのフォルダ名を取得します。
    * @param directoryPath 探索するディレクトリパス
-   * @param ignoreFolders 無視するフォルダ名の配列
    * @returns ディレクトリ直下のすべてのフォルダ名
    */
-  private static getSubdirectories(directoryPath: string, ignoreFolders: Array<string>): Array<string> {
+  public static getSubdirectories(directoryPath: string): Array<string> {
+    console.log('directoryPath:', directoryPath);
     /** ディレクトリ直下のすべてのファイルフォルダ名 */
     const items = fs.readdirSync(directoryPath);
-    
+
     /** ディレクトリ直下のすべてのフォルダ名 */
     const folders = items.filter((item) => {
       /** itemの絶対パス */
       const itemPath = path.join(directoryPath, item);
       /** 無視フォルダではないかつitemがフォルダであるか */
-      return (
-        !ignoreFolders.includes(item) &&
-        fs.statSync(itemPath).isDirectory()
-      );
+      return fs.statSync(itemPath).isDirectory();
     });
 
+    console.log('folders:', folders);
     return folders;
   }
 
   /**
    * ディレクトリ直下のすべてのフォルダに存在する指定したファイルを読み込みます。
-   * @param directoryPath 親ディレクトリのパス
-   * @param ignoreFolders 無視するフォルダ名の配列
+   * @param baseDirectoryPath 親ディレクトリのパス
+   * @param directories フォルダ名の配列
    * @param fileName ファイル名
    * @param callbackFn ファイルの中身を処理する関数
+   * @param callbackFn.content 読み込んだファイルの内容
+   * @param callbackFn.directoryName フォルダ名
    * @returns ファイルの中身を処理した結果の配列、null: ファイルが存在しない場合
    */
   public static readFileInFolders(
-    directoryPath: string,
-    ignoreFolders: Array<string>,
+    baseDirectoryPath: string,
+    directories: Array<string>,
     fileName: string,
-    callbackFn: (content: string) => any
+    callbackFn: (content: string | null, directoryName: string) => any | void
   ): Array<any> | null {
-    /** ディレクトリ直下のすべてのフォルダ名 */
-    const folders = this.getSubdirectories(directoryPath, ignoreFolders);
     /** 結果 */
     const results: Array<any> = [];
 
-    for (const folder of folders) {
+    for (const directory of directories) {
       /** フォルダのパス */
-      const folderPath = path.join(directoryPath, folder);
+      const folderPath = path.join(baseDirectoryPath, directory);
       /** ファイルのパス */
       const filePath = path.join(folderPath, fileName);
       /** ファイルの中身 */
       const content = this.readFileContent(filePath);
 
-      // ファイルが存在しているか
-      if (content === null) {
-        return null;
+      if (callbackFn !== undefined) {
+        const cb = callbackFn(content, directory);
+        if (cb === null) return null;
+        results.push(cb);
       } else {
-        results.push(callbackFn(content));
+        results.push(content);
       }
     }
 

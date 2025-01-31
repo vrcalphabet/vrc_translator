@@ -9,75 +9,87 @@ import { XprFile } from './xpr/xpr';
 
 /** .xprファイルと翻訳定義ファイルをそれぞれ統合するクラス */
 export default class MergeFiles {
+  /** アクティブなテキストエディタ */
+  private editor!: vscode.TextEditor;
+  /** `index.json`のパス */
+  private indexFilePath: string = '';
+  /** `index.json`の内容 */
+  private index!: IndexDefinition;
+  /** 入力フォルダ名の配列 */
+  private directories!: Array<string>;
+  /** 入力フォルダのパス */
+  private inputPath: string = '';
+  /** 出力フォルダのパス */
+  private outputPath: string = '';
+
+  /** シングルトンのインスタンス */
+  private static readonly INSTANCE = new MergeFiles();
+  private constructor() {}
+
+  /** インスタンスを取得します */
+  public static getInstance(): MergeFiles {
+    return this.INSTANCE;
+  }
+
   /**
    * .xprファイルと翻訳定義ファイルをそれぞれ統合します。
    */
-  public static merge(): void {
-    /** アクティブなテキストエディタ */
-    const activeEditor = this.getActiveEditor();
-    if (activeEditor === null) return;
+  public merge(): void {
+    // TODO: エラーハンドリング
+    this.setActiveEditor();
+    this.setIndex();
+    this.setPath();
+    this.mergeRules();
+    this.mergeTrans();
+    Console.log('統合が完了しました');
+  }
 
-    /** index.jsonのパス */
-    const filePath = this.getCurrentFilePath(activeEditor);
+  /**
+   * `index.json`の内容を設定します。
+   */
+  private setIndex(): void {
+    this.indexFilePath = this.editor.document.uri.fsPath;
     /** ファイル名 */
-    const fileName = path.basename(filePath);
+    const fileName = path.basename(this.indexFilePath);
     if (fileName !== 'index.json') {
       Console.error('`index.json`を開いた上で実行してください');
       return;
     }
 
     /** index.jsonファイルの中身 */
-    const index = this.getIndex(filePath);
+    const index = this.getIndex(this.indexFilePath);
     if (index === null) return;
 
-    const { inputPath, outputPath } = this.getPath(filePath, index);
-    this.setRules(inputPath, outputPath, index.ignore, index.format);
-    Console.log('統合が完了しました');
+    this.index = index;
   }
 
   /**
-   * `index.json`の内容から入力ファイルと出力ファイルのパスを取得します。
-   * @param filePath `index.json`のパス
-   * @param index `index.json`の内容
-   * @returns 入力ファイルと出力ファイルのパス
+   * `index.json`の内容から入力ファイルと出力ファイルのパスを設定します。
    */
-  private static getPath(
-    filePath: string,
-    index: IndexDefinition
-  ): { inputPath: string; outputPath: string } {
+  private setPath(): void {
     /** index.jsonが存在するフォルダパス */
-    const basePath = path.dirname(filePath);
-    const inputPath = path.join(basePath, index.input);
-    const outputPath = path.join(basePath, index.output);
-    return { inputPath, outputPath };
+    const basePath = path.dirname(this.indexFilePath);
+    const directories = FileReader.getSubdirectories(basePath);
+    // ignoreに含まれているフォルダを除外
+    this.directories = directories.filter(directory => !this.index.ignore.includes(directory));
+    this.inputPath = path.join(basePath, this.index.input);
+    this.outputPath = path.join(basePath, this.index.output);
   }
 
   /**
-   * アクティブなエディターを取得します。
-   * @returns アクティブなエディター。エディターが存在しない場合はnull
+   * アクティブなエディターを設定します。
    */
-  private static getActiveEditor(): vscode.TextEditor | null {
+  private setActiveEditor(): void {
     /** アクティブなテキストエディタ */
     const activeEditor = vscode.window.activeTextEditor;
     if (activeEditor === undefined) {
       /* コマンドを実行するにはテキストエディタをアクティブにしなければいけないため、
          通常はこの処理に入ることはない */
       Console.error('アクティブなテキストエディタが見つかりません');
-      return null;
+      return;
     }
-    return activeEditor;
-  }
 
-  /**
-   * 現在フォーカスされているファイルのパスを取得します。
-   * @param activeEditor アクティブなエディター
-   * @returns 現在フォーカスされているファイルのパス
-   */
-  private static getCurrentFilePath(activeEditor: vscode.TextEditor): string {
-    /** フォーカスされているファイル */
-    const document = activeEditor.document;
-    /** ファイルパス */
-    return document.uri.fsPath;
+    this.editor = activeEditor;
   }
 
   /**
@@ -85,10 +97,12 @@ export default class MergeFiles {
    * @param path `index.json`のパス
    * @returns バリデートした`index.json`の内容。バリデートに失敗した場合はnull
    */
-  private static getIndex(path: string): IndexDefinition | null {
+  private getIndex(path: string): IndexDefinition | null {
+    // index.jsonの中身を取得
     const index = FileReader.readFileContent(path);
     if (index === null) return null;
 
+    // スキーマを検証
     const validatedIndex = IndexValidator.validate(index);
     if (validatedIndex === null) return null;
 
@@ -97,53 +111,48 @@ export default class MergeFiles {
 
   /**
    * basePath直下のディレクトリの全てのrules.xprを統合し、rules.jsonを作成します。
-   * @param inputPath 探索対象の親ディレクトリのパス
-   * @param outputPath 出力先のディレクトリのパス
-   * @param format インデントをするかどうか、true: インデントする、false: インデントしない
    * @returns 正常に書き込めたか
    */
-  private static setRules(
-    inputPath: string,
-    outputPath: string,
-    ignoreFolders: Array<string>,
-    format: boolean
-  ): boolean {
+  private mergeRules(): boolean {
     /** 各rules.xprファイルの配列 */
-    const files = this.readRules(inputPath, ignoreFolders);
+    const files = this.readRules();
     if (files === null) return false;
 
     /** フォーマットされたjson */
-    const content = this.stringifyJSON(files, format);
-    return this.writeRulesFile(outputPath, content);
+    const content = this.stringifyJSON(files);
+    return this.writeRulesFile(content);
   }
-  
+
   /**
    * 指定したフォルダ内の全てのrules.xprファイルを読み込みます。
-   * @param inputPath 親ディレクトリのパス
-   * @param ignoreFolders 無視するフォルダ名の配列
    * @returns rules.xprファイルの配列、エラーの場合はnull
    */
-  private static readRules(inputPath: string, ignoreFolders: Array<string>): Array<XprFile> | null {
+  private readRules(): Array<XprFile> | null {
     /** 各rules.xprファイルの配列 */
-    const files = FileReader.readFileInFolders(inputPath, ignoreFolders, 'rules.xpr', (content) => {
-      return XprConverter.convert(content);
-    }) as Array<XprFile> | null;
+    const files = FileReader.readFileInFolders(
+      this.inputPath,
+      this.directories,
+      'rules.xpr',
+      (content, folder) => {
+        if (content === null) {
+          Console.error(`フォルダ ${folder} に \`trans.json\` が存在しません`);
+          return null;
+        }
+        return XprConverter.convert(content);
+      }
+    ) as Array<XprFile> | null;
 
-    if (files === null) {
-      Console.error('`rules.xpr`が存在しないディレクトリがあります');
-      return null;
-    }
+    if (files === null) return null;
     return files;
   }
-  
+
   /**
    * rules.jsonを出力します。
-   * @param outputPath 出力先のディレクトリのパス
    * @param content rules.jsonの内容
    * @returns 正常に書き込めたか
    */
-  private static writeRulesFile(outputPath: string, content: string): boolean {
-    const rulesPath = path.join(outputPath, 'rules.json');
+  private writeRulesFile(content: string): boolean {
+    const rulesPath = path.join(this.outputPath, 'rules.json');
     const success = FileReader.writeFileContent(rulesPath, content);
     if (!success) {
       Console.error('`rules.json`に書き込めませんでした');
@@ -152,13 +161,60 @@ export default class MergeFiles {
   }
 
   /**
+   * basePath直下のディレクトリの全てのtrans.jsonを統合し、新たなtrans.jsonを作成します。
+   * @returns 正常に書き込めたか
+   */
+  private mergeTrans(): boolean {
+    const files = this.readTrans();
+    if (files === null) return false;
+
+    const content = this.stringifyJSON(files);
+    return this.writeTransFile(content);
+  }
+
+  /**
+   * 指定したフォルダ内の全てのtrans.jsonファイルを読み込みます。
+   * @returns trans.jsonファイルの配列、エラーの場合はnull
+   */
+  private readTrans(): any {
+    const files = FileReader.readFileInFolders(
+      this.inputPath,
+      this.directories,
+      'trans.json',
+      (content, folder) => {
+        if (content === null) {
+          Console.error(`フォルダ ${folder} に \`trans.json\` が存在しません`);
+          return null;
+        }
+        return JSON.parse(content);
+      }
+    );
+
+    if (files === null) return null;
+    return files;
+  }
+
+  /**
+   * trans.jsonを出力します。
+   * @param content trans.jsonの内容
+   * @returns 正常に書き込めたか
+   */
+  private writeTransFile(content: string): boolean {
+    const transPath = path.join(this.outputPath, 'trans.json');
+    const success = FileReader.writeFileContent(transPath, content);
+    if (!success) {
+      Console.error('`trans.json`に書き込めませんでした');
+    }
+    return success;
+  }
+
+  /**
    * オブジェクトをJSON文字列に変換します。
    * @param json 変換対象のデータ
-   * @param format インデントをするかどうか、true: インデントする、false: インデントしない
    * @returns JSON文字列
    */
-  private static stringifyJSON(json: any, format: boolean): string {
-    if (format) {
+  private stringifyJSON(json: any): string {
+    if (this.index.format) {
       return JSON.stringify(json, null, 2);
     } else {
       return JSON.stringify(json);
