@@ -1,6 +1,5 @@
 # Custom Dictionary Words
 Viveport
-rootkey
 htmlv
 failedverify
 EMAILTWOFACTORAUTH
