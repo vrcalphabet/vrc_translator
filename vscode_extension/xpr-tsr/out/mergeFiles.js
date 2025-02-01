@@ -55,11 +55,20 @@ class MergeFiles {
         return this.INSTANCE;
     }
     merge() {
-        this.setActiveEditor();
-        this.setIndex();
-        this.setPath();
-        this.mergeRules();
-        this.mergeTrans();
+        let success;
+        success = this.setActiveEditor();
+        if (!success)
+            return;
+        success = this.setIndex();
+        if (!success)
+            return;
+        success = this.setPath();
+        success = this.mergeRules();
+        if (!success)
+            return;
+        success = this.mergeTrans();
+        if (!success)
+            return;
         Console_1.default.log('統合が完了しました');
     }
     setIndex() {
@@ -67,17 +76,18 @@ class MergeFiles {
         const fileName = path_1.default.basename(this.indexFilePath);
         if (fileName !== 'index.json') {
             Console_1.default.error('`index.json`を開いた上で実行してください');
-            return;
+            return false;
         }
         const index = this.getIndex(this.indexFilePath);
         if (index === null)
-            return;
+            return false;
         this.index = index;
+        return true;
     }
     setPath() {
         const basePath = path_1.default.dirname(this.indexFilePath);
         const directories = FileReader_1.default.getSubdirectories(basePath);
-        this.directories = directories.filter(directory => !this.index.ignore.includes(directory));
+        this.directories = directories.filter((directory) => !this.index.ignore.includes(directory));
         this.inputPath = path_1.default.join(basePath, this.index.input);
         this.outputPath = path_1.default.join(basePath, this.index.output);
     }
@@ -85,9 +95,10 @@ class MergeFiles {
         const activeEditor = vscode.window.activeTextEditor;
         if (activeEditor === undefined) {
             Console_1.default.error('アクティブなテキストエディタが見つかりません');
-            return;
+            return false;
         }
         this.editor = activeEditor;
+        return true;
     }
     getIndex(path) {
         const index = FileReader_1.default.readFileContent(path);
@@ -103,7 +114,7 @@ class MergeFiles {
         if (files === null)
             return false;
         const content = this.stringifyJSON(files);
-        return this.writeRulesFile(content);
+        return this.writeFile('rules.json', content);
     }
     readRules() {
         const files = FileReader_1.default.readFileInFolders(this.inputPath, this.directories, 'rules.xpr', (content, folder) => {
@@ -117,11 +128,11 @@ class MergeFiles {
             return null;
         return files;
     }
-    writeRulesFile(content) {
-        const rulesPath = path_1.default.join(this.outputPath, 'rules.json');
+    writeFile(fileName, content) {
+        const rulesPath = path_1.default.join(this.outputPath, fileName);
         const success = FileReader_1.default.writeFileContent(rulesPath, content);
         if (!success) {
-            Console_1.default.error('`rules.json`に書き込めませんでした');
+            Console_1.default.error(`\`${fileName}\`に書き込めませんでした`);
         }
         return success;
     }
@@ -130,7 +141,7 @@ class MergeFiles {
         if (files === null)
             return false;
         const content = this.stringifyJSON(files);
-        return this.writeTransFile(content);
+        return this.writeFile('trans.json', content);
     }
     readTrans() {
         const files = FileReader_1.default.readFileInFolders(this.inputPath, this.directories, 'trans.json', (content, folder) => {
@@ -138,19 +149,17 @@ class MergeFiles {
                 Console_1.default.error(`フォルダ ${folder} に \`trans.json\` が存在しません`);
                 return null;
             }
-            return JSON.parse(content);
+            try {
+                return [folder, JSON.parse(content)];
+            }
+            catch (e) {
+                Console_1.default.error(`フォルダ ${folder} の \`trans.json\` の構文が不正です。`);
+                return null;
+            }
         });
         if (files === null)
             return null;
-        return files;
-    }
-    writeTransFile(content) {
-        const transPath = path_1.default.join(this.outputPath, 'trans.json');
-        const success = FileReader_1.default.writeFileContent(transPath, content);
-        if (!success) {
-            Console_1.default.error('`trans.json`に書き込めませんでした');
-        }
-        return success;
+        return Object.fromEntries(files);
     }
     stringifyJSON(json) {
         if (this.index.format) {

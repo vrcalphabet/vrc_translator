@@ -45,7 +45,6 @@ export default class FileReader {
    * @returns ディレクトリ直下のすべてのフォルダ名
    */
   public static getSubdirectories(directoryPath: string): Array<string> {
-    console.log('directoryPath:', directoryPath);
     /** ディレクトリ直下のすべてのファイルフォルダ名 */
     const items = fs.readdirSync(directoryPath);
 
@@ -57,7 +56,6 @@ export default class FileReader {
       return fs.statSync(itemPath).isDirectory();
     });
 
-    console.log('folders:', folders);
     return folders;
   }
 

@@ -28,13 +28,11 @@ class FileReader {
         }
     }
     static getSubdirectories(directoryPath) {
-        console.log('directoryPath:', directoryPath);
         const items = fs_1.default.readdirSync(directoryPath);
         const folders = items.filter((item) => {
             const itemPath = path_1.default.join(directoryPath, item);
             return fs_1.default.statSync(itemPath).isDirectory();
         });
-        console.log('folders:', folders);
         return folders;
     }
     static readFileInFolders(baseDirectoryPath, directories, fileName, callbackFn) {
