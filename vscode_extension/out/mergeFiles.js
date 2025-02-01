@@ -69,6 +69,9 @@ class MergeFiles {
         success = this.mergeTrans();
         if (!success)
             return;
+        success = this.updateTimestamp();
+        if (!success)
+            return;
         Console_1.default.log('統合が完了しました');
     }
     setIndex() {
@@ -160,6 +163,9 @@ class MergeFiles {
         if (files === null)
             return null;
         return Object.fromEntries(files);
+    }
+    updateTimestamp() {
+        return this.writeFile('lastUpdate.txt', Date.now().toString());
     }
     stringifyJSON(json) {
         if (this.index.format) {

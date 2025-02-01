@@ -45,6 +45,8 @@ export default class MergeFiles {
     if (!success) return;
     success = this.mergeTrans();
     if (!success) return;
+    success = this.updateTimestamp();
+    if (!success) return;
     Console.log('統合が完了しました');
   }
 
@@ -206,6 +208,14 @@ export default class MergeFiles {
 
     if (files === null) return null;
     return Object.fromEntries(files);
+  }
+  
+  /**
+   * 現在のタイムスタンプを出力します。
+   * @returns 正常に出力できたか
+   */
+  private updateTimestamp(): boolean {
+    return this.writeFile('lastUpdate.txt', Date.now().toString());
   }
 
   /**

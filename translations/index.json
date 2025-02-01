@@ -1,4 +1,4 @@
 {
   "$schema": "https://raw.githubusercontent.com/vrcalphabet/vrc_translator/refs/heads/main/vscode_extension/schema.json",
-  "output": "../chrome_extension/data/"
+  "output": "../data/"
 }
