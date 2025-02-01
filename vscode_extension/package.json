@@ -2,7 +2,7 @@
   "name": "xpr-tsr",
   "displayName": ".xprと翻訳ファイルの拡張機能パック",
   "description": ".xprと翻訳ファイルをそれぞれ統合するための拡張機能",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.96.0"
   },
