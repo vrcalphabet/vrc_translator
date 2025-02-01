@@ -1,4 +1,4 @@
-@rootkey VERIFY
+@name VERIFY
 @includes {
   /home/verify
 }

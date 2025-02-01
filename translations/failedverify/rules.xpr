@@ -1,4 +1,4 @@
-@rootkey FAILEDVERIFY
+@name FAILEDVERIFY
 @includes {
   /home/failedverify
 }

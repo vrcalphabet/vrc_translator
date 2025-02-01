@@ -1,0 +1,40 @@
+{
+  "FORM": {
+    "TITLE": {
+      "Email Verification": "メールアドレスの認証"
+    },
+    "VERIFY_MESSAGE": {
+      "We’ve resent you the verification email.": "認証用メールを再送信しました。",
+      "Failed to verify, Please check your inbox (or spam folder) to verify your email.": "認証に失敗しました。受信トレイ（または迷惑メール）からメールを確認してください。",
+      "Your email has been updated.": "メールアドレスを更新しました。"
+    },
+    "DESCRIPTION": {
+      "We've sent an email to": "次のメールアドレスにメールを送信しました: ",
+      "Please check your inbox (or spam folder) to verify your email, it may take a few minutes.": "受信トレイ（または迷惑メール）からメールを確認してください。メールが受信されるまで数分かかる場合があります。",
+      "If you entered your email address incorrectly, you can update it here": "メールアドレスを誤って入力した場合は、こちらから変更できます。"
+    },
+    "RESEND": {
+      "Can't find the email? Send again": "メールが見つかりませんか？ここをクリックすると再度送信します"
+    },
+    "NEW_INPUT": {
+      "New Email": "新しいメールアドレス",
+      "Re-Enter Email": "新しいメールアドレス（確認）",
+      "Enter Your Password": "現在のパスワードを入力"
+    },
+    "UPDATE_BUTTON": {
+      "Update Email": "メールアドレスを更新"
+    },
+    "VALIDATION_MESSAGE": {
+      "This is not a valid email": "無効なメールアドレスです",
+      "This email is already taken": "このメールアドレスは既に登録されています",
+      "Emails do not match": "メールアドレスが一致しません"
+    },
+    "VERIFIED": {
+      "Okay, I've verified my Email!": "メールを認証しました！"
+    },
+    "LOGOUT": {
+      "Log out and start over": "ログアウトして始めからやり直す",
+      "Logout": "ログアウト"
+    }
+  }
+}

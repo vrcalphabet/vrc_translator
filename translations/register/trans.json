@@ -1,0 +1,63 @@
+{
+  "FORM": {
+    "TITLE": {
+      "Create a New Account": "新しいアカウントを作成"
+    },
+    "LABEL": {
+      "Display Name": "表示名",
+      "Email": "メールアドレス",
+      "Password": "パスワード",
+      "Date of Birth": "生年月日"
+    },
+    "REGISTER_INPUT": {
+      "Re-enter email address": "メールアドレスの再入力",
+      "Re-enter password": "パスワードの再入力",
+      "Day": "日",
+      "Year": "年"
+    },
+    "VALIDATION_MESSAGE": {
+      "This is the name shown to other users in-app, you may only change your display name once per 90 days.": "これはアプリ内で他のユーザに表示される名前です。名前の変更は90日に1回のみ行えます。",
+      "That display name is too short": "名前が短すぎます",
+      "That display name is too long": "名前が長すぎます",
+      "That display name is already taken.": "その名前は既に使用されています",
+      "That's an invalid email": "無効なメールアドレスです",
+      "This email is already taken.": "そのメールアドレスは既に登録されています",
+      "Emails do not match": "メールアドレスが一致しません",
+      "That password is too short \n \n    We recommend using a password which is:\n      •   At least 8 characters long\n      •   Unique to this account and not in use anywhere else\n      •   Uses a combination of letters, numbers, and symbols\n      •   Stored in a Password Manager": "パスワードが短すぎます\n\n    パスワードは次の条件を満たすことを推奨します:\n      •   最低8文字以上であること\n      •   このアカウント専用のパスワードを使用すること\n      •   文字、数字、記号を組み合わせること\n      •   パスワードマネージャーに保存して管理すること",
+      "Please try a more secure password \n \n    We recommend using a password which is:\n      •   At least 8 characters long\n      •   Unique to this account and not in use anywhere else\n      •   Uses a combination of letters, numbers, and symbols\n      •   Stored in a Password Manager": "パスワードをもっと強力にしてください\n\n    パスワードは次の条件を満たすことを推奨します:\n      •   最低8文字以上であること\n      •   このアカウント専用のパスワードを使用すること\n      •   文字、数字、記号を組み合わせること\n      •   パスワードマネージャーに保存して管理すること",
+      "Passwords do not match": "パスワードが一致しません",
+      "That's not a valid year": "無効な日付です"
+    },
+    "AGE_MONTH": {
+      "January": "1月",
+      "February": "2月",
+      "March": "3月",
+      "April": "4月",
+      "May": "5月",
+      "June": "6月",
+      "July": "7月",
+      "August": "8月",
+      "September": "9月",
+      "October": "10月",
+      "November": "11月",
+      "December": "12月"
+    },
+    "CONSENT": {
+      "I have read and agree to the": "",
+      "Privacy Policy": "プライバシーポリシー",
+      ",": "と",
+      "Community Guidelines": "コミュニティガイドライン",
+      "and": "、",
+      "Terms of Service": "利用規約",
+      ".": "に同意する",
+      "I agree to receive updates from VRChat about its products, services and promotions.": "VRChatから製品、サービス、およびプロモーションに関する最新情報を受け取る"
+    },
+    "REGISTER_BUTTON": {
+      "Create Account": "アカウントを作成する"
+    },
+    "LOGIN": {
+      "Have an account?": "既にアカウントをお持ちの場合、",
+      "Log in": "ログイン"
+    }
+  }
+}

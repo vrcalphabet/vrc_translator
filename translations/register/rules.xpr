@@ -1,4 +1,4 @@
-@rootkey REGISTER
+@name REGISTER
 @includes {
   /home/register
 }

@@ -1,3 +1,295 @@
-[
-  {}
-]
+{
+  "emailtwofactorauth": {
+    "FORM": {
+      "TITLE": {
+        "Email One-Time Code": "確認コードの入力"
+      },
+      "DESCRIPTION": {
+        "Enter the numeric code we sent to your email.": "登録されているメールアドレス宛に送信されたメールに記載されている確認コードを入力します。"
+      },
+      "VALIDATION_MESSAGE": {
+        "Oops, that code didn't work.": "無効なコードです。"
+      },
+      "NEXT_BUTTON": {
+        "Next": "次へ"
+      },
+      "WHATS_THIS": {
+        "TITLE": {
+          "What's this?": "このページが表示される理由"
+        },
+        "DESCRIPTION": {
+          "To help keep your account secure we've sent a code to your registered email address. You'll need to enter it above to access VRChat.": "アカウントを安全に保つため、登録されたメールアドレス宛にメールを送信しました。アカウントにログインするには、上記に確認コードを入力する必要があります。"
+        }
+      },
+      "LOGOUT": {
+        "Log out": "ログアウト"
+      }
+    }
+  },
+  "failedverify": {
+    "FORM": {
+      "TITLE": {
+        "Verification Failed": "認証に失敗しました"
+      },
+      "DESCRIPTION": {
+        "The link you followed is either invalid, or you are already verified. Please log in and request a new verification link if prompted.": "リンクが無効であるか、既に認証されています。もう一度ログインして、新しいリンクをリクエストしてください。"
+      },
+      "LOGIN": {
+        "Back to login": "ログイン画面に戻る"
+      }
+    }
+  },
+  "forgot_email": {
+    "FORM": {
+      "FORM_USERNAME": {
+        "TITLE": {
+          "Forgot Email Address": "メールアドレスを忘れた"
+        },
+        "DESCRIPTION": {
+          "Please enter the user or display name of your account.": "以下にアカウントの表示名（ユーザ名）を入力してください。",
+          "If the name is associated with a verified email address, we will send a reminder message to that address.": "ユーザ名が認証済みのメールアドレスと関連付けられている場合は、そのメールアドレス宛に確認メールが送信されます。"
+        },
+        "USERNAME_INPUT": {
+          "Username": "ユーザ名"
+        },
+        "VALIDATION_MESSAGE": {
+          "That name is too long": "名前が長すぎます",
+          ": Sorry, you can't request email address reminders that often": "確認メールの送信を頻繁にリクエストすることはできません"
+        },
+        "REMINDER_BUTTON": {
+          "Request reminder message": "確認メールを送信"
+        },
+        "LOGIN": {
+          "Back to login": "ログイン画面に戻る"
+        }
+      },
+      "FORM_CHECK_EMAIL": {
+        "DESCRIPTION": {
+          "We have attempted to send a reminder to your registered email address!": "登録されているメールアドレスに確認メールを送信しました！",
+          "You may need to check your spam folder if you don't see it within a few minutes.": "数分以内に受信されない場合は、迷惑メールフォルダにある可能性があります。"
+        }
+      }
+    }
+  },
+  "login": {
+    "FORM": {
+      "TITLE": {
+        "Welcome to VRChat": "VRChatへようこそ",
+        "New to VRChat?": "初めてですか？",
+        "Using an Oculus, Steam, or Viveport account?": "Oculus/Steam/Viveportのアカウントをお使いですか？"
+      },
+      "LOGIN_FAILED": {
+        "Failed to Log In": "認証に失敗しました",
+        "\"Invalid Username/Email or Password\"": "ユーザ名またはメールアドレスに誤りがあります"
+      },
+      "LOGIN_INPUT": {
+        "Username/Email": "ユーザ名/メールアドレス",
+        "Password": "パスワード"
+      },
+      "LOGIN_FORGOT": {
+        "Forgot your": "",
+        "password": "パスワード",
+        "or": "または",
+        "email address": "メールアドレス",
+        "?": "をお忘れですか？"
+      },
+      "LOGIN_BUTTON": {
+        "Login": "ログイン"
+      },
+      "CREATE_ACCOUNT_BUTTON": {
+        "Create an account": "アカウントを作成する"
+      },
+      "USING_OTHER_ACCOUNTS": {
+        "Don't worry! You can link your VRChat account to your existing Oculus / Steam / Viveport account and keep all your friends.": "VRChatアカウントを既存のOculus/Steam/Viveportのアカウントと紐づけることで、フレンドを移行することができます。",
+        "Learn More": "さらに詳しく"
+      }
+    },
+    "WORLD_INFO": {
+      "World:": "ワールド名:",
+      "Author:": "作者:"
+    }
+  },
+  "password": {
+    "FORM": {
+      "FORM_EMAIL": {
+        "TITLE": {
+          "Reset Password": "パスワードのリセット"
+        },
+        "DESCRIPTION": {
+          "Please enter the email address associated with your account.": "アカウントに関連付けられているメールアドレスを入力してください。"
+        },
+        "EMAIL_INPUT": {
+          "Email": "メールアドレス"
+        },
+        "RESET_BUTTON": {
+          "Reset your password": "パスワードをリセットする"
+        },
+        "VALIDATION_MESSAGE": {
+          "Invalid Email Address": "無効なメールアドレスです"
+        },
+        "LOGIN": {
+          "Back to login": "ログイン画面に戻る"
+        }
+      },
+      "FORM_CHECK_EMAIL": {
+        "TITLE": {
+          "Check Your Email": "メールを確認してください"
+        },
+        "DESCRIPTION": {
+          "If we have an account associated with": "",
+          ", we have sent you a password reset link!": " に関連付けられたアカウントをお持ちの場合は、指定されたメールアドレスにパスワードリセットリンクをお送りしました。",
+          "You may need to check your spam folder if you don't see it within a few minutes.": "数分以内に受信されない場合は、迷惑メールフォルダにある可能性があります。"
+        },
+        "LOGIN": {
+          "Back to login": "ログイン画面に戻る"
+        }
+      },
+      "FORM_RESET_PASSWORD": {
+        "TITLE": {
+          "Reset Password": "パスワードのリセット"
+        },
+        "DESCRIPTION": {
+          "Almost there! Type your new password and you'll be all set.": "もう少しです！新しいパスワードを入力すると完了します。"
+        },
+        "PASSWORD_INPUT": {
+          "New Password": "新しいパスワード",
+          "Re-Enter Password": "新しいパスワード（確認）"
+        },
+        "VALIDATION_MESSAGE": {
+          "That password is too short": "パスワードが短すぎます",
+          "Please try a more secure password": "パスワードをもっと強力にしてください",
+          "Passwords do not match": "パスワードが一致しません",
+          "Please verify the password recovery link has not already been used!": "パスワードリセットリンクが無効になっている可能性があります！リンクがまだ有効であるかどうかを確認してください。"
+        },
+        "RESET_BUTTON": {
+          "Change Password": "パスワードを変更する"
+        },
+        "LOGIN": {
+          "Back to login": "ログイン画面に戻る"
+        },
+        "STRONG_PASSWORD": {
+          "Use a strong password": "強いパスワードにするためのヒント",
+          "We recommend using a password which is:": "次のようなパスワードにすることを推奨します：",
+          "At least 8 characters long": "最低8文字以上であること",
+          "Unique to this account and not in use anywhere else": "このアカウント専用のパスワードを使用すること",
+          "Uses a combination of letters, numbers and symbols": "文字、数字、記号を組み合わせること",
+          "Stored in a Password Manager": "パスワードマネージャーに保存して管理すること"
+        }
+      }
+    },
+    "FORM_SUCCESS": {
+      "TITLE": {
+        "Successful password reset!": "パスワードのリセットが完了しました！"
+      },
+      "DESCRIPTION": {
+        "You can now use your new password to log in to your account!": "今後、新しいパスワードを利用してアカウントにログインできます！"
+      },
+      "LOGIN": {
+        "Login": "ログイン"
+      }
+    }
+  },
+  "register": {
+    "FORM": {
+      "TITLE": {
+        "Create a New Account": "新しいアカウントを作成"
+      },
+      "LABEL": {
+        "Display Name": "表示名",
+        "Email": "メールアドレス",
+        "Password": "パスワード",
+        "Date of Birth": "生年月日"
+      },
+      "REGISTER_INPUT": {
+        "Re-enter email address": "メールアドレスの再入力",
+        "Re-enter password": "パスワードの再入力",
+        "Day": "日",
+        "Year": "年"
+      },
+      "VALIDATION_MESSAGE": {
+        "This is the name shown to other users in-app, you may only change your display name once per 90 days.": "これはアプリ内で他のユーザに表示される名前です。名前の変更は90日に1回のみ行えます。",
+        "That display name is too short": "名前が短すぎます",
+        "That display name is too long": "名前が長すぎます",
+        "That display name is already taken.": "その名前は既に使用されています",
+        "That's an invalid email": "無効なメールアドレスです",
+        "This email is already taken.": "そのメールアドレスは既に登録されています",
+        "Emails do not match": "メールアドレスが一致しません",
+        "That password is too short \n \n    We recommend using a password which is:\n      •   At least 8 characters long\n      •   Unique to this account and not in use anywhere else\n      •   Uses a combination of letters, numbers, and symbols\n      •   Stored in a Password Manager": "パスワードが短すぎます\n\n    パスワードは次の条件を満たすことを推奨します:\n      •   最低8文字以上であること\n      •   このアカウント専用のパスワードを使用すること\n      •   文字、数字、記号を組み合わせること\n      •   パスワードマネージャーに保存して管理すること",
+        "Please try a more secure password \n \n    We recommend using a password which is:\n      •   At least 8 characters long\n      •   Unique to this account and not in use anywhere else\n      •   Uses a combination of letters, numbers, and symbols\n      •   Stored in a Password Manager": "パスワードをもっと強力にしてください\n\n    パスワードは次の条件を満たすことを推奨します:\n      •   最低8文字以上であること\n      •   このアカウント専用のパスワードを使用すること\n      •   文字、数字、記号を組み合わせること\n      •   パスワードマネージャーに保存して管理すること",
+        "Passwords do not match": "パスワードが一致しません",
+        "That's not a valid year": "無効な日付です"
+      },
+      "AGE_MONTH": {
+        "January": "1月",
+        "February": "2月",
+        "March": "3月",
+        "April": "4月",
+        "May": "5月",
+        "June": "6月",
+        "July": "7月",
+        "August": "8月",
+        "September": "9月",
+        "October": "10月",
+        "November": "11月",
+        "December": "12月"
+      },
+      "CONSENT": {
+        "I have read and agree to the": "",
+        "Privacy Policy": "プライバシーポリシー",
+        ",": "と",
+        "Community Guidelines": "コミュニティガイドライン",
+        "and": "、",
+        "Terms of Service": "利用規約",
+        ".": "に同意する",
+        "I agree to receive updates from VRChat about its products, services and promotions.": "VRChatから製品、サービス、およびプロモーションに関する最新情報を受け取る"
+      },
+      "REGISTER_BUTTON": {
+        "Create Account": "アカウントを作成する"
+      },
+      "LOGIN": {
+        "Have an account?": "既にアカウントをお持ちの場合、",
+        "Log in": "ログイン"
+      }
+    }
+  },
+  "verify": {
+    "FORM": {
+      "TITLE": {
+        "Email Verification": "メールアドレスの認証"
+      },
+      "VERIFY_MESSAGE": {
+        "We’ve resent you the verification email.": "認証用メールを再送信しました。",
+        "Failed to verify, Please check your inbox (or spam folder) to verify your email.": "認証に失敗しました。受信トレイ（または迷惑メール）からメールを確認してください。",
+        "Your email has been updated.": "メールアドレスを更新しました。"
+      },
+      "DESCRIPTION": {
+        "We've sent an email to": "次のメールアドレスにメールを送信しました: ",
+        "Please check your inbox (or spam folder) to verify your email, it may take a few minutes.": "受信トレイ（または迷惑メール）からメールを確認してください。メールが受信されるまで数分かかる場合があります。",
+        "If you entered your email address incorrectly, you can update it here": "メールアドレスを誤って入力した場合は、こちらから変更できます。"
+      },
+      "RESEND": {
+        "Can't find the email? Send again": "メールが見つかりませんか？ここをクリックすると再度送信します"
+      },
+      "NEW_INPUT": {
+        "New Email": "新しいメールアドレス",
+        "Re-Enter Email": "新しいメールアドレス（確認）",
+        "Enter Your Password": "現在のパスワードを入力"
+      },
+      "UPDATE_BUTTON": {
+        "Update Email": "メールアドレスを更新"
+      },
+      "VALIDATION_MESSAGE": {
+        "This is not a valid email": "無効なメールアドレスです",
+        "This email is already taken": "このメールアドレスは既に登録されています",
+        "Emails do not match": "メールアドレスが一致しません"
+      },
+      "VERIFIED": {
+        "Okay, I've verified my Email!": "メールを認証しました！"
+      },
+      "LOGOUT": {
+        "Log out and start over": "ログアウトして始めからやり直す",
+        "Logout": "ログアウト"
+      }
+    }
+  }
+}

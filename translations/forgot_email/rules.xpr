@@ -1,4 +1,4 @@
-@rootkey FORGOT_EMAIL
+@name FORGOT_EMAIL
 @includes {
   /home/forgot-email
 }

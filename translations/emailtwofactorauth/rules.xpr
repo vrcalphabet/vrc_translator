@@ -1,4 +1,4 @@
-@rootkey EMAILTWOFACTORAUTH
+@name EMAILTWOFACTORAUTH
 @includes {
   /home/emailtwofactorauth
 }

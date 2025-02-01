@@ -1,4 +1,4 @@
-@rootkey PASSWORD
+@name PASSWORD
 @includes {
   /home/password
 }
