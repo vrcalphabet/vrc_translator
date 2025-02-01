@@ -1,0 +1,93 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "xpr",
+  "scopeName": "source.xpr",
+  "patterns": [{ "include": "#comment" }, { "include": "#metadata" }, { "include": "#node" }],
+  "repository": {
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.line.percent.xpr",
+          "begin": "%[^-]",
+          "end": "$",
+          "patterns": []
+        },
+        {
+          "name": "comment.block.xpr",
+          "begin": "%-",
+          "end": "-%",
+          "patterns": []
+        }
+      ]
+    },
+    "metadata": {
+      "patterns": [
+        {
+          "name": "meta.name.xpr",
+          "match": "(@name)\\s+([A-Z_]+)",
+          "captures": {
+            "1": { "name": "keyword.control.xpr" },
+            "2": { "name": "keyword.xpr" }
+          },
+          "patterns": []
+        },
+        {
+          "name": "meta.includes.xpr",
+          "begin": "(@includes)\\s+\\{",
+          "end": "\\}",
+          "captures": {
+            "1": { "name": "keyword.control.xpr" }
+          },
+          "patterns": [
+            {
+              "name": "string.unquoted.xpr",
+              "match": "\\s*(/[^\\s]+)"
+            }
+          ]
+        },
+        {
+          "name": "meta.excludes.xpr",
+          "begin": "(@excludes)\\s+\\{",
+          "end": "\\}",
+          "captures": {
+            "1": { "name": "keyword.control.xpr" }
+          },
+          "patterns": [
+            {
+              "name": "string.unquoted.xpr",
+              "match": "\\s*(/[^\\s]+)"
+            }
+          ]
+        }
+      ]
+    },
+    "node": {
+      "patterns": [
+        {
+          "name": "node.key.xpr",
+          "match": "([A-Z_]+)",
+          "captures": {
+            "1": { "name": "keyword.xpr" }
+          },
+          "patterns": []
+        },
+        {
+          "name": "node.xpath.xpr",
+          "match": "\\s+(/[^\\s]+)",
+          "captures": {
+            "1": { "name": "string.unquoted.xpr" }
+          },
+          "patterns": []
+        },
+        {
+          "name": "node.attribute.xpr",
+          "match": "\\[([a-zA-Z-]+)\\]",
+          "captures": {
+            "1": { "name": "constant.numeric.xpr" }
+          },
+          "patterns": []
+        }
+      ]
+    }
+  }
+}

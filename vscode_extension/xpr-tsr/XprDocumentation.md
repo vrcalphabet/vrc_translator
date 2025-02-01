@@ -73,6 +73,7 @@ xpath を定義するためのファイル（xpath rule definition file）です
 - ノードの定義
   - ノード (`node`変数と同義です)
     xpath で要素を選択する一つのノードです。ネストされている場合、親のネストで指定されている xpath と multiSelect を継承します。
+    ネストされていないノード（親がいないノード）では`key`を省略することはできません。
     - `[key] <xpath> [multiSelect] [attribute],`
   - ノードのネスト
     指定した xpath の中に複数のノードを含めることができます。ネストされている場合、親のネストで指定されている xpath と multiSelect を継承します。
