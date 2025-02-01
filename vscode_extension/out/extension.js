@@ -39,12 +39,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = activate;
 exports.deactivate = deactivate;
 const vscode = __importStar(require("vscode"));
-const mergeFiles_1 = __importDefault(require("./mergeFiles"));
+const MergeFiles_1 = __importDefault(require("./MergeFiles"));
 const Console_1 = __importDefault(require("./Console"));
 function activate() {
     vscode.commands.registerCommand('extension.mergeXprAndTsrFiles', () => {
         try {
-            const merger = mergeFiles_1.default.getInstance();
+            const merger = MergeFiles_1.default.getInstance();
             merger.merge();
         }
         catch (e) {

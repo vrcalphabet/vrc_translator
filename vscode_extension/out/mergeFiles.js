@@ -171,4 +171,4 @@ class MergeFiles {
     }
 }
 exports.default = MergeFiles;
-//# sourceMappingURL=mergeFiles.js.map
+//# sourceMappingURL=MergeFiles.js.map

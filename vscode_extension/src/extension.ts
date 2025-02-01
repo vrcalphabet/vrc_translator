@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import MergeFiles from './mergeFiles';
+import MergeFiles from './MergeFiles';
 import Console from './Console';
 
 export function activate() {
