@@ -36,4 +36,4 @@ src/
 
 `index.json`を開きフォーカスした上で、`extension.mergeXprAndTsrFiles`（翻訳用ファイルの統合）を実行します。
 
-`../out/`に統合された`rules.json`と`translations.json`が作成されます。
+`../out/`に統合された`rules.json`と`translations.json`、コマンドを実行した時間`lastUpdate.txt`が作成されます。
